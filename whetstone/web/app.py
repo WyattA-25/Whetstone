@@ -28,6 +28,9 @@ ACCOUNT_API = os.getenv("WHETSTONE_ACCOUNT_API", "off") == "on"
 # Entitlement enforcement for starting runs (AWS App Monetization). Fail-closed by default; set to "off" only
 # while hosted checkout is unavailable (the decision is still checked, logged, and shown).
 BILLING_ENFORCE = os.getenv("WHETSTONE_BILLING_ENFORCE", "on") != "off"
+# Where AWS's hosted checkout/portal send the buyer back. Must be a public https URL: the billing endpoint's
+# firewall rejects localhost/127.0.0.1 URLs in the request body (SSRF protection) with a bare 403.
+PUBLIC_URL = os.getenv("WHETSTONE_PUBLIC_URL", "https://orluwkuvzjjph76umunjuj6qpe0yzalo.lambda-url.us-east-1.on.aws/")
 TASKS = {"banking77": "Support-ticket intent classification (Banking77)",
          "codefix": "Fix static-analysis findings in real repos"}
 
@@ -205,7 +208,7 @@ def pricing_session(cid: str = Depends(current_customer)) -> dict:
     """Hosted AWS App Monetization pricing page (checkout session with no planId)."""
     from ..billing import BillingError, checkout_session
     try:
-        return checkout_session(cid, return_url="http://127.0.0.1:8000/")
+        return checkout_session(cid, return_url=PUBLIC_URL)
     except BillingError as e:
         raise HTTPException(502, f"hosted checkout unavailable: {e}") from None
 
@@ -214,6 +217,6 @@ def pricing_session(cid: str = Depends(current_customer)) -> dict:
 def portal_session(cid: str = Depends(current_customer)) -> dict:
     from ..billing import BillingError, billing_portal
     try:
-        return {"redirect": billing_portal(cid, return_url="http://127.0.0.1:8000/")}
+        return {"redirect": billing_portal(cid, return_url=PUBLIC_URL)}
     except BillingError as e:
         raise HTTPException(502, f"billing portal unavailable: {e}") from None
