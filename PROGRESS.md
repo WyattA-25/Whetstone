@@ -14,8 +14,8 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 5 | Code-fix data (teammate): repos → SARIF findings → frozen split | 🟡 collector done (`scripts/collect_findings.py`); waiting on Chayce's `data/codefix/repos.yaml` |
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | ✅ done (verifier self-test passes; dev baseline 6/8 on itsdangerous) |
 | ✂ | Cut line 3:00 PM | |
-| 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ⏭ next (needs AWS CLI configured) |
-| 8 | Unattended code-fix run + held-out evaluation | |
+| 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
+| 8 | Unattended code-fix run + held-out evaluation | ⏭ next (held-out eval can be built now; code-fix run needs repos.yaml) |
 | 9 | Employer pilot (only if approved; private config, never committed) | |
 | 10 | Results UI (FastAPI + HTML) | |
 | ✂ | Cut line 5:00 PM | |
@@ -61,6 +61,15 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - **Noise:** same prompt at temperature 0 gave val 70% / 80% / 75% across runs. The model is
   nondeterministic, so selection must re-check winners and report confidence intervals.
 - Prices in `.env` are placeholder estimates ($0.10 in / $0.40 out per 1M); replace with Luminal's real price.
+
+## AWS
+
+- Account 079755088097, IAM user `Whetstone-dev`, region us-east-1. CLI: `C:\Program Files\Amazon\AWSCLIV2ws.exe`.
+- DynamoDB (on-demand): `whetstone-runs` (run_id + sk) and `whetstone-accounts` (customer_id + sk).
+  Create/verify: `python -m whetstone.aws_setup`. With `WHETSTONE_STORE=dynamo`, runs write locally AND to DynamoDB.
+  Backfill/repair: `python -m whetstone.sync <run_id>` or `--all` (idempotent).
+- Sandboxed code gets no AWS env vars and AWS_SHARED_CREDENTIALS_FILE/AWS_CONFIG_FILE point at devnull.
+  It is still a same-user process (not OS-isolated) — a container sandbox is the production answer.
 
 ## Code-fix adapter notes
 

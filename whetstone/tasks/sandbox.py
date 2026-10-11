@@ -41,6 +41,8 @@ def venv_env(venv: Path, extra: dict | None = None) -> dict:
     for k in list(env):
         if any(s in k.upper() for s in ("API_KEY", "SECRET", "TOKEN", "MONGODB", "AWS_", "STRIPE")):
             env.pop(k)
+    # ...and point the AWS SDK away from our credential files so sandboxed code can't use them.
+    env["AWS_SHARED_CREDENTIALS_FILE"] = env["AWS_CONFIG_FILE"] = os.devnull
     env.update(extra or {})
     return env
 

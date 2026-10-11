@@ -22,7 +22,7 @@ from .config import AGENT_EXTRA_BODY, OPTIMIZER_MAX_USD_PER_RUN, optimizer_endpo
 from .evaluate import evaluate_prompt
 from .llm import BudgetExceeded, LLMClient, Usage
 from .objective import Constraint, Objective
-from .store import JsonlStore
+from .store import Store, get_store
 from .tasks import get_task, load_or_create_split
 
 POPULATION = 4
@@ -45,7 +45,7 @@ def short(agg: dict | None, metric: str) -> str:
 
 
 class Runner:
-    def __init__(self, state: dict, store: JsonlStore, run_dir: Path):
+    def __init__(self, state: dict, store: Store, run_dir: Path):
         self.s = state
         self.store = store
         self.run_dir = run_dir
@@ -69,6 +69,7 @@ class Runner:
         tmp = self.run_dir / "state.json.tmp"
         tmp.write_text(json.dumps(self.s, indent=2))
         tmp.replace(self.run_dir / "state.json")
+        self.store.put_state(self.s["run_id"], self.s)
 
     def fit(self, agg: dict, split: str) -> float:
         return self.objective.fitness(agg, self.s["baseline"][split])
@@ -270,7 +271,7 @@ def main() -> None:
     ap.add_argument("--resume")
     args = ap.parse_args()
 
-    store = JsonlStore("runs")
+    store = get_store("runs")
     if args.resume:
         run_dir = Path("runs") / args.resume
         state = json.loads((run_dir / "state.json").read_text())

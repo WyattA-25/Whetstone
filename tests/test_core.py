@@ -44,7 +44,8 @@ def test_objective_with_baseline_constraint():
 
 def test_jsonl_store(tmp_path):
     st = JsonlStore(tmp_path)
-    st.insert("rounds", {"run_id": "r1", "round": 0, "best": 0.5})
-    st.insert("rounds", {"run_id": "r1", "round": 1, "best": 0.7})
-    assert [d["best"] for d in st.find("rounds", run_id="r1")] == [0.5, 0.7]
+    assert st.insert("rounds", {"run_id": "r1", "round": 0, "best": 0.5}) == 0
+    assert st.insert("rounds", {"run_id": "r1", "round": 1, "best": 0.7}) == 1
+    assert JsonlStore(tmp_path).insert("rounds", {"run_id": "r1", "round": 2, "best": 0.8}) == 2  # survives restart
+    assert [d["best"] for d in st.find("rounds", run_id="r1")] == [0.5, 0.7, 0.8]
     assert st.find("rounds", run_id="r1", round=1)[0]["best"] == 0.7
