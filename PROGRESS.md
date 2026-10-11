@@ -9,8 +9,8 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 |---|---|---|
 | 1 | Repo & environment | ✅ done |
 | 2 | Core library (Luminal client, TaskAdapter interface, objective, frozen split + hash, storage) | ✅ done |
-| 3 | Adapter A: text classification (exact match) | ⏭ next |
-| 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | |
+| 3 | Adapter A: text classification (exact match) | ✅ done |
+| 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | ⏭ next |
 | 5 | Code-fix data (teammate): repos → SARIF findings → frozen split | |
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | |
 | ✂ | Cut line 3:00 PM | |
@@ -48,6 +48,11 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Luminal: `https://flash.luminal.cloud/v1`, only model `deepseek-ai/DeepSeek-V4.1-Flash`.
   Reasoning model (hidden reasoning tokens count as completion tokens). ~0.7-1.5s per short call.
 - Rate limit: ~10 concurrent requests OK, more get HTTP 429. Default concurrency 8 + exponential backoff.
+- **Classify baseline** (Banking77, 10 confusable intents, 200 examples; split 100/40/60,
+  held-out hash `98b8b9b1...185e7b`): train **66%**, val **75%**, ~320 tok/ex, 0 errors.
+  Run: `python -m whetstone.baseline --task classify`.
+- **Noise:** same prompt at temperature 0 gave val 70% / 80% / 75% across runs. The model is
+  nondeterministic, so selection must re-check winners and report confidence intervals.
 - Prices in `.env` are placeholder estimates ($0.10 in / $0.40 out per 1M); replace with Luminal's real price.
 
 ## Open questions

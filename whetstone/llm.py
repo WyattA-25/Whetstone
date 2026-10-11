@@ -77,7 +77,7 @@ class LLMClient:
         return ChatResult(resp.choices[0].message.content or "", pt, ct, usd, dt)
 
     @retry(retry=retry_if_exception_type(RETRYABLE), wait=wait_random_exponential(min=1, max=30),
-           stop=stop_after_attempt(6), reraise=True)
+           stop=stop_after_attempt(8), reraise=True)
     def _create(self, messages, temperature, max_tokens):
         return self._client.chat.completions.create(
             model=self.endpoint.model, messages=messages,
