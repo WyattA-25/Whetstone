@@ -15,7 +15,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | ✅ done (verifier self-test passes; dev baseline 6/8 on itsdangerous) |
 | ✂ | Cut line 3:00 PM | |
 | 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
-| 8 | Unattended code-fix run + held-out evaluation | ⏭ next (held-out eval can be built now; code-fix run needs repos.yaml) |
+| 8 | Unattended code-fix run + held-out evaluation | 🟡 eval tool done (`python -m whetstone.final_eval <run_id>`); classify redesign pending decision |
 | 9 | Employer pilot (only if approved; private config, never committed) | |
 | 10 | Results UI (FastAPI + HTML) | |
 | ✂ | Cut line 5:00 PM | |
@@ -81,6 +81,14 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Memory cap applies on Linux/macOS only (no setrlimit on Windows); timeouts apply everywhere.
 - Real data: Chayce's `data/codefix/repos.yaml` -> `python scripts/collect_findings.py` -> `data/codefix/findings.jsonl`;
   the split freezes on the first `python -m whetstone.baseline --task codefix`.
+
+## Findings so far (be honest in README/video)
+
+- Classify v1 (reasoning ON for scoring, 100/40/60 split): train rose 66% -> 77% over 3 rounds, but the
+  held-out check (1 repeat, and with a since-fixed bug counting 16 provider errors as wrong) showed
+  63.3% -> 65.0%, CI [-11.7, +15.0]: NOT significant. Train gains were mostly selection noise/overfit.
+- With thinking OFF for scoring: baseline 59.3% vs r3 prompt 67.1% on train+val (biased: r3 was selected
+  there). Lower baseline = more headroom; 3x cheaper scoring. Not faster: Luminal throughput ~1 call/s.
 
 ## Known issues
 
