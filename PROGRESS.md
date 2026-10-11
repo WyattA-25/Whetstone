@@ -15,7 +15,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | ✅ done (verifier self-test passes; dev baseline 6/8 on itsdangerous) |
 | ✂ | Cut line 3:00 PM | |
 | 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
-| 8 | Unattended code-fix run + held-out evaluation | 🟡 eval tool done (`python -m whetstone.final_eval <run_id>`); classify redesign pending decision |
+| 8 | Held-out evaluation | ✅ banking77 headline done (below); code-fix run still to do |
 | 9 | Employer pilot (only if approved; private config, never committed) | |
 | 10 | Results UI (FastAPI + HTML) | ✅ done: `python -m whetstone.web` → http://127.0.0.1:8000 |
 | ✂ | Cut line 5:00 PM | |
@@ -49,6 +49,16 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Code-fix adapter accepts any scanner that outputs SARIF; parsers for others.
 - Fixer inside the loop = Luminal flash model.
 - UI = FastAPI + single HTML page. Deploy = App Runner (web); optimization worker runs separately.
+
+## HEADLINE (banking77-20261011-142259, results/banking77-20261011-142259-heldout.json)
+
+- 400 official Banking77 test examples, never used in optimization, hash verified, 0 excluded:
+  **baseline 72.0% -> best 81.5%; +9.5 pts [95% CI +5.5, +13.5]; +13.2% relative; error rate -34%; significant.**
+- Validation (selection) 70.0% -> 85.0% over 8 rounds; best prompt r4-fresh-2 (fresh-strategy agent, round 4).
+- Cost of the whole run: ours $0.05 (agents), theirs $0.82 scoring + $0.15 held-out (placeholder prices).
+- Tradeoff (report honestly): the best prompt is ~11x longer (98 -> 1,094 tokens/example; mostly label
+  definitions), so per-call cost is ~10x. A follow-up run with objective "minimize tokens, success >= best-2pts"
+  is the natural next step (the objective is configurable).
 
 ## Current numbers
 
