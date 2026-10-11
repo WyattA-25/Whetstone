@@ -75,6 +75,11 @@ def propose(llm: LLMClient, strategy: str, *, description: str, objective: str, 
     r = llm.chat([{"role": "system", "content": sys}, {"role": "user", "content": user}],
                  temperature=temp, max_tokens=4096)
     prompt = extract_tag(r.text, "prompt")
+    if prompt is None and len(r.text.strip()) >= 80:
+        # Told to return only the prompt; some replies skip the tags. Use the reply minus code fences.
+        prompt = re.sub(r"^```\w*
+|
+```\s*$", "", r.text.strip()).strip()
     if not prompt or len(prompt) < 20:
         raise ValueError(f"no usable <prompt> block ({r.completion_tokens} tokens); "
                          f"reply ends: {r.text.strip()[-150:]!r}")
