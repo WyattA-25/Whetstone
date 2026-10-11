@@ -14,6 +14,8 @@ BLOCKED_PATHS = [
     re.compile(r"(^|/)configs/private/"),
     re.compile(r"\.private\."),
     re.compile(r"(^|/)\.npmrc$"),
+    re.compile(r"(^|/)\.claude/(skills|commands)/"),
+    re.compile(r"monetiz", re.I),                           # AWS beta skill files are confidential
 ]
 
 SECRET_PATTERNS = [

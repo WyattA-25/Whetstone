@@ -36,3 +36,10 @@ data/codefix/dev/
 # AWS App Monetization beta: private registry token + installed packages (never commit)
 .npmrc
 node_modules/
+
+# Locally installed agent skills (AWS App Monetization beta is confidential; never commit)
+.claude/skills/
+.claude/commands/
+.agents/
+.kiro/
+.codex/
