@@ -160,6 +160,16 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - With thinking OFF for scoring: baseline 59.3% vs r3 prompt 67.1% on train+val (biased: r3 was selected
   there). Lower baseline = more headroom; 3x cheaper scoring. Not faster: Luminal throughput ~1 call/s.
 
+## Incident (17:40 ET) and the rule it created
+
+- The private pilot drives an external pipeline that runs git commands in its own workspace. Its workspace
+  had been placed inside this repo's folder, so on one run those commands acted on THIS repo: `origin` was
+  repointed, foreign branches fetched, and `main` moved. Nothing was committed or pushed (dry-run).
+- Restored: `origin` reset to GitHub, `main` reset to `origin/main` (every commit had been pushed), stray
+  branch deleted; tests pass; all untracked/private files intact. Unreachable foreign objects may remain in
+  the local object store until `git gc` (never pushed; harmless to the public repo).
+- RULE: external-tool workspaces/configs live OUTSIDE any git repo; the pilot script refuses to run otherwise.
+
 ## Known issues
 
 - Luminal intermittently returns 503 "model temporarily unavailable" / connection errors (seen 12:49-13:06).
