@@ -30,7 +30,8 @@ def main() -> None:
     print(f"  train={len(split.train_ids)} val={len(split.val_ids)} heldout={len(split.heldout_ids)}")
     print(f"  heldout hash: {split.heldout_hash}")
 
-    llm = LLMClient(scoring_endpoint(), temperature=0, timeout=adapter.scoring_timeout)
+    llm = LLMClient(scoring_endpoint(), temperature=0, timeout=adapter.scoring_timeout,
+                    extra_body=adapter.scoring_extra_body)
     prompt = adapter.starting_prompts()[0]
     for name, batch in (("train", split.train(examples)), ("val", split.val(examples))):
         agg, _ = evaluate_prompt(adapter, prompt, batch, llm, split)

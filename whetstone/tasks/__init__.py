@@ -11,6 +11,9 @@ def get_task(name: str) -> TaskAdapter:
     if name == "classify":
         from .classify import ClassifyAdapter
         return ClassifyAdapter()
+    if name == "banking77":
+        from .classify import Banking77Adapter
+        return Banking77Adapter()
     if name == "codefix":
         from .codefix import CodeFixAdapter
         return CodeFixAdapter()
@@ -26,6 +29,7 @@ def load_or_create_split(name: str, adapter: TaskAdapter, seed: int = 42) -> tup
     p = split_path(name)
     if p.exists():
         return Split.load(p), False
-    s = Split.create(adapter.examples(), seed=seed)
+    fixed = adapter.split_assignment()
+    s = Split.from_ids(fixed["train"], fixed["val"], fixed["heldout"]) if fixed else Split.create(adapter.examples(), seed=seed)
     s.save(p)
     return s, True

@@ -26,6 +26,7 @@ class ClassifyAdapter(TaskAdapter):
                    "and the reply should contain exactly one of them.")
 
     def __init__(self, path: Path = DATA):
+        self.path = path
         self._rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
         self.labels = sorted({r["label"] for r in self._rows})
 
@@ -56,3 +57,19 @@ class ClassifyAdapter(TaskAdapter):
         notes = "" if ok else (f"message: {example.input!r}\nexpected: {example.expected}\n"
                                f"got: {pred or 'UNPARSEABLE'} (raw reply: {output.text.strip()[:120]!r})")
         return Score({"success": float(ok)}, notes)
+
+
+class Banking77Adapter(ClassifyAdapter):
+    """v2: train/val from Banking77's official train file, held-out = all 400 official test examples
+    for the 10 intents. Scored with the model's thinking OFF, as a production classifier usually runs."""
+    name = "banking77"
+    proposals_per_round = 4
+    train_minibatch = 60
+    scoring_extra_body = {"thinking": {"type": "disabled"}}
+    heldout_repeats = 1      # 400 examples: per-example noise averages out; keeps the eval inside the rate limit
+
+    def __init__(self, path: Path = Path("data/banking77/banking77_v2.jsonl")):
+        super().__init__(path)
+
+    def split_assignment(self) -> dict[str, list[str]]:
+        return {p: [r["id"] for r in self._rows if r["part"] == p] for p in ("train", "val", "heldout")}

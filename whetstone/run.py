@@ -59,7 +59,7 @@ class Runner:
         self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"], timeout=90, attempts=3,
                              extra_body=AGENT_EXTRA_BODY)
         self.score_llm = LLMClient(scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0,
-                                   timeout=self.adapter.scoring_timeout)
+                                   timeout=self.adapter.scoring_timeout, extra_body=self.adapter.scoring_extra_body)
         self.opt.usage = Usage(**{k: v for k, v in state["usage"]["optimizer"].items()})
         self.score_llm.usage = Usage(**{k: v for k, v in state["usage"]["scoring"].items()})
 
@@ -167,17 +167,28 @@ class Runner:
             cands.append({"id": f"r{r}-{p.strategy}-{i}", "round": r, "strategy": p.strategy,
                           "parents": p.parents, "prompt": p.prompt})
 
-        # 3) evaluate all candidates on train, in parallel
-        with ThreadPoolExecutor(max(1, len(cands))) as ex:
-            results = list(ex.map(lambda c: self.eval(c["prompt"], self.train), cands))
+        # 3) evaluate candidates on this round's training batch, in parallel. With a minibatch (a fresh
+        #    seeded sample each round, which resists overfitting a fixed train set), the champion is scored
+        #    on the SAME batch so the comparison is paired, and the analyst gets fresh failures next round.
+        mb = self.adapter.train_minibatch
+        batch = rng.sample(self.train, mb) if mb and mb < len(self.train) else self.train
+        paired = batch is not self.train and bool(cands)
+        prompts = [c["prompt"] for c in cands] + ([champ["prompt"]] if paired else [])
+        with ThreadPoolExecutor(max(1, len(prompts))) as ex:
+            results = list(ex.map(lambda p: self.eval(p, batch), prompts))
         for c, (agg, f) in zip(cands, results):
             c["train"], c["fitness"], c["_fails"] = agg, self.fit(agg, "train"), f
+        champ_bar = champ["fitness"]
+        if paired:
+            champ_bar = self.fit(results[-1][0], "train")
+            self.s["champion_failures"] = results[-1][1]
+            self.s["champion_batch"] = results[-1][0]
 
-        # 4) selection: top-2 that beat the champion on train get a validation check, and the champion
-        #    is re-checked on validation in the same round. The champion's val score is a running mean
-        #    over all its checks, so one lucky measurement can't block every challenger (winner's curse).
-        #    Promotion requires beating the champion on train + val combined (140 examples).
-        challengers = sorted([c for c in cands if c["fitness"] > champ["fitness"]],
+        # 4) selection: the top-2 candidates that beat the champion on the training batch get a validation
+        #    check, and the champion is re-checked on validation in the same round. Its val score is a
+        #    running mean over all checks, so one lucky measurement can't block every challenger (winner's
+        #    curse). Promotion requires beating the champion on validation.
+        challengers = sorted([c for c in cands if c["fitness"] > champ_bar],
                              key=lambda c: c["fitness"], reverse=True)[:2]
         promoted = None
         if challengers:
@@ -192,7 +203,7 @@ class Runner:
             for c, v in zip(challengers, vals[1:]):
                 c["val"], c["combined"] = v, combine(c["train"], v)
                 best = promoted or champ
-                if self.fit(c["combined"], "combined") > self.fit(best["combined"], "combined"):
+                if self.fit(v, "val") > self.fit(best["val"], "val"):
                     promoted = c
         if promoted:
             self.s["champion"] = {k: v for k, v in promoted.items() if k != "_fails"}
@@ -211,7 +222,8 @@ class Runner:
         cs = ", ".join(f"{c['strategy']} {short(c['train'], m)}" + (f" (val {short(c['val'], m)})" if c.get("val") else "")
                        for c in cands) or "no valid proposals"
         cs += f" [{len(proposals)}/{len(jobs)} proposals usable]"
-        self.log(f"round {r}: champion train {short(ch['train'], m)} val {short(ch['val'], m)}"
+        bar = f" (on this batch {short(self.s['champion_batch'], m)})" if paired and not promoted else ""
+        self.log(f"round {r}: champion train {short(ch['train'], m)}{bar} val {short(ch['val'], m)}"
                  f"{'  << NEW CHAMPION ' + ch['id'] if promoted else ''} | candidates: {cs} "
                  f"| spend ours ${self.opt.usage.usd:.4f} theirs ${self.score_llm.usage.usd:.4f}")
         self.s["round_done"] = r

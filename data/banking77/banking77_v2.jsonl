@@ -1,0 +1,600 @@
+{"id": "b77v2-train-pending_transfer-00", "text": "How long does it take for a transfer to finish pending?", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-01", "text": "Can you tell me why my transfer is pending still?", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-02", "text": "I recently purchased something and the seller says my money has not arrived yet. It was in EU's. How long does this take?", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-03", "text": "I have a transfer waiting.", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-04", "text": "I have a pending money transfer", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-05", "text": "How long until transfers complete?", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-06", "text": "How long does a transfer to another country normally take? I check over and over again and see that my transfer is still pending. It's 2018, nothing should take this long. I have confirmed my account information, so there is no error. What is the hold up?", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-07", "text": "Why isn't my pending transfer finished?", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-08", "text": "How long do transfers take, mine just says pending?", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-09", "text": "Transfers can take up to one day to process before departing for the beneficiary accounts. Please confirm that you've entered your account details correctly. SEPA transfers can take up to two working days, while SWIFT transfers can take up to five working days.", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-10", "text": "Do EU transfers happen quickly? I purchased something a few days ago and the seller hasn't received my money yet.", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-train-pending_transfer-11", "text": "Could you please help me figure out why the seller has not received their money after I sent it.", "label": "pending_transfer", "part": "train"}
+{"id": "b77v2-val-pending_transfer-12", "text": "How long do you expect me to wait for the transfer? It finally worked out, but has been pending for a long time and it's quite urgent.", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-val-pending_transfer-13", "text": "I double checked that I have the correct account details already, they're right for sure. Transfer is still pending since forever. It should not have been done so.", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-val-pending_transfer-14", "text": "I have a transfer that is pending.", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-val-pending_transfer-15", "text": "Why is my transfer appearing as \"pending\"?", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-val-pending_transfer-16", "text": "i transfered and yet it is still pending", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-val-pending_transfer-17", "text": "I can't figure out why a transfer is still pending?", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-val-pending_transfer-18", "text": "There has been a transfer pending in my account and I wanted to know how long it is going to take to go  through.", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-val-pending_transfer-19", "text": "I finished my transfer. I am having an issue with it still pending. It has been a long time and i'm growing impatient", "label": "pending_transfer", "part": "val"}
+{"id": "b77v2-heldout-pending_transfer-00", "text": "For how long will my transfer be pending?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-01", "text": "How can I speed up a transfer?  Mine is pending.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-02", "text": "How long can I expect a transfer to pend for?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-03", "text": "How long can an EU transfer take?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-04", "text": "How long do transfer pend for?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-05", "text": "How long does a transfer stay pending?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-06", "text": "How long does a transfer take to be confirmed?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-07", "text": "How long does it take for a money transfer to show?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-08", "text": "How long for money transfer to show?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-09", "text": "I am confused as to why my transfer could still be pending.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-10", "text": "I am still waiting for a money transfer to show", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-11", "text": "I am waiting for a pending money transfer to process.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-12", "text": "I did transfer, why is it pending", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-13", "text": "I double checked that I have the correct account details , they're right for sure. Transfer is still pending since forever. What should be done now?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-14", "text": "I had made a transfer but its still pending.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-15", "text": "I have a pending transfer", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-16", "text": "I have a transfer that's pending and wanted to know how long it is going to take to process?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-17", "text": "I made a transfer 12 hours ago. Why is it still listed as pending?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-18", "text": "I submitted my transfer but it has been pending for quite a while and I was wondering what takes so long? why hasn't it completed", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-19", "text": "I transferred money yesterday, but it still isn't available?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-20", "text": "I would like to know why my payment is still pending, can you help?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-21", "text": "I'm trying to transfer money to another country. It's just pending and not sending. My account details are correct. Please help me.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-22", "text": "My transfer hasn't gone through yet.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-23", "text": "My transfer is still coming up as pending.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-24", "text": "My transfer is still pending and I know the account numbers are correct.  Please help.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-25", "text": "Pending transfer?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-26", "text": "Please explain why the transfers shows up as pending?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-27", "text": "So the transfer finally worked but now it's been pending for quite a long time. How long do you expect me to wait for it? It's quite urgent", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-28", "text": "Someone transferred money to me and it doesn't show", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-29", "text": "The transfer is coming up as pending the payment is due today. Will I be charged a fee?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-30", "text": "Transferring money in 2018 to another country shouldn't take this long. My transfer has been pending for too long. I verified my account details are correct.", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-31", "text": "What is the cause that the transfer shows as pending?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-32", "text": "When will my transfer go through?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-33", "text": "When will the transfer be completed?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-34", "text": "When will the transfer go through?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-35", "text": "Why does my transfer say \"pending\"?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-36", "text": "Why hasn't my transfer gone through yet?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-37", "text": "Why is a money transfer not showing?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-38", "text": "Why is my transfer not done yet?", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-pending_transfer-39", "text": "i transfered however its still pending", "label": "pending_transfer", "part": "heldout"}
+{"id": "b77v2-train-failed_transfer-00", "text": "Why did my transfer not work?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-01", "text": "Is there a reason that my transfer failed?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-02", "text": "A transfer could not be completed.", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-03", "text": "I have made 5 attempts to make a very standard survey, yet I can't get it to work. What is the problem? Is there an issue related to your system?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-04", "text": "Why can't I complete my transfer?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-05", "text": "The transfer I tried to make failed.", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-06", "text": "I got a transfer fail message, but no explanation of why-- what happened?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-07", "text": "I tried to make a transfer but it failed. will you tell me why?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-08", "text": "The attempted transfer failed.", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-09", "text": "How can I find out why my transfer didn't go through?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-10", "text": "Hi, I'm in progress of purchasing a flat and am trying to make to make a payment.  An error is appearing, and I need assistance.", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-train-failed_transfer-11", "text": "What could possibly be the cause of my failed transfer?", "label": "failed_transfer", "part": "train"}
+{"id": "b77v2-val-failed_transfer-12", "text": "Hi, I'm trying to purchase a flat and I'm needing the first payment for the mortgage to go through on the flat I'm trying to buy. For some reason I keep getting an error.can you assist in making this transfer? What is going on?", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-val-failed_transfer-13", "text": "The transger I tried to make failed.", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-val-failed_transfer-14", "text": "The transfer keeps failing , I tried to transfer some money to friends this morning but it keeps getting rejected for some reason, Would you please check the issue?", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-val-failed_transfer-15", "text": "I've tried to send money to my friends and I keep getting rejected. Can you please tell me why, I don't understand.", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-val-failed_transfer-16", "text": "Can you tell my why my funds transfer did not work properly?", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-val-failed_transfer-17", "text": "Why didn't my transfer complete?", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-val-failed_transfer-18", "text": "I attempted a transfer, but it failed.", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-val-failed_transfer-19", "text": "What caused my transfer to fail?", "label": "failed_transfer", "part": "val"}
+{"id": "b77v2-heldout-failed_transfer-00", "text": "Can you help me figure out what's happening? I'm trying to transfer money to a friend but it keeps getting returned. I'm not sure what i'm doing wrong.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-01", "text": "Can you provide a reason as to why my transfer did not work?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-02", "text": "Fix your system. I can't make transfers, I've tried like 5 times already.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-03", "text": "Hi, I'm buying a flat and I'm trying to get my mortgage to go though. Every time I check I simply get an error message. Is there any way you can help me get this money transferred over. Thanks!", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-04", "text": "I am trying to make a transfer and am unsuccessful, can you please tell me why?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-05", "text": "I can not seem to make a successful transfer, can you tell me what I'm doing wrong?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-06", "text": "I could not get my transfer to happen correctly and was wondering why?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-07", "text": "I transferred my funds, why did it not go through?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-08", "text": "I tried to make a transfer but it failed", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-09", "text": "I tried to transfer money and it did not work.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-10", "text": "I've attempted to do a very standard transfer and have tried 5 times at this point. Can you tell me what the issue is? Is the system down?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-11", "text": "I've now been trying to do a really standard transfer 5 times already. What's going on, is your system broken or something?!", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-12", "text": "Is the system down? I've been trying to do a transfer and have failed?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-13", "text": "My attempted transfer failed.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-14", "text": "My transfer appeared not to work.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-15", "text": "My transfer did not go through.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-16", "text": "My transfer did not seem to work.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-17", "text": "My transfer didn't go through.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-18", "text": "My transfer didn't work", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-19", "text": "My transfer keeps failing and I just want to transfer the money can you please make it work?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-20", "text": "My transfer will not go through.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-21", "text": "Please help me as i am continuously facing the issue in transferring money to my friends, as all my transactions are getting failed.", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-22", "text": "Please help me make a transfer. I keep receiving an error and I'm trying to make the initial mortgage payment for a flat I'm buying. What is the deal here?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-23", "text": "Says my transfer can't be completed?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-24", "text": "Tell me why my transfer failed!", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-25", "text": "The transfer keeps failing , I tried to transfer some money to friends this morning but it keeps getting rejected for some reason, Would you please check the issue ?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-26", "text": "What are your policies for card transfers?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-27", "text": "What is stopping my money from transferring?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-28", "text": "Why couldn't I complete a transfer?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-29", "text": "Why did my transfer fail?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-30", "text": "Why did my transfer not go through?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-31", "text": "Why didn't my transfer go through?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-32", "text": "Why has my transfer failed?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-33", "text": "Why hasn't my transfer been made?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-34", "text": "Why was I not able to complete a transfer?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-35", "text": "Why would a transfer fail?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-36", "text": "can you tell me why my transfer failed?", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-37", "text": "dont understand why transfer failed", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-38", "text": "help me with my transfer", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-failed_transfer-39", "text": "how come my transfer didn't work", "label": "failed_transfer", "part": "heldout"}
+{"id": "b77v2-train-declined_transfer-00", "text": "I can't make any transfers, they won't go through, the details are correct as I checked them.  Can you look in to this please?", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-01", "text": "My transfer has been declined.", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-02", "text": "Transfer declined.", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-03", "text": "I tried to buy something and it was declined and my transfers keep getting declined, Why?", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-04", "text": "I am sure I have plenty of money to transfer but my transfer is being declined.", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-05", "text": "How can I find a way to transfer money without it being rejected?", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-06", "text": "I wanted to buy something online yesterday, but I could not because the card got declined on the day of and the following day. What is wrong with the card?", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-07", "text": "My recent transfer didn't go through - why not?", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-08", "text": "I wanted to know why my transaction didn't go through.", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-09", "text": "I don't know what's going on but all of my transfers keep getting declined. I have checked over the recipient details twice. These details are all correct.", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-10", "text": "What are the reasons for a declined transfer?", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-train-declined_transfer-11", "text": "It says the transfer wasn't accepted.", "label": "declined_transfer", "part": "train"}
+{"id": "b77v2-val-declined_transfer-12", "text": "Why do you keep declining my transfers? it's always been working really well so far but when I tried to buy something just now the card got declined . I tried couple of times already  but same thing is happening .", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-val-declined_transfer-13", "text": "Transfer unable to be completed, states 'declined'", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-val-declined_transfer-14", "text": "I just noticed my transfer was declined and I don't know why. Can you help me?", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-val-declined_transfer-15", "text": "Transfer was declined, could not complete request.", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-val-declined_transfer-16", "text": "The transfer that I was trying to complete was declined. What was the cause?", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-val-declined_transfer-17", "text": "I tried to buy something online yesterday but it kept saying declined. Tried another time today but same thing happened. What's Broken?", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-val-declined_transfer-18", "text": "Is there a reason my transfer would have been declined?", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-val-declined_transfer-19", "text": "I am trying to make a transfer to a different account but they keep getting declined. I have double checked all the details and the information is correct.", "label": "declined_transfer", "part": "val"}
+{"id": "b77v2-heldout-declined_transfer-00", "text": "Are there any restrictions causing my transfer to be declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-01", "text": "Double check your funds may be declined", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-02", "text": "For what reason was my transfer declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-03", "text": "Good morning. I tried to make a purchase with my credit card last night and again this morning. Both times it was declined. Can you investigate?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-04", "text": "How can I fix my card, it got declined twice.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-05", "text": "How do I contact customer support about a transfer?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-06", "text": "I am getting continuous failure for all my transfers. I have cross checked each recipient detail again and again and everything is correct.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-07", "text": "I can't transfer money from my account.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-08", "text": "I could not do a transfer because it was declined", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-09", "text": "I think my transfer was declined, but why?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-10", "text": "I tired to move my money, but my transfer was declined.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-11", "text": "I tried to buy something online yesterday but it kept saying declined. Tried again today but same thing happened. What's broken?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-12", "text": "I tried to buy something online yesterday but it wouldn't stop saying declined. Tried again today but same thing happened. What's Broken?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-13", "text": "I tried to make a transfer and it was declined. Why?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-14", "text": "I tried to make a transfer, but it was declined. Can you tell me why?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-15", "text": "I was attempting to purchase a golf club off eBay yesterday, but my credit card was declined. I tried multiple times, and again this morning. Can you check into my card please?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-16", "text": "I would like to know why my transfer was declined.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-17", "text": "If the transfer details have already but reviewed and confirmed that they are correct, what other reason would cause my transfer to be declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-18", "text": "My card is being declined online. Could you tell me what might be broken or wrong with the account?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-19", "text": "My transfer got declined.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-20", "text": "My transfer has been declined and I know it should have went through.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-21", "text": "My transfer was declined", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-22", "text": "My transfers are being declined. IT has always worked for me but now it's declining my card. I've tried several times.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-23", "text": "The card got declined twice when I tried to use it to buy something online yesterday.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-24", "text": "Trouble transferring transaction contact for help", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-25", "text": "What is the reason my transfer was declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-26", "text": "What would make a decline message show up during a transfer?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-27", "text": "When I submit a transfer, it is being declined.  The information I put in has been reviewed.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-28", "text": "When I try and to buy something using my card it keeps getting declined.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-29", "text": "Why could my transfer have been declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-30", "text": "Why did I get a transfer declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-31", "text": "Why did a transfer get declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-32", "text": "Why did my my transfer get declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-33", "text": "Why did my transfer decline", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-34", "text": "Why do you keep declining my transfers?it was always been working really well so far but when I tried to buy something just now the card got declined . I tried couple of times already  but same thing is happening.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-35", "text": "Why was I unable to do a transfer?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-36", "text": "Why was the transfer declined?", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-37", "text": "Why would my transfer be declined? I've checked that I've put in all the right details, but it is still declined.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-38", "text": "You keep declining my transfers? It's always been working really well so far, but when I tried to buy something just now the card got declined. I tried couple times already but same thing.", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-declined_transfer-39", "text": "why was my transfer declined", "label": "declined_transfer", "part": "heldout"}
+{"id": "b77v2-train-cancel_transfer-00", "text": "stop the transaction", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-01", "text": "I did a transaction to a wrong account!", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-02", "text": "Please cancel my last transaction.", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-03", "text": "I made a mistake this morning when I did a transfer. How do I reverse it?", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-04", "text": "I am trying to revert a transcation I did this morning", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-05", "text": "I'm really upset because I made a typo during a transfer and now I've sent money to the wrong account.  I can't fix this with the app.  Please help me immediately!", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-06", "text": "I sent a payment to the wrong account number - can that transaction be reversed? I am worried about accidentally giving my money away.", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-07", "text": "I made a transaction, but I made it to an account I didn't mean to make it to.", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-08", "text": "Please help revert my transaction from this morning.", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-09", "text": "I just realized I made the wrong transaction yesterday. Would  you please make it correct?I need it by tomorrow Please.", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-10", "text": "I need to cancel my recent transfer as soon as possible. I made an error there. Please help before it goes through.", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-train-cancel_transfer-11", "text": "Could you refund my transaction, I paid it into the wrong account. I need to be able to pay it into the right account by tomorrow.", "label": "cancel_transfer", "part": "train"}
+{"id": "b77v2-val-cancel_transfer-12", "text": "I made a mistake and need to cancel a transfer.", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-val-cancel_transfer-13", "text": "Can you help me to quickly cancel a transaction I accidentally did to the wrong account?", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-val-cancel_transfer-14", "text": "I need to cancel a transaction.", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-val-cancel_transfer-15", "text": "I wanna revert a transaction i did this morning.", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-val-cancel_transfer-16", "text": "I made a transaction to the wrong account!", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-val-cancel_transfer-17", "text": "Help me cancel a transfer.", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-val-cancel_transfer-18", "text": "I just realised I made the wrong payment yesterday. Can you please change it to the right account? It's my rent payment and really really needs to be in the right account by tomorrow", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-val-cancel_transfer-19", "text": "There was a transaction this morning that I'd like to reverse.", "label": "cancel_transfer", "part": "val"}
+{"id": "b77v2-heldout-cancel_transfer-00", "text": "Can I cancel a transfer", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-01", "text": "Can I cancel a transfer if is already processed?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-02", "text": "Can I cancel my transaction?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-03", "text": "Can I change the amount I made on a payment that I made to the payment is correct.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-04", "text": "Can a transaction be cancelled?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-05", "text": "Can i cancel a charge?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-06", "text": "Cancel my last transfer", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-07", "text": "Help me cancel my transaction", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-08", "text": "How can I cancel a transfer?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-09", "text": "How do I cancel my transfer?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-10", "text": "How do i cancel my transaction?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-11", "text": "I accidentally made a transaction to the wrong account.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-12", "text": "I don't want the transaction to go through now", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-13", "text": "I made a mistake and need to cancel a transaction", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-14", "text": "I made a mistake when I did a transfer so now what can I do to fix that?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-15", "text": "I made a mistake with a transaction!", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-16", "text": "I made a transaction but did it to the wrong account.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-17", "text": "I made a transaction this morning and would like to revert it.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-18", "text": "I made an error in payment yesterday and I need it fixed asap because it's for my rent tomorrow.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-19", "text": "I need help cancelling a transaction.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-20", "text": "I need to cancel an incorrect transaction.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-21", "text": "I need to cancel my recent transfer immediately, I made a mistake there, please help quickly before it goes through", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-22", "text": "I need to make an immediate cancellation related to a transfer. This was a mistake. Please assist quickly so this does not actually go through.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-23", "text": "I need you to cancel a transfer that I made.  It is the wrong account number and the app won't let me stop the transaction.  Please stop it!", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-24", "text": "I submitted a transaction to the incorrect account.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-25", "text": "I transferred the wrong amount and would like to cancel the transaction.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-26", "text": "I want to cancel a transfer right away! Can you help?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-27", "text": "I want to go back on what I did this morning", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-28", "text": "I want to reverse my transaction from earlier", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-29", "text": "I would like to revert a transaction I did this morning", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-30", "text": "I'd like to cancel a transfer", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-31", "text": "If I make a transaction can I cancel it?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-32", "text": "Is there a way to revert my transaction from this morning?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-33", "text": "Is there any way to cancel a transfer?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-34", "text": "My recent transfer needs to be cancelled immediately; it was a mistake, please can you cancel it before it goes through?", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-35", "text": "My transaction needs to be canceled.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-36", "text": "Please help me!  I need to cancel a transaction.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-37", "text": "Tell me how to cancel a transfer.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-38", "text": "The transfer I just made needs to be cancelled right now. It was my mistake. Please help me cancel it before it goes through!", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-cancel_transfer-39", "text": "This is URGENT, I typed the wrong payment information for a payment I needed to make and have clicked send, I need to reverse the transaction immediately.", "label": "cancel_transfer", "part": "heldout"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-00", "text": "I transferred some money but it hasn't arrived.", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-01", "text": "I made a transfer to my friend earlier and she hasn't received it yet.  What's the hold up?", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-02", "text": "wheres my money receipt", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-03", "text": "Where did the money transfer go?", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-04", "text": "My money transaction hasn't arrived.", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-05", "text": "the money i transferred didnt arrive", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-06", "text": "The recipient doesn't see the money transaction I made", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-07", "text": "I do not know where the transaction is.", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-08", "text": "I sent money to my family last Friday but they don't have it.", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-09", "text": "I did a money transaction and the recipient doesn't see it", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-10", "text": "I sent money about 5 days ago and the recipient has not received the money yet.", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-train-transfer_not_received_by_recipient-11", "text": "Why hasn't my transaction arrived to my friend yet?", "label": "transfer_not_received_by_recipient", "part": "train"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-12", "text": "Why hasn't arrived yet a transaction I did to my friend?", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-13", "text": "Why hasn't the transaction I did to my friend arrive yet?", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-14", "text": "My transfer isn't in", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-15", "text": "My new landlord is a lier and is trying to rip me off by saying I've not paid my rent when I have paid my rent.  What is going on?  They say the money hasn't got to them but I see it going out of my account.  Can you check that the money went to the right place?", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-16", "text": "I've been waiting since Friday, where is my money?", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-17", "text": "I need to transfer some money to a friend who is in urgent need of some fast cash. How long will it take before she can use that money?", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-18", "text": "Why can't the recepient of my money transaction see it?", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-val-transfer_not_received_by_recipient-19", "text": "When will the transaction be done?", "label": "transfer_not_received_by_recipient", "part": "val"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-00", "text": "Hey, I need some help figuring out way my transfer is not complete yet. My Landlord hasn't got the money yet.She should have received it by now.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-01", "text": "How can the recipient see my money transaction?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-02", "text": "How long do transfers need to come through? I sent some money to a friend, she needs it urgently, but seems it's still not there yet after a couple hours.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-03", "text": "How long does it take for a transfer to get to a recipient?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-04", "text": "How long does it take for transfers to finish?  I sent funds to my pal, and she says that she has not gotten anything.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-05", "text": "How long until my friend receives my transaction?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-06", "text": "How long will it take for my transaction to be completed?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-07", "text": "I am still awaiting the completion of the transaction.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-08", "text": "I am still waiting for a transaction to be completed", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-09", "text": "I completed a money transaction but the recipient hasn't received it", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-10", "text": "I completed an in country transfer a few days ago and was sure to check the account information several times since the transaction was completed, but the funds are still not available. What is the problem?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-11", "text": "I just finished sending money, but it's not logging on the recipient side.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-12", "text": "I made a money transaction but the recipient can't see it", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-13", "text": "I made a transaction and it is taking a very long time to go through.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-14", "text": "I need to find out why my transfer didn't get there.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-15", "text": "I sent money.  They haven't received it.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-16", "text": "I sent my friend some money a few hours ago but she has not received it yet. She really needs it. How long does this take?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-17", "text": "I sent some money and the receiver can't access it.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-18", "text": "I transferred money but the recipient says it has not arrived. Why would this be?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-19", "text": "I transferred some money and it didint arrive", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-20", "text": "I transferred some money but the receiver can't pick it up for some reason.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-21", "text": "I transferred some money but the recipient is having trouble withdrawing.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-22", "text": "I transferred the rent payment for my new place a couple days ago but the landlord says it's not there yet, despite showing up as done on my side. I checked the account number I sent it to and it's definitely correct. Can you please verify if the transaction really went through or not?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-23", "text": "I tried to send someone money but they haven't received it.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-24", "text": "I'm having a problem with a money transfer.  I sent some money to a friend a couple of hours ago, and they haven't received it yet.  Why hasn't it gotten to them? How long do transfers need to go through?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-25", "text": "I've just moved address from a place in Durham to a place in Walton-On-The-Naze.  I have a new landlord at my new house and they haven't got my payment but I know I sent it on time, can you check they got it please?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-26", "text": "Im waiting for my transaction to go through.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-27", "text": "Is there a reason why my transaction is taking so long?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-28", "text": "My friend still hasn't gotten a transaction I made.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-29", "text": "My money transfer has not arrived.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-30", "text": "The day before yesterday, I performed a transfer which was within this country. It still hasn't gone through. Can you check on that? The account number is definitely correct, as I've checked and double checked.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-31", "text": "The person I sent money to hasn't gotten it yet!", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-32", "text": "The receipient doesn't see my money transfer.", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-33", "text": "The transfer I did hasn't arrived", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-34", "text": "When will my funds transfer?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-35", "text": "Where is the transaction I made to a friend?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-36", "text": "Where is the transfer I started?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-37", "text": "Why hasn't my recipient received their money?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-38", "text": "how long do money transfers take?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_not_received_by_recipient-39", "text": "transaction failed?", "label": "transfer_not_received_by_recipient", "part": "heldout"}
+{"id": "b77v2-train-transfer_timing-00", "text": "How long does it take in Europe to do a transfer?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-01", "text": "How long do I have to wait for a US transfer?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-02", "text": "How long does it take transfers from Europe to complete?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-03", "text": "How long will an urgent transfer from China take?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-04", "text": "How long will it take for the money to reach my account?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-05", "text": "When will my money be in my account?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-06", "text": "How long does a transfer from the US take?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-07", "text": "When can I expect a transfer from Europe to go through?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-08", "text": "What's the wait time for European transfers?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-09", "text": "Why hasn't my transfer from Europe gone through?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-10", "text": "I need to transfer funds from China and quick expedition is crucial. Approximately how long does it take for a transfer from China to go through?", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-train-transfer_timing-11", "text": "Can you please tell me how long it takes for the transfer to be available.", "label": "transfer_timing", "part": "train"}
+{"id": "b77v2-val-transfer_timing-12", "text": "How long does transfer from the US take?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-val-transfer_timing-13", "text": "I need to urgently transfer something from China. How long will it approximately take?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-val-transfer_timing-14", "text": "What is the estimated wait time for transfers from the US?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-val-transfer_timing-15", "text": "If I need to transfer something quick from China, how long does that take?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-val-transfer_timing-16", "text": "When will my transfer from the US get here?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-val-transfer_timing-17", "text": "When will the money show in my account?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-val-transfer_timing-18", "text": "Can I quickly send a transfer from China?  How long will it take?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-val-transfer_timing-19", "text": "I need to transfer something to China. It is urgent. How many days will it take to get there?", "label": "transfer_timing", "part": "val"}
+{"id": "b77v2-heldout-transfer_timing-00", "text": "Approximately how long will an urgent transfer from China take?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-01", "text": "Do transfers from Europe take longer?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-02", "text": "How long do I have to wait for a transfer from the US?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-03", "text": "How long do i have to wait for a transfer to reach my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-04", "text": "How long does a funds transfer take from one back to another?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-05", "text": "How long does a transfer take from china?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-06", "text": "How long does a transfer take from the point it's sent, to the point it arrives in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-07", "text": "How long does it take for a transfer?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-08", "text": "How long does it take for funds to come through the US to my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-09", "text": "How long does it take to process transfers from Europe?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-10", "text": "How long is it going to take for my funds to show in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-11", "text": "How long is my Europe transfer wait?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-12", "text": "How long is the wait for a US transfer?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-13", "text": "How long to I have to wait for a transfer to reach my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-14", "text": "How long until my transfer goes through?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-15", "text": "How long until the money is in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-16", "text": "How long will it take for the transfer to reach my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-17", "text": "How many days does a transfer from the US take?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-18", "text": "How many days does it take until funds are in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-19", "text": "How many days until the money will be in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-20", "text": "I have to transfer something to China as fast as I can. How long will it take to arrive in China?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-21", "text": "I initiated a Bank transfer form Europe, how long will this take?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-22", "text": "I need a fast transfer from China?  How fast will it be?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-23", "text": "If I need to do a quick transfer from China, how long should I expect the transfer to take?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-24", "text": "If I started the Bank transfer from Europe, how long will the process take to complete?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-25", "text": "If my transfer is from Europe how long will it take?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-26", "text": "There is an important thing from China that I need to transfer. Approximately how long will this take?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-27", "text": "What is the fastest that I can make a transfer?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-28", "text": "What is the number of days I have to wait for my Europe transfer?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-29", "text": "What is the time frame for a transfer from the US?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-30", "text": "What is the wait time for a transfer from the US?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-31", "text": "What would the approximate delivery date be if I transferred something urgently to China?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-32", "text": "When does the money get transferred to my account", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-33", "text": "When should I expect to see my transfer hit my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-34", "text": "When will a transfer reach my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-35", "text": "When will money be available in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-36", "text": "Will my transfer immediately show up in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-37", "text": "how long dies it take for transfers to reflect on my balance", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-38", "text": "how soon will I see the transfer in my account?", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-heldout-transfer_timing-39", "text": "when will i receive a US transfer", "label": "transfer_timing", "part": "heldout"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-00", "text": "There is a missing transfer on my account", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-01", "text": "How long does it take for a bank transfer to show on my balance?", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-02", "text": "There is a transfer not showing on my account.", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-03", "text": "How can I fix my bank transfer to show up on my bank account?", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-04", "text": "Why isn't my balance reflecting a transfer I did?", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-05", "text": "I made a bank transfer and the balance hasn't updated yet.", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-06", "text": "Why isn't the transferred money there?", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-07", "text": "Why hasn't the money I transferred into my account shown up yet?", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-08", "text": "How long does it typically take to make a transfer from a UK bank? I just made one and it hasn't shown up in my account yet.", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-09", "text": "How long do transfers to international banks take? I made one to france a couple of days ago, but it's still not there.", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-10", "text": "I transferred some money but the balance stayed the same.", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-train-balance_not_updated_after_bank_transfer-11", "text": "How long does a transfer from a UK account take? I just made one and it doesn't seem to be working, wondering if everything is okay", "label": "balance_not_updated_after_bank_transfer", "part": "train"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-12", "text": "When is my balance going to update, I just transferred some money", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-13", "text": "What's the normal time frame for a transfer from a UK account? After just making a transfer it doesn't appear at all. I need to know if things went okay.", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-14", "text": "A few hours ago I made a bank transfer from my UK account but I don't see that it has arrived.   Can you check and see if all is ok please?", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-15", "text": "Why hasn't my money transfer showed up yet?", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-16", "text": "I made a transfer from France a couple days ago and don't see the transaction yet. How long does an international transfer take?", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-17", "text": "The other bank confirmed a transfer I made, but this account is not reflecting it yet.", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-18", "text": "After transfering some money my balance hasn't changed.", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-val-balance_not_updated_after_bank_transfer-19", "text": "How long before a bank transfer shows up in the account?", "label": "balance_not_updated_after_bank_transfer", "part": "val"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-00", "text": "After the transfer, the balance did not update.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-01", "text": "Could you please check one of my transfer which i made few hours ago from my UK bank account, as its not showing yet.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-02", "text": "Hello I made a bank transfer couple hours ago from my UK account but it doesn't show up yet. Can you please check if everything is alright with it?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-03", "text": "Hey, I try to make a bank transfer from my UK account a few hours ago, but it haven't show up yet. Please check my account to make sure everything alright with it?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-04", "text": "How long does a UK transfer take?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-05", "text": "How long does it take for an international transfer into my account?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-06", "text": "How long until my transfer will be available to me", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-07", "text": "How long will it take for my transferred money to show up?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-08", "text": "I can't see my latest bank transfer", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-09", "text": "I did a transfer to my account but it doesn't show up", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-10", "text": "I didn't get the money I transferred", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-11", "text": "I had cash transferred but the balance did not change.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-12", "text": "I have completed a transfer but it is not showing up.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-13", "text": "I just completed a bank transfer and the balance didn't update", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-14", "text": "I made a bank transfer a couple of hours ago from my UK account.  It hasn't appeared, can you check to make sure it went through?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-15", "text": "I made a bank transfer and my account balance did not show it.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-16", "text": "I made a transfer a few hours ago from a UK banking account.  I do not yet see the transfer.  Please check on this for me.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-17", "text": "I made a transfer and am still waiting.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-18", "text": "I made a transfer and it doesnt' show up in my account.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-19", "text": "I made an out of country transfer and it hasn't went through yet.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-20", "text": "I need to know the time frame that is typical for a transfer from a UK account. I just made a transfer and it doesn't appear. I want to make sure everything is okay.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-21", "text": "I transferred some money but I think it has gotten lost somewhere.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-22", "text": "I transferred some money but it is yet to arrive.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-23", "text": "My account balance has not gone up even though I just transferred money into it", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-24", "text": "My bank transfer is still not showing up in my account.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-25", "text": "My transfer is pending.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-26", "text": "The  money I transferred does not show in the balance.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-27", "text": "The amount of time that transfers usually take from a UK account is what?I just completed a transfer and it is not showing up at all. I'm wondering at this point if everything is actually okay.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-28", "text": "When will I see my new balance after making my bank transfer?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-29", "text": "When will my balance update after a transfer?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-30", "text": "When will my transfer be available in my account.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-31", "text": "Where is my money? I transfered it and it isn't in my account.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-32", "text": "Where is my transfer from [country]?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-33", "text": "Why didn't my balance change after I transferred some money?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-34", "text": "Why doesn't it show that I did a balance transfer?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-35", "text": "Why doesn't my balance reflect my transfer", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-36", "text": "Why don't I have my transfer?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-37", "text": "Why is my balance the same?  I processed a transfer.", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-38", "text": "Why isn't the transfer on my account showing up?", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-heldout-balance_not_updated_after_bank_transfer-39", "text": "the balance on my account didnt change when i transferred money", "label": "balance_not_updated_after_bank_transfer", "part": "heldout"}
+{"id": "b77v2-train-pending_top_up-00", "text": "My top-up is still pending", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-01", "text": "My top up has been pending for an hour already, and I really need this to go through as soon as possible.  Can you help?", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-02", "text": "I've been waiting for over an hour for a top up to go through.  How long is this supposed to take?  I really need this money.", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-03", "text": "How do I make my top up complete?", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-04", "text": "top up is still pending", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-05", "text": "How long does it take for a top up to go through", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-06", "text": "How long does it take for a top-up?", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-07", "text": "When will my top-up go through?", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-08", "text": "How long do top-ups take to go through", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-09", "text": "Why is my top-up pending?", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-10", "text": "I already paid to top-up but the funds aren't available yet, where are they?", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-train-pending_top_up-11", "text": "When will my top up go through?", "label": "pending_top_up", "part": "train"}
+{"id": "b77v2-val-pending_top_up-12", "text": "how long does it take to reflect in my balance a top up", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-val-pending_top_up-13", "text": "I made a top up yesterday but it's still pending.", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-val-pending_top_up-14", "text": "Is there something wrong with my top up I did an hour ago? it's still pending. I need that money, i cant afford to wait or have it come back to me.", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-val-pending_top_up-15", "text": "Why is my top up not completing?", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-val-pending_top_up-16", "text": "There is a top up that has been pending for an hour and I don't know why.  I was expecting it immediately and need it now!", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-val-pending_top_up-17", "text": "I'm a new customer and tried topping up today for the first time. It's still pending and doesn't seem to be working. I need to get this fixed.", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-val-pending_top_up-18", "text": "Yesterday I topped up my card. Why didn't it complete as it still pending?", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-val-pending_top_up-19", "text": "I tried to top up, but the funds show up as pending. I thought it was instant?", "label": "pending_top_up", "part": "val"}
+{"id": "b77v2-heldout-pending_top_up-00", "text": "Can you look into my top up please.  I made it over three hours ago and yet it's still pending.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-01", "text": "Can you please make my top up go through as soon as possible. I really need the money and it has been pending for an hour already.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-02", "text": "Could you explain why my top-up has gone through yet?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-03", "text": "Hi I'm a new customer and tried topping up for the first time today, seems it's not working, the thing shows up as pending since half an hour already! Please fix it!", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-04", "text": "Hi. I'm a new customer to your system and I think something isn't working right - or maybe it is. Maybe you can confirm. I tried to top up today (my first time ever) and it's been stuck at \"pending\" for over an hour now. Is it supposed to do this or is there something wrong in the system?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-05", "text": "I  do not see a top-up processed.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-06", "text": "I topped up but it didn't complete", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-07", "text": "I topped up by card a while ago and it's still pending, surely it should be done by now?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-08", "text": "I tried topping up but my funds seem to be pending. I want to buy something right now, what do I do?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-09", "text": "I'm attempting to top-up my account but it has been pending for an hour.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-10", "text": "I've already topped up, but I cannot see the funds being available. What happened?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-11", "text": "Is there a reason my top up hasn't gone through", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-12", "text": "Is there something wrong with your website? I tried topping up my account and it's been close to two hours now and it's still at \"pending\" for some reason. I just joined with you guys and this is the first attempt at this, so maybe I'm wrong, but shouldn't this be instant?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-13", "text": "It doesn't look like the top-up completed.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-14", "text": "My card was topped this morning but I can't see the funds. Why didn't it complete?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-15", "text": "My top up hasn't worked, it's been stuck in pending for the last couple hours", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-16", "text": "My top up is pending.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-17", "text": "OMG!  I'm trying to load my card and it wont top up!  I desperately need the money either on my card or in my bank, where is it?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-18", "text": "So I just put my top-up into the card and it hasn't changed.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-19", "text": "So, I am a new customer and attempted to top up for the very first time today. It's already been pending for half an hour and doesn't seem to be working. I need to please get this fixed.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-20", "text": "The top-up has a definite problem! I regularly use your service and haven't had a problem before, but now the top-up just shows pending. Please tell my why it continues to show pending.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-21", "text": "The top-up is pending.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-22", "text": "Topping up my card is not working because I believe the top up is pending", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-23", "text": "What does it mean when my top up is saying  still pending?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-24", "text": "What is going on? My top-up is still pending. I use your system all the time but now it is just showing as pending.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-25", "text": "What would lead to my top up still pending?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-26", "text": "What's going on with the top-up? All it says is pending, pending, pending! I use your service several times a week and have never had a problem before! What's going on here?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-27", "text": "When will my top-up process?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-28", "text": "Where is the money I topped off with?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-29", "text": "Why does my top up say still pending when I used my card to do it.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-30", "text": "Why hasn't my top-up been completed?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-31", "text": "Why is my top up still pending?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-32", "text": "Why is my top-up still outstanding?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-33", "text": "Why is my top-up still pending?", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-34", "text": "Your top-up function isn't working, it still says pending even though I know my card works.", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-35", "text": "new customer and filling gas today, it's not working, the thing shows pending half an hour!", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-36", "text": "there's a delay in my top-up", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-37", "text": "top up did not complete", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-38", "text": "top-up is slow to process", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-heldout-pending_top_up-39", "text": "why hasn't my top up gone through yet", "label": "pending_top_up", "part": "heldout"}
+{"id": "b77v2-train-top_up_failed-00", "text": "My credit card for was not approved for a top-up transaction.  What happened?", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-01", "text": "My top-up was rejected by an app.", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-02", "text": "My top-up does not seem to have worked, what  went wrong?", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-03", "text": "The top-up I ordered didn't process.", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-04", "text": "Why has my top up failed?", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-05", "text": "Top up did not work on the app.", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-06", "text": "I could not get the top-up to go through", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-07", "text": "I tried topping up my account but it failed, can you help me?", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-08", "text": "I tried to top up but the app rejected it.", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-09", "text": "How can correct Top up with the app to work correctly?", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-10", "text": "My top up didn't go through", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-train-top_up_failed-11", "text": "Fix my top up", "label": "top_up_failed", "part": "train"}
+{"id": "b77v2-val-top_up_failed-12", "text": "Why would the app deny my top-up?", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-val-top_up_failed-13", "text": "I tried to top up my account and it didn't work", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-val-top_up_failed-14", "text": "I tried to charge my card but it was declined. A couple days ago I was able to charge it and it was accepted. Is something wrong? Will you double check for me please?", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-val-top_up_failed-15", "text": "Can you find out why my credit card didn't process payment? It was declined for top up so what's the deal?", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-val-top_up_failed-16", "text": "I added funds to my account but the app didn't process it.", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-val-top_up_failed-17", "text": "Hi, My card is getting declined during top-up. As it urgent, could you please resolve this issue, or guide me with other alternatives if any.", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-val-top_up_failed-18", "text": "How do I know if my top up worked?", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-val-top_up_failed-19", "text": "Hello, I trying to top up with my card today but it didn't work. When I tried last time it worked but today it isn't. Could you take a look at it for me?", "label": "top_up_failed", "part": "val"}
+{"id": "b77v2-heldout-top_up_failed-00", "text": "Can you tell me if my pop-up went through?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-01", "text": "Can you tell me why my top up didn't work?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-02", "text": "Heyy I tried to top up with my card today but it failed! I just got the couple days before but it has worked last time. What's going on, can you double check please?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-03", "text": "How can I check to see if my top-up worked?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-04", "text": "How did my top-up fail?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-05", "text": "How do I know if my top up was unsuccessful?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-06", "text": "I attempted to top up but the app denied it.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-07", "text": "I don't think my top up is working correctly", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-08", "text": "I have a top up that didn't go through.  Why?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-09", "text": "I need to know why my credit card was declined for top up? What is the deal here and why did it not go through?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-10", "text": "I really need money from my card today, but my card is getting declined. Please help!!", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-11", "text": "I think my top up did not work", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-12", "text": "I topped up but the app did not accept it.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-13", "text": "I tried to top up. Why was it denied?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-14", "text": "I'm not sure why my top up request was denied", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-15", "text": "I'm pretty sure my top up failed. How do I fix this?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-16", "text": "My funding to my card didn't go through.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-17", "text": "My top up didn't work.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-18", "text": "My top up failed.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-19", "text": "My top up was denied in the app.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-20", "text": "My top-up failed, WHY?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-21", "text": "My top-up has failed.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-22", "text": "My top-up isn't working.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-23", "text": "Problems with top up", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-24", "text": "So, I tried topping up my card for the today. Unfortunately, it failed. A couple of days back I used it and it works fine. Can you double check and tell me what's going on?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-25", "text": "The app denied my top-up", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-26", "text": "The app denied my topped up.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-27", "text": "The app won't let me top up my account", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-28", "text": "What reason did my top-up fail for?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-29", "text": "What's the deal? My card was just denied for top up. Why is it not going through?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-30", "text": "Why can't I top up?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-31", "text": "Why caused my top up to not work?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-32", "text": "Why did my top up not work?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-33", "text": "Why did the app deny my top up?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-34", "text": "Why didn`t my topup go through?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-35", "text": "Why was my top-up unsuccessful?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-36", "text": "Why would my topup not go through?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-37", "text": "can you check why I wasn't able to top up?", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-38", "text": "please tell me why my top-up failed.", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_failed-39", "text": "why isnt top up working", "label": "top_up_failed", "part": "heldout"}
+{"id": "b77v2-train-top_up_reverted-00", "text": "My top-up was just cancelled.", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-01", "text": "Hello. I tried doing a topup and I thought it worked, but now the money is no longer in my account. Can you explain?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-02", "text": "Why has my top-up been returned to my account?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-03", "text": "If my top-up didn't transfer, what went wrong?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-04", "text": "My money is gone. I had topped up recently and saw it was there and went through, but now it's disappeared, what is happening?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-05", "text": "Why did you revert my top-up?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-06", "text": "I wanted to know why a top-up I made has been reverted.", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-07", "text": "Why was my top up cancelled?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-08", "text": "I have a canceled top-up and wanted to know about it.", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-09", "text": "Why did my top-up not get approved this time?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-10", "text": "Is there a reason my top-up has been cancelled?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-train-top_up_reverted-11", "text": "What did you do with my money??? I just topped up, I saw the money was there, but now it's gone!! What did you do with it?", "label": "top_up_reverted", "part": "train"}
+{"id": "b77v2-val-top_up_reverted-12", "text": "I topped up but my money is not showing. Why is that?", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-val-top_up_reverted-13", "text": "How do I tell if my top up was reverted?", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-val-top_up_reverted-14", "text": "What reasons could cause my top up to be reverted", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-val-top_up_reverted-15", "text": "Reasons for top up cancellation.", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-val-top_up_reverted-16", "text": "What if my top up is reverted?", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-val-top_up_reverted-17", "text": "What happened to my top-up? I think it was cancelled.", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-val-top_up_reverted-18", "text": "Why did my top up get reverted?", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-val-top_up_reverted-19", "text": "Has my top-up been cancelled?", "label": "top_up_reverted", "part": "val"}
+{"id": "b77v2-heldout-top_up_reverted-00", "text": "Can you tell me if my top-up has been cancelled?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-01", "text": "Can you tell me why my top up was reverted?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-02", "text": "Causes of top-up cancellation", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-03", "text": "Do you know if my top-up has been cancelled?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-04", "text": "For what reason would a top up be reverted and returned to my account?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-05", "text": "Has my top up been reverted?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-06", "text": "Hi, i don't know what's going on i've just paid for my top up twice by accident can you help me get a refund please.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-07", "text": "How do I fix a reverted top up?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-08", "text": "I believe my money did not go through with my top up, was there a problem on your end?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-09", "text": "I believed crypto top up with something you offered. This does not seem to be working. The money has been removed from my account though so what's going on?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-10", "text": "I got topped up but the application reverted it.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-11", "text": "I put money into my account for the minimum balance but the application didn't accept.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-12", "text": "I see my top-up was canceled, but why?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-13", "text": "I think my top-up was cancelled.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-14", "text": "I topped up but the app reverted it", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-15", "text": "I topped up my account and even though it was confirmed at first, the money isn't there anymore! why did this happen, and where did my money go?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-16", "text": "I tryed to make a top-up with cryptocurrency but the payment was referted.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-17", "text": "I went to top up and it is no longer there.  Was it sent back?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-18", "text": "I'd like to know why my top-up was canceled please.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-19", "text": "Im very upset as my top-up was canceled and I have no idea why.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-20", "text": "Is it possible to tell if my top up has reverted?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-21", "text": "It seems my top up is reverted?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-22", "text": "My top-up has been cancelled.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-23", "text": "My top-up showed as complete, but it's no longer there! What's going on here?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-24", "text": "My top-up was cancelled; will I receive a refund?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-25", "text": "My top-up was reverted, why did this happen?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-26", "text": "My top-up was revoked.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-27", "text": "On my last transaction it seem that my top-up was not successful.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-28", "text": "The app reverted my action when I topped up.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-29", "text": "The app reverted my top off.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-30", "text": "The app reverted what I topped up.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-31", "text": "The app wouldn't accept my top up.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-32", "text": "The application reverted my top-up.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-33", "text": "There appears to have been a reversion in my top up", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-34", "text": "Was my top up reversed?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-35", "text": "What happened to my top-up?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-36", "text": "What happened to where my top-up was canceled?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-37", "text": "When I topped up, the app reverted my funds.", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-38", "text": "Why would my top up be cancelled?", "label": "top_up_reverted", "part": "heldout"}
+{"id": "b77v2-heldout-top_up_reverted-39", "text": "has my top-up has been cancelled", "label": "top_up_reverted", "part": "heldout"}

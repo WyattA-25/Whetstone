@@ -56,3 +56,11 @@ def test_bootstrap_ci():
     assert bootstrap_ci([1.0] * 30) == (1.0, 1.0)
     lo, hi = bootstrap_ci([0.0] * 50 + [1.0] * 50, n=2000)
     assert 0.38 < lo < 0.5 < hi < 0.62
+
+
+def test_predefined_split():
+    s = Split.from_ids(["a", "b"], ["c"], ["d", "e"])
+    s.verify()
+    assert s.seed == -1 and s.heldout(EXAMPLES[:0] + [Example("d", 1), Example("e", 2)], final_eval=True)
+    with pytest.raises(ValueError):
+        Split.from_ids(["a"], ["b"], ["a"])

@@ -47,6 +47,14 @@ class TaskAdapter(ABC):
     description: str = ""        # plain-language task description given to proposer agents
     scoring_timeout: float = 45.0    # seconds per scoring call attempt
     proposals_per_round: int = 6     # parallel proposer agents per round (fewer for expensive tasks)
+    train_minibatch: int | None = None   # score candidates on a fresh seeded sample of train each round
+    scoring_extra_body: dict | None = None  # provider options for scoring calls (the customer's model config)
+    heldout_repeats: int = 3         # default repeats for the final held-out evaluation
+
+    def split_assignment(self) -> dict[str, list[str]] | None:
+        """Optional fixed split {"train": ids, "val": ids, "heldout": ids}, e.g. an official test set.
+        None means the core makes a seeded random split."""
+        return None
 
     @abstractmethod
     def starting_prompts(self) -> list[str]:

@@ -82,6 +82,17 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Real data: Chayce's `data/codefix/repos.yaml` -> `python scripts/collect_findings.py` -> `data/codefix/findings.jsonl`;
   the split freezes on the first `python -m whetstone.baseline --task codefix`.
 
+## Headline experiment: task `banking77` (classify v2)
+
+- Data: train 120 / val 80 from Banking77's official train file; held-out = all 400 official test examples
+  for the 10 intents (6 train/test duplicate texts excluded). Split is predefined and hash-frozen.
+- Scoring with model thinking OFF (`scoring_extra_body`), like a production classifier.
+- Each round: 4 proposers; candidates + champion scored on a fresh seeded 60-example train sample (paired);
+  top-2 + champion checked on val; promotion = beats champion's running-mean val score.
+- Run: `python -m whetstone.run --task banking77 --rounds 8`; final: `python -m whetstone.final_eval <run_id>`
+  (1 repeat by default for this task: 400 examples x 2 prompts = 800 calls).
+- Old task `classify` (v1) is kept for the record but retired.
+
 ## Findings so far (be honest in README/video)
 
 - Classify v1 (reasoning ON for scoring, 100/40/60 split): train rose 66% -> 77% over 3 rounds, but the

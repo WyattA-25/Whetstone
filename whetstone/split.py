@@ -44,6 +44,14 @@ class Split:
         return cls(tr, va, ho, seed, _hash_ids(ho),
                    _hash_ids([f"train:{i}" for i in tr] + [f"val:{i}" for i in va] + [f"heldout:{i}" for i in ho]))
 
+    @classmethod
+    def from_ids(cls, train: list[str], val: list[str], heldout: list[str]) -> "Split":
+        """A predefined split (e.g. the dataset's official test set as held-out). seed -1 = not random."""
+        if set(train) & set(heldout) or set(val) & set(heldout) or set(train) & set(val):
+            raise ValueError("predefined split parts overlap")
+        return cls(list(train), list(val), list(heldout), -1, _hash_ids(heldout),
+                   _hash_ids([f"train:{i}" for i in train] + [f"val:{i}" for i in val] + [f"heldout:{i}" for i in heldout]))
+
     def save(self, path: str | Path) -> None:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         Path(path).write_text(json.dumps(self.__dict__, indent=2))

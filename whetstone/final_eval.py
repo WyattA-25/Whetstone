@@ -61,7 +61,7 @@ def per_example(adapter, prompt, examples, llm, split, repeats) -> tuple[dict[st
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("run_id")
-    ap.add_argument("--repeats", type=int, default=3)
+    ap.add_argument("--repeats", type=int, help="default: the task's heldout_repeats")
     args = ap.parse_args()
 
     run_dir = Path("runs") / args.run_id
@@ -71,6 +71,7 @@ def main() -> None:
     split.verify()
     if split.heldout_hash != st["heldout_hash"]:
         raise SystemExit("held-out hash differs from the one recorded when this run started; refusing to evaluate")
+    args.repeats = args.repeats or adapter.heldout_repeats
     objective = Objective.from_dict(st["objective"])
     m = objective.metric
     heldout = split.heldout(adapter.examples(), final_eval=True)
@@ -81,7 +82,8 @@ def main() -> None:
     print(f"held-out hash {split.heldout_hash[:12]}... verified against split file and run record")
     print(f"comparing baseline vs best prompt {best['id']}: {objective.describe()}\n")
 
-    llm = LLMClient(scoring_endpoint(), temperature=0, timeout=adapter.scoring_timeout)
+    llm = LLMClient(scoring_endpoint(), temperature=0, timeout=adapter.scoring_timeout,
+                    extra_body=adapter.scoring_extra_body)
     base, base_aggs = per_example(adapter, base_prompt, heldout, llm, split, args.repeats)
     champ, champ_aggs = per_example(adapter, best["prompt"], heldout, llm, split, args.repeats)
     # Anything still erroring after retries is excluded from BOTH prompts, and reported.
