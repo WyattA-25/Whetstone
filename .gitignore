@@ -46,3 +46,6 @@ node_modules/
 .pi/
 .monetize/
 .env.monetization
+
+# Rendered demo video and raw clips (large binaries; upload to YouTube instead)
+video/
