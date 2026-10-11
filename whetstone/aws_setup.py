@@ -3,6 +3,7 @@
 - whetstone-runs:     run history (runs, rounds, candidates, lessons, latest state). Key: run_id + sk.
 - whetstone-accounts: customers (plan, encrypted API keys, run counter, usage log). Key: customer_id + sk.
 Both are on-demand ("PAY_PER_REQUEST"): no capacity to manage, billed per request (cents at our scale).
+- KMS key alias/whetstone-customer-keys: encrypts customers' AI-provider API keys at rest (~$1/month).
 """
 from __future__ import annotations
 
@@ -29,6 +30,22 @@ def ensure_table(ddb, name: str, pk: str) -> str:
     return "created"
 
 
+KMS_ALIAS = os.getenv("KMS_KEY_ALIAS", "alias/whetstone-customer-keys")
+
+
+def ensure_kms_key(kms) -> str:
+    aliases = {a["AliasName"]: a.get("TargetKeyId") for p in kms.get_paginator("list_aliases").paginate()
+               for a in p["Aliases"]}
+    if KMS_ALIAS in aliases and aliases[KMS_ALIAS]:
+        return f"exists ({aliases[KMS_ALIAS]})"
+    key = kms.create_key(Description="Whetstone: encrypts customer AI-provider API keys at rest",
+                         KeyUsage="ENCRYPT_DECRYPT", Tags=[{"TagKey": "project", "TagValue": "whetstone"}])
+    kid = key["KeyMetadata"]["KeyId"]
+    kms.create_alias(AliasName=KMS_ALIAS, TargetKeyId=kid)
+    kms.enable_key_rotation(KeyId=kid)
+    return f"created ({kid}, yearly rotation on)"
+
+
 def main() -> None:
     region = os.getenv("AWS_REGION", "us-east-1")
     ddb = boto3.client("dynamodb", region_name=region)
@@ -36,6 +53,7 @@ def main() -> None:
     print(f"AWS account {ident['Account']} ({ident['Arn'].split('/')[-1]}), region {region}")
     for name, pk in ((RUNS_TABLE, "run_id"), (ACCOUNTS_TABLE, "customer_id")):
         print(f"  {name}: {ensure_table(ddb, name, pk)}")
+    print(f"  {KMS_ALIAS}: {ensure_kms_key(boto3.client('kms', region_name=region))}")
 
 
 if __name__ == "__main__":

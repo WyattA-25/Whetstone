@@ -50,6 +50,7 @@ class TaskAdapter(ABC):
     train_minibatch: int | None = None   # score candidates on a fresh seeded sample of train each round
     scoring_extra_body: dict | None = None  # provider options for scoring calls (the customer's model config)
     heldout_repeats: int = 3         # default repeats for the final held-out evaluation
+    est_tokens_per_example: float = 500  # for the pre-run cost estimate (prompt + output, averaged over a run)
 
     def split_assignment(self) -> dict[str, list[str]] | None:
         """Optional fixed split {"train": ids, "val": ids, "heldout": ids}, e.g. an official test set.

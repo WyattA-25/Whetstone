@@ -19,7 +19,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 9 | Employer pilot (only if approved; private config, never committed) | |
 | 10 | Results UI (FastAPI + HTML) | ✅ done: `python -m whetstone.web` → http://127.0.0.1:8000 |
 | ✂ | Cut line 5:00 PM | |
-| 11 | Customer features (BYO key, cost estimate, spend limit, run counter, usage log) | |
+| 11 | Customer features (BYO key, cost estimate, spend limit, run counter, usage log) | ✅ done (KMS) |
 | 12a | Payments (AWS beta tool; Stripe test-mode fallback) | |
 | 12b | Deploy (ECR → App Runner, KMS) | |
 | ✂ | Cut line 7:00 PM: features stop | |
@@ -92,6 +92,19 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Run: `python -m whetstone.run --task banking77 --rounds 8`; final: `python -m whetstone.final_eval <run_id>`
   (1 repeat by default for this task: 400 examples x 2 prompts = 800 calls).
 - Old task `classify` (v1) is kept for the record but retired.
+
+## Customer features (step 11)
+
+- `whetstone/accounts.py`: plans (Founding $49/4 runs, Standard $199/10 runs, extra $5), run counter per UTC
+  month, counting rules, usage log, cost estimate. DynamoDB `whetstone-accounts`.
+- Customer API keys: validated with one tiny call (429 = accepted, provider busy), encrypted with KMS
+  `alias/whetstone-customer-keys` with encryption context {customer_id, key_id}, never returned/logged,
+  revocable. The worker decrypts in memory at run start (`--customer/--key-id`).
+- Web: Account tab (local only: WHETSTONE_ACCOUNT_API=on) — keys, plan, estimate → confirm → start,
+  extra-run $5 confirm (also enforced server-side + in the CLI), usage log. Pricing tab always on.
+- Demo customer id `demo` has our Luminal key registered as its "customer key".
+- Verified: ciphertext only at rest; wrong encryption context rejected by KMS; fake key -> 401 shown;
+  unconfirmed run -> HTTP 400; 5th Founding run flagged extra and billed $5 unless our bug failed it.
 
 ## Web UI
 

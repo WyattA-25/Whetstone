@@ -66,6 +66,7 @@ class Banking77Adapter(ClassifyAdapter):
     proposals_per_round = 4
     train_minibatch = 60
     scoring_extra_body = {"thinking": {"type": "disabled"}}
+    est_tokens_per_example = 250   # measured: ~95 at baseline, ~280 once prompts gain definitions
     heldout_repeats = 1      # 400 examples: per-example noise averages out; keeps the eval inside the rate limit
 
     def __init__(self, path: Path = Path("data/banking77/banking77_v2.jsonl")):

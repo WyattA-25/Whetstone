@@ -18,7 +18,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .agents import analyze, propose
-from .config import AGENT_EXTRA_BODY, OPTIMIZER_MAX_USD_PER_RUN, optimizer_endpoint, scoring_endpoint
+from .config import (AGENT_EXTRA_BODY, OPTIMIZER_MAX_USD_PER_RUN, EndpointConfig, optimizer_endpoint,
+                     scoring_endpoint)
 from .evaluate import evaluate_prompt
 from .llm import BudgetExceeded, LLMClient, Usage
 from .objective import Constraint, Objective
@@ -58,10 +59,35 @@ class Runner:
         self.objective = Objective.from_dict(state["objective"])
         self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"], timeout=90, attempts=3,
                              extra_body=AGENT_EXTRA_BODY)
-        self.score_llm = LLMClient(scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0,
+        self.score_llm = LLMClient(self._scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0,
                                    timeout=self.adapter.scoring_timeout, extra_body=self.adapter.scoring_extra_body)
         self.opt.usage = Usage(**{k: v for k, v in state["usage"]["optimizer"].items()})
         self.score_llm.usage = Usage(**{k: v for k, v in state["usage"]["scoring"].items()})
+
+    def _scoring_endpoint(self) -> EndpointConfig:
+        """The customer's own key (decrypted from KMS, in memory only) or, for internal runs, the default."""
+        cust = self.s.get("customer")
+        if not cust:
+            return scoring_endpoint()
+        from .accounts import Accounts
+        k = Accounts().key_secret(cust["customer_id"], cust["key_id"])
+        return EndpointConfig("scoring", k["api_key"], k["base_url"], k["model"],
+                              k["price_in_per_m"], k["price_out_per_m"])
+
+    def _bill(self) -> None:
+        cust = self.s.get("customer")
+        if not cust:
+            return
+        try:
+            from .accounts import Accounts
+            rec = Accounts().finish_run(cust["customer_id"], self.s["run_id"], cust["month"],
+                                        stopped=self.s.get("stopped") or "interrupted",
+                                        round_done=max(0, self.s.get("round_done", 0)),
+                                        ours=asdict(self.opt.usage), theirs=asdict(self.score_llm.usage))
+            self.log(f"usage recorded: counted={rec['counted']} overage=${rec['overage_usd']} "
+                     f"ours ${rec['optimizer_usd']} theirs ~${rec['scoring_usd_est']}")
+        except Exception as e:  # billing bookkeeping must never lose the run's results
+            self.log(f"WARNING: could not record usage ({type(e).__name__}); run results are saved")
 
     # ---- helpers -------------------------------------------------------------------------------
     def save(self) -> None:
@@ -258,6 +284,7 @@ class Runner:
             self.s["stopped"] = "interrupted"
             self.log("interrupted; resume with --resume " + self.s["run_id"])
         self.save()
+        self._bill()
         ch, b, m = self.s.get("champion"), self.s.get("baseline"), self.objective.metric
         if ch and b:
             self.log(f"done ({self.s['stopped']}). baseline val {short(b['val'], m)} -> champion val "
@@ -281,6 +308,10 @@ def main() -> None:
     ap.add_argument("--max-usd-scoring", type=float, default=5.0, help="customer's per-run spending limit")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--resume")
+    ap.add_argument("--run-id", help="explicit id for a new run (the web UI sets this)")
+    ap.add_argument("--customer", help="customer id: score on that customer's stored API key")
+    ap.add_argument("--key-id", help="which of the customer's keys to score with")
+    ap.add_argument("--confirm-extra", action="store_true", help="customer confirmed the $5 extra-run charge")
     args = ap.parse_args()
 
     store = get_store("runs")
@@ -299,7 +330,7 @@ def main() -> None:
         adapter = get_task(args.task)
         split, _ = load_or_create_split(args.task, adapter)
         args.rounds = args.rounds or 8
-        run_id = f"{args.task}-{datetime.now():%Y%m%d-%H%M%S}"
+        run_id = args.run_id or f"{args.task}-{datetime.now():%Y%m%d-%H%M%S}"
         run_dir = Path("runs") / run_id
         run_dir.mkdir(parents=True, exist_ok=True)
         state = {"run_id": run_id, "task": args.task, "rounds": args.rounds, "seed": args.seed,
@@ -310,6 +341,19 @@ def main() -> None:
                  "usage": {"optimizer": asdict(Usage()), "scoring": asdict(Usage())},
                  "models": {"optimizer": optimizer_endpoint().model, "scoring": scoring_endpoint().model},
                  "started_at": datetime.now(timezone.utc).isoformat()}
+        if args.customer:
+            from .accounts import Accounts, month
+            acc = Accounts()
+            quote = acc.quote_next_run(args.customer)
+            if quote["next_is_extra"] and not args.confirm_extra:
+                raise SystemExit(f"{quote['used']} of {quote['included']} included runs used: this run costs "
+                                 f"${quote['extra_run_usd']:.0f}. Re-run with --confirm-extra to accept.")
+            k = acc.key_secret(args.customer, args.key_id)        # fails fast if revoked; secret not kept
+            state["models"]["scoring"] = k["model"]
+            state["customer"] = {"customer_id": args.customer, "key_id": args.key_id, "month": month(),
+                                 "extra": quote["next_is_extra"]}
+            acc.start_run(args.customer, run_id, key_id=args.key_id, task=args.task,
+                          max_usd=args.max_usd_scoring, extra=quote["next_is_extra"])
         store.insert("runs", {k: v for k, v in state.items() if k != "usage"})
         print(f"run {run_id}: {obj.describe()} | {args.rounds} rounds | budgets: ours ${args.max_usd_optimizer}, "
               f"theirs ${args.max_usd_scoring}")

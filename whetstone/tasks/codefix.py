@@ -97,6 +97,7 @@ class CodeFixAdapter(TaskAdapter):
     name = "codefix"
     scoring_timeout = 180.0
     proposals_per_round = 4
+    est_tokens_per_example = 3500   # measured ~3.3k (the numbered source file dominates)
     train_minibatch = 20     # fix attempts are expensive (LLM + sandbox + test suite)
     description = (
         "The prompt is the SYSTEM message for an AI coding agent that fixes ONE static-analysis finding "

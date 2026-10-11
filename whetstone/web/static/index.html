@@ -28,6 +28,7 @@
   --ins: #14301f; --ins-ink: #bbf7d0; --del: #3a1717; --del-ink: #fecaca; --shadow: none;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--ink);
   font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px 48px; }
@@ -86,6 +87,34 @@ pre { white-space: pre-wrap; word-break: break-word; margin: 6px 0 4px; padding:
 .diff-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
 ol.lessons { margin: 0; padding-left: 20px; } ol.lessons li { margin-bottom: 6px; }
 .empty { color: var(--muted); font-size: 14px; padding: 24px 0; text-align: center; }
+.tabs { display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.tabs button { border: 0; background: none; padding: 5px 12px; border-radius: 7px; color: var(--muted); }
+.tabs button.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.form { display: grid; gap: 10px; }
+.form .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.form label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.form input, .form select { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; width: 100%; }
+.check { display: flex !important; grid-template-columns: none; align-items: flex-start; gap: 8px; color: var(--ink) !important; }
+.check input { width: auto; margin-top: 3px; }
+.btn { background: var(--accent); color: #fff; border: 0; font-weight: 600; padding: 8px 14px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); font-weight: 500; }
+.msg { font-size: 13px; padding: 8px 10px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line); }
+.msg.err { color: var(--del-ink); background: var(--del); border-color: transparent; }
+.msg.ok { color: var(--good); background: var(--good-soft); border-color: transparent; }
+.msg.warn { color: var(--warn); background: var(--accent-soft); border-color: transparent; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+.tablewrap { overflow-x: auto; }
+.meter { height: 8px; background: var(--bg); border: 1px solid var(--line); border-radius: 99px; overflow: hidden; margin-top: 8px; }
+.meter > i { display: block; height: 100%; background: var(--accent); }
+.plans { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 700px) { .plans { grid-template-columns: 1fr; } }
+.price { font-size: 40px; font-weight: 800; letter-spacing: -.03em; }
+.price small { font-size: 15px; font-weight: 500; color: var(--muted); }
+ul.ticks { padding-left: 18px; margin: 10px 0; } ul.ticks li { margin-bottom: 4px; }
+.prose h3 { margin: 0 0 6px; font-size: 16px; } .prose p { margin: 0 0 10px; color: var(--muted); }
 footer { margin-top: 24px; color: var(--muted); font-size: 12px; }
 footer code { font-size: 12px; }
 </style>
@@ -94,13 +123,21 @@ footer code { font-size: 12px; }
 <div class="wrap">
   <header>
     <div class="brand"><h1>Whet<span>stone</span></h1><p>Self-improving prompt optimizer</p></div>
+    <nav class="tabs" id="tabs">
+      <button data-view="results" class="on">Results</button>
+      <button data-view="account" id="tab-account" hidden>Account &amp; runs</button>
+      <button data-view="pricing">Pricing</button>
+    </nav>
     <select id="run" aria-label="Run"></select>
     <span class="live"><span class="dot" id="livedot"></span><span id="livetxt">-</span></span>
     <button id="theme" title="Toggle theme" aria-label="Toggle theme">◐</button>
   </header>
-  <p class="sub" id="objective"></p>
-
-  <div id="app"><div class="empty">Loading runs...</div></div>
+  <section id="view-results">
+    <p class="sub" id="objective"></p>
+    <div id="app"><div class="empty">Loading runs...</div></div>
+  </section>
+  <section id="view-account" hidden></section>
+  <section id="view-pricing" hidden></section>
 
   <footer id="foot"></footer>
 </div>
@@ -310,6 +347,129 @@ function bindDiff() {
   f.onchange = t.onchange = () => { diffSel = { from: +f.value, to: +t.value }; render(); };
 }
 
+// ---- views / tabs ------------------------------------------------------------------------------
+let CONFIG = null;
+async function post(u, body, method = "POST") {
+  const r = await fetch(u, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.detail || r.status);
+  return j;
+}
+function show(view) {
+  ["results", "account", "pricing"].forEach(v => { $("#view-" + v).hidden = v !== view; });
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.view === view));
+  $("#run").hidden = $(".live").hidden = view !== "results";
+  if (view === "account") renderAccount();
+  if (view === "pricing") renderPricing();
+}
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => show(b.dataset.view));
+
+// ---- pricing -----------------------------------------------------------------------------------
+function renderPricing() {
+  const P = CONFIG.plans, x = CONFIG.extra_run_usd;
+  const plan = (p, k, hl) => `<div class="card ${hl ? "hero" : ""}"><h2>${esc(p.name)}</h2>
+    <div class="price">$${p.usd_per_month}<small> / month${p.locked_months ? `, locked ${p.locked_months} months` : ""}</small></div>
+    <ul class="ticks"><li><b>${p.included_runs} optimization runs</b> included each month</li><li>Extra runs <b>$${x}</b> each</li>
+    <li>Scoring runs on <b>your own AI API key</b></li><li>Held-out proof on every run</li></ul>
+    <div class="note">${k === "founding" ? "For our first customers. Price locked for 12 months." : "List price."}</div></div>`;
+  $("#view-pricing").innerHTML = `<div class="grid plans section">${plan(P.founding, "founding", true)}${plan(P.standard, "standard")}</div>
+    <div class="grid plans section prose">
+      <div class="card"><h3>Your own API key</h3><p>Whetstone's agents (proposers, crossover, analyst) run on our account; that part is included.
+        Scoring the candidate prompts on your examples, usually 90%+ of a run's tokens, runs on <b>your</b> AI provider key, so it bills to your
+        provider at your rates. Your prompt is optimized against the exact model you run in production, and your data goes to a provider you already trust.</p>
+        <p>Keys are encrypted with AWS KMS, never shown again or logged, and you can revoke them at any time. Before every run you see the estimated
+        tokens and cost on your key and confirm it, and you set a per-run spending limit.</p></div>
+      <div class="card"><h3>What counts as a run</h3><p>One run is one full optimization of one prompt (or prompt set): baseline, up to N rounds, and the final
+        held-out test. Re-running the held-out test or viewing results is free. A run that fails because of our bug doesn't count. A cancelled run
+        counts only if more than one round finished. Unused runs don't roll over.</p>
+        <h3>Roadmap</h3><p>Hosted scoring, where we pay for scoring tokens, is not offered yet.</p></div>
+    </div>`;
+}
+
+// ---- account (local demo) ----------------------------------------------------------------------
+const PROVIDERS = { "Luminal": "https://flash.luminal.cloud/v1", "OpenAI": "https://api.openai.com/v1",
+  "Anthropic (OpenAI-compatible)": "https://api.anthropic.com/v1/", "Other OpenAI-compatible": "" };
+let lastEstimate = null;
+
+async function renderAccount() {
+  const V = $("#view-account");
+  let A;
+  try { A = await getJSON("/api/account"); } catch (e) { V.innerHTML = `<div class="empty">Account API unavailable (${esc(e.message)}).</div>`; return; }
+  const q = A.quote, pct = Math.min(100, 100 * q.used / q.included);
+  const keyRows = A.keys.length ? A.keys.map(k => `<tr><td>${esc(k.provider)}</td><td><code>${esc(k.model)}</code></td>
+      <td>${esc(k.added_at.replace("T", " ").replace("+00:00", " UTC"))}</td><td>validated ✓</td>
+      <td><button class="btn ghost" data-revoke="${esc(k.key_id)}">Revoke</button></td></tr>`).join("")
+    : `<tr><td colspan="5" class="note">No keys yet. Add one below.</td></tr>`;
+  const usageRows = A.usage.length ? A.usage.slice().reverse().map(u => `<tr><td><code>${esc(u.run_id)}</code></td><td>${esc(u.status)}</td>
+      <td>${u.counted ? "yes" : "no"}${u.extra_run ? " (extra)" : ""}</td><td>$${(+u.optimizer_usd || 0).toFixed(4)}</td>
+      <td>~$${(+u.scoring_usd_est || 0).toFixed(4)}</td><td>$${(+u.overage_usd || 0).toFixed(2)} ${u.payment_status && u.payment_status !== "n/a" ? "· " + esc(u.payment_status) : ""}</td></tr>`).join("")
+    : `<tr><td colspan="6" class="note">No runs yet this month.</td></tr>`;
+  V.innerHTML = `<div class="grid two section">
+    <div class="card"><h2>Plan</h2><div class="big">${esc(A.plan.name)} · $${A.plan.usd_per_month}/mo</div>
+      <div class="note">${q.used} of ${q.included} included runs used this month${q.next_is_extra ? ` · <b>next run costs $${q.extra_run_usd}</b>` : ""}</div>
+      <div class="meter"><i style="width:${pct}%"></i></div>
+      <div class="form" style="margin-top:12px"><label>Switch plan (demo)<select id="plan">
+        ${Object.entries(CONFIG.plans).map(([k, p]) => `<option value="${k}" ${p.name === A.plan.name ? "selected" : ""}>${esc(p.name)} ($${p.usd_per_month}/mo, ${p.included_runs} runs)</option>`).join("")}
+      </select></label></div></div>
+    <div class="card"><h2>Your AI provider keys</h2><div class="tablewrap"><table><tr><th>Provider</th><th>Model</th><th>Added</th><th>Status</th><th></th></tr>${keyRows}</table></div>
+      <form class="form" id="keyform" style="margin-top:12px" autocomplete="off">
+        <div class="row"><label>Provider<select id="k-prov">${Object.keys(PROVIDERS).map(p => `<option>${esc(p)}</option>`).join("")}</select></label>
+          <label>Model<input id="k-model" placeholder="deepseek-ai/DeepSeek-V4.1-Flash" required></label></div>
+        <label>Base URL<input id="k-url" value="${PROVIDERS.Luminal}"></label>
+        <label>API key<input id="k-key" type="password" autocomplete="new-password" required placeholder="paste key; it is encrypted with AWS KMS and never shown again"></label>
+        <div class="row"><label>Input price $/1M tokens<input id="k-pin" type="number" step="0.01" value="0.10"></label>
+          <label>Output price $/1M tokens<input id="k-pout" type="number" step="0.01" value="0.40"></label></div>
+        <div><button class="btn" type="submit">Validate &amp; save key</button></div><div id="k-msg"></div></form></div>
+  </div>
+  <div class="card section"><h2>Start an optimization run</h2>
+    <form class="form" id="runform">
+      <div class="row"><label>Task<select id="r-task">${Object.entries(CONFIG.tasks).map(([k, d]) => `<option value="${k}">${esc(d)}</option>`).join("")}</select></label>
+        <label>Rounds<input id="r-rounds" type="number" min="1" max="20" value="6"></label>
+        <label>Score with key<select id="r-key">${A.keys.map(k => `<option value="${esc(k.key_id)}">${esc(k.provider)} · ${esc(k.model)}</option>`).join("")}</select></label>
+        <label>Spending limit on your key ($/run)<input id="r-max" type="number" min="0.01" step="0.01" value="2.00"></label></div>
+      <div><button class="btn ghost" type="button" id="r-est" ${A.keys.length ? "" : "disabled"}>Estimate cost</button></div>
+      <div id="r-out"></div></form></div>
+  <div class="card section"><h2>Usage log · this account</h2><div class="tablewrap"><table>
+    <tr><th>Run</th><th>Status</th><th>Counted</th><th>Our agents</th><th>Your key (est.)</th><th>Overage</th></tr>${usageRows}</table></div></div>`;
+
+  $("#plan").onchange = async e => { await post("/api/account/plan", { plan: e.target.value }); renderAccount(); };
+  $("#k-prov").onchange = e => { $("#k-url").value = PROVIDERS[e.target.value]; };
+  document.querySelectorAll("[data-revoke]").forEach(b => b.onclick = async () => {
+    if (!confirm("Revoke this key? Runs can no longer use it.")) return;
+    await post("/api/account/keys/" + b.dataset.revoke, null, "DELETE"); renderAccount(); });
+  $("#keyform").onsubmit = async e => {
+    e.preventDefault(); const m = $("#k-msg"); m.className = "msg"; m.textContent = "Validating with one tiny test call...";
+    try {
+      await post("/api/account/keys", { provider: $("#k-prov").value, base_url: $("#k-url").value, model: $("#k-model").value,
+        api_key: $("#k-key").value, price_in_per_m: +$("#k-pin").value, price_out_per_m: +$("#k-pout").value });
+      $("#k-key").value = ""; renderAccount();
+    } catch (err) { $("#k-key").value = ""; m.className = "msg err"; m.textContent = err.message; }
+  };
+  const body = () => ({ task: $("#r-task").value, rounds: +$("#r-rounds").value, key_id: $("#r-key").value, max_usd: +$("#r-max").value });
+  $("#r-est").onclick = async () => {
+    const out = $("#r-out");
+    try { lastEstimate = await post("/api/account/estimate", body()); } catch (err) { out.innerHTML = `<div class="msg err">${esc(err.message)}</div>`; return; }
+    const E = lastEstimate.estimate, Q = lastEstimate.quote;
+    out.innerHTML = `<div class="msg">Estimated scoring on <b>your ${esc(lastEstimate.key.provider)} key</b>: about <b>${E.scoring_tokens.toLocaleString()} tokens ≈ $${E.scoring_usd.toFixed(2)}</b>
+        <div class="note">${esc(E.formula)}. The run stops gracefully, keeping its best result, if it reaches your $${lastEstimate.spending_limit_usd.toFixed(2)} limit.</div></div>
+      ${lastEstimate.limit_may_stop_early ? `<div class="msg warn" style="margin-top:8px">The estimate is above your spending limit, so this run will likely stop early.</div>` : ""}
+      ${Q.next_is_extra ? `<div class="msg warn" style="margin-top:8px">You've used ${Q.used} of ${Q.included} included runs this month. This run is an extra run: <b>$${Q.extra_run_usd}</b>.</div>
+        <label class="check" style="margin-top:8px"><input type="checkbox" id="r-cx"> I agree to the $${Q.extra_run_usd} extra-run charge</label>` : ""}
+      <label class="check" style="margin-top:8px"><input type="checkbox" id="r-cc"> I understand this uses about $${E.scoring_usd.toFixed(2)} of tokens on my own key (max $${lastEstimate.spending_limit_usd.toFixed(2)})</label>
+      <div style="margin-top:8px"><button class="btn" type="button" id="r-go" disabled>Start run</button></div>`;
+    const sync = () => { $("#r-go").disabled = !($("#r-cc").checked && (!Q.next_is_extra || $("#r-cx").checked)); };
+    $("#r-cc").onchange = sync; if ($("#r-cx")) $("#r-cx").onchange = sync;
+    $("#r-go").onclick = async () => {
+      try {
+        const r = await post("/api/account/runs", { ...body(), confirm_cost: true, confirm_extra: !!($("#r-cx") && $("#r-cx").checked) });
+        out.innerHTML = `<div class="msg ok">Started <code>${esc(r.run_id)}</code>${r.extra_run ? " (extra run)" : ""}. It appears under Results once the baseline is scored.</div>`;
+        setTimeout(renderAccount, 1500);
+      } catch (err) { out.innerHTML += `<div class="msg err" style="margin-top:8px">${esc(err.message)}</div>`; }
+    };
+  };
+}
+
+getJSON("/api/config").then(c => { CONFIG = c; $("#tab-account").hidden = !c.account_api; }).catch(() => {});
 loadRuns().catch(e => $("#app").innerHTML = `<div class="empty">Could not reach the API (${esc(e.message)}).</div>`);
 </script>
 </body>
