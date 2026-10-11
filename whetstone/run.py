@@ -1,0 +1,295 @@
+"""The optimization loop. Resumable: state is saved after every round.
+
+Usage:
+  python -m whetstone.run --task classify --rounds 8
+  python -m whetstone.run --task classify --objective tokens:min --constraint "success>=-0.02:rel"
+  python -m whetstone.run --resume <run_id>
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import random
+import re
+import time
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict
+from datetime import datetime, timezone
+from pathlib import Path
+
+from .agents import analyze, propose
+from .config import OPTIMIZER_MAX_USD_PER_RUN, optimizer_endpoint, scoring_endpoint
+from .evaluate import evaluate_prompt
+from .llm import BudgetExceeded, LLMClient, Usage
+from .objective import Constraint, Objective
+from .store import JsonlStore
+from .tasks import get_task, load_or_create_split
+
+POPULATION = 4
+N_FAILURES = 8
+
+
+def combine(train: dict, val: dict) -> dict:
+    """Example-weighted mean of train and val metrics."""
+    n = train["n"] + val["n"]
+    out = {k: (train.get(k, 0) * train["n"] + val.get(k, 0) * val["n"]) / n for k in set(train) | set(val) if k != "n"}
+    out["n"] = n
+    return out
+
+
+def short(agg: dict | None, metric: str) -> str:
+    if not agg:
+        return "-"
+    v = agg.get(metric, 0)
+    return f"{v:.1%}" if metric == "success" else f"{v:.0f}" if metric == "tokens" else f"{v:.3g}"
+
+
+class Runner:
+    def __init__(self, state: dict, store: JsonlStore, run_dir: Path):
+        self.s = state
+        self.store = store
+        self.run_dir = run_dir
+        self.adapter = get_task(state["task"])
+        self.examples = self.adapter.examples()
+        self.split, _ = load_or_create_split(state["task"], self.adapter)
+        assert self.split.heldout_hash == state["heldout_hash"], "split changed since this run started"
+        self.train = self.split.train(self.examples)
+        self.val = self.split.val(self.examples)
+        self.objective = Objective.from_dict(state["objective"])
+        self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"])
+        self.score_llm = LLMClient(scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0)
+        self.opt.usage = Usage(**{k: v for k, v in state["usage"]["optimizer"].items()})
+        self.score_llm.usage = Usage(**{k: v for k, v in state["usage"]["scoring"].items()})
+
+    # ---- helpers -------------------------------------------------------------------------------
+    def save(self) -> None:
+        self.s["usage"] = {"optimizer": asdict(self.opt.usage), "scoring": asdict(self.score_llm.usage)}
+        tmp = self.run_dir / "state.json.tmp"
+        tmp.write_text(json.dumps(self.s, indent=2))
+        tmp.replace(self.run_dir / "state.json")
+
+    def fit(self, agg: dict, split: str) -> float:
+        return self.objective.fitness(agg, self.s["baseline"][split])
+
+    def eval(self, prompt: str, batch) -> tuple[dict, list[str]]:
+        agg, res = evaluate_prompt(self.adapter, prompt, batch, self.score_llm, self.split)
+        return agg, [sc.notes for _, sc in res if sc.notes]
+
+    def log(self, msg: str) -> None:
+        line = f"[{datetime.now():%H:%M:%S}] {msg}"
+        print(line, flush=True)
+        with (self.run_dir / "log.txt").open("a", encoding="utf-8") as f:
+            f.write(line + "\n")
+
+    # ---- baseline ------------------------------------------------------------------------------
+    def baseline(self) -> None:
+        prompt = self.adapter.starting_prompts()[0]
+        tr, fails = self.eval(prompt, self.train)
+        self.s["baseline"] = {"train": tr}          # constraints are relative to baseline
+        va, _ = self.eval(prompt, self.val)
+        cand = {"id": "baseline", "round": 0, "strategy": "baseline", "parents": [], "prompt": prompt,
+                "train": tr, "val": va, "combined": combine(tr, va)}
+        cand["fitness"] = self.fit(tr, "train")
+        self.s["baseline"] = {"train": tr, "val": va, "combined": cand["combined"], "prompt": prompt}
+        self.s["champion"] = cand
+        self.s["population"] = [cand]
+        self.s["champion_failures"] = fails
+        self.store.insert("candidates", {"run_id": self.s["run_id"], **cand, "status": "champion"})
+        self.store.insert("rounds", self.round_doc(0, [cand], promoted=True))
+        m = self.objective.metric
+        self.log(f"round 0 (baseline): train {short(tr, m)}  val {short(va, m)}  "
+                 f"| {short(tr, 'tokens')} tok/ex | scoring ${self.score_llm.usage.usd:.4f}")
+        self.s["round_done"] = 0
+        self.save()
+
+    def round_doc(self, r: int, cands: list[dict], promoted: bool) -> dict:
+        ch = self.s["champion"]
+        return {"run_id": self.s["run_id"], "round": r, "at": datetime.now(timezone.utc).isoformat(),
+                "champion_id": ch["id"], "champion_train": ch["train"], "champion_val": ch["val"],
+                "champion_combined": ch["combined"], "promoted": promoted,
+                "candidates": [{"id": c["id"], "strategy": c["strategy"], "train": c.get("train"),
+                                "val": c.get("val")} for c in cands],
+                "usage": {"optimizer": self.opt.usage.as_dict(), "scoring": self.score_llm.usage.as_dict()},
+                "lessons": self.s.get("lessons", [])}
+
+    # ---- one round -----------------------------------------------------------------------------
+    def round(self, r: int) -> None:
+        rng = random.Random(self.s["seed"] * 1000 + r)
+        champ = self.s["champion"]
+        fails = self.s["champion_failures"]
+        sample = rng.sample(fails, min(N_FAILURES, len(fails)))
+
+        # 1) analyst writes lessons from the champion's TRAIN failures (never held-out)
+        try:
+            self.s["lessons"] = analyze(self.opt, description=self.adapter.description, prompt=champ["prompt"],
+                                        failures=sample, lessons=self.s.get("lessons", []))
+        except BudgetExceeded:
+            raise
+        except Exception as e:  # analyst is advisory: keep last round's lessons
+            self.log(f"analyst failed ({type(e).__name__}); keeping previous lessons")
+        self.store.insert("lessons", {"run_id": self.s["run_id"], "round": r, "lessons": self.s["lessons"]})
+
+        # 2) proposers in parallel
+        m = self.objective.metric
+        pop = sorted(self.s["population"], key=lambda c: c["fitness"], reverse=True)
+        as_parent = lambda c: {"id": c["id"], "prompt": c["prompt"], "score": short(c["train"], m)}
+        jobs = [("mutate", [as_parent(champ)]), ("mutate", [as_parent(champ)]), ("fresh", [])]
+        if len(pop) >= 2:
+            jobs.append(("crossover", [as_parent(pop[0]), as_parent(pop[1])]))
+        else:
+            jobs.append(("mutate", [as_parent(champ)]))
+        common = dict(description=self.adapter.description, objective=self.objective.describe(),
+                      lessons=self.s["lessons"], reference_prompt=self.s["baseline"]["prompt"])
+
+        job_fails = [rng.sample(fails, min(N_FAILURES, len(fails))) for _ in jobs]
+
+        def do(i):
+            try:
+                return propose(self.opt, jobs[i][0], parents=jobs[i][1], failures=job_fails[i], **common)
+            except BudgetExceeded:
+                raise
+            except Exception as e:  # one failed agent shouldn't sink the round
+                self.log(f"{jobs[i][0]} proposer failed ({type(e).__name__})")
+                return None
+
+        with ThreadPoolExecutor(len(jobs)) as ex:
+            proposals = [p for p in ex.map(do, range(len(jobs))) if p]
+        seen = {c["prompt"] for c in self.s["population"]}
+        cands = []
+        for i, p in enumerate(proposals):
+            if p.prompt in seen:
+                continue
+            seen.add(p.prompt)
+            cands.append({"id": f"r{r}-{p.strategy}-{i}", "round": r, "strategy": p.strategy,
+                          "parents": p.parents, "prompt": p.prompt})
+
+        # 3) evaluate all candidates on train, in parallel
+        with ThreadPoolExecutor(max(1, len(cands))) as ex:
+            results = list(ex.map(lambda c: self.eval(c["prompt"], self.train), cands))
+        for c, (agg, f) in zip(cands, results):
+            c["train"], c["fitness"], c["_fails"] = agg, self.fit(agg, "train"), f
+
+        # 4) selection: top-2 that beat the champion on train get a validation check;
+        #    promote only if it also holds on validation (guards against lucky noise).
+        challengers = sorted([c for c in cands if c["fitness"] > champ["fitness"]],
+                             key=lambda c: c["fitness"], reverse=True)[:2]
+        promoted = None
+        for c in challengers:
+            c["val"], _ = self.eval(c["prompt"], self.val)
+            c["combined"] = combine(c["train"], c["val"])
+            best = promoted or champ
+            if (self.fit(c["val"], "val") >= self.fit(best["val"], "val")
+                    and self.fit(c["combined"], "combined") > self.fit(best["combined"], "combined")):
+                promoted = c
+        if promoted:
+            self.s["champion"] = {k: v for k, v in promoted.items() if k != "_fails"}
+            self.s["champion_failures"] = promoted["_fails"]
+
+        # 5) keep the top variants, record everything
+        for c in cands:
+            status = "champion" if c is promoted else "kept" if c in challengers else "discarded"
+            self.store.insert("candidates", {"run_id": self.s["run_id"],
+                                             **{k: v for k, v in c.items() if k != "_fails"}, "status": status})
+        pool = self.s["population"] + [{k: v for k, v in c.items() if k != "_fails"} for c in cands]
+        self.s["population"] = sorted(pool, key=lambda c: c["fitness"], reverse=True)[:POPULATION]
+        self.store.insert("rounds", self.round_doc(r, cands, promoted is not None))
+
+        ch = self.s["champion"]
+        cs = ", ".join(f"{c['strategy']} {short(c['train'], m)}" + (f" (val {short(c['val'], m)})" if c.get("val") else "")
+                       for c in cands) or "no valid proposals"
+        cs += f" [{len(proposals)}/{len(jobs)} proposals usable]"
+        self.log(f"round {r}: champion train {short(ch['train'], m)} val {short(ch['val'], m)}"
+                 f"{'  << NEW CHAMPION ' + ch['id'] if promoted else ''} | candidates: {cs} "
+                 f"| spend ours ${self.opt.usage.usd:.4f} theirs ${self.score_llm.usage.usd:.4f}")
+        self.s["round_done"] = r
+        self.save()
+
+    def go(self) -> None:
+        try:
+            if self.s["round_done"] < 0:
+                self.baseline()
+            failures = 0
+            while self.s["round_done"] < self.s["rounds"]:
+                try:
+                    self.round(self.s["round_done"] + 1)
+                    failures = 0
+                except (BudgetExceeded, KeyboardInterrupt):
+                    raise
+                except Exception as e:  # provider outage etc.: wait and retry the round from saved state
+                    failures += 1
+                    if failures > 5:
+                        raise
+                    self.log(f"round {self.s['round_done'] + 1} failed ({type(e).__name__}: {str(e)[:120]}); "
+                             f"retry {failures}/5 in {30 * failures}s")
+                    time.sleep(30 * failures)
+            self.s["stopped"] = "completed"
+        except BudgetExceeded as e:
+            self.s["stopped"] = f"budget: {e}"     # incomplete round is discarded; best so far is kept
+            self.log(f"stopping gracefully: {e}")
+        except Exception as e:
+            self.s["stopped"] = f"error: {type(e).__name__}"
+            self.log(f"stopping after repeated errors: {e}; best so far is kept; resume with --resume {self.s['run_id']}")
+        except KeyboardInterrupt:
+            self.s["stopped"] = "interrupted"
+            self.log("interrupted; resume with --resume " + self.s["run_id"])
+        self.save()
+        ch, b, m = self.s.get("champion"), self.s.get("baseline"), self.objective.metric
+        if ch and b:
+            self.log(f"done ({self.s['stopped']}). baseline val {short(b['val'], m)} -> champion val "
+                     f"{short(ch['val'], m)} [{ch['id']}]. Held-out is untouched until final eval.")
+
+
+def parse_constraint(s: str) -> Constraint:
+    m = re.fullmatch(r"(\w+)(>=|<=)([-+]?[0-9.]+)(:rel)?", s.replace(" ", ""))
+    if not m:
+        raise argparse.ArgumentTypeError(f"bad constraint {s!r}; use e.g. success>=-0.02:rel")
+    return Constraint(m[1], m[2], float(m[3]), bool(m[4]))
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--task")
+    ap.add_argument("--rounds", type=int, help="default 8; on --resume, extends the run")
+    ap.add_argument("--objective", default="success:max", help="metric:max|min")
+    ap.add_argument("--constraint", action="append", type=parse_constraint, default=[])
+    ap.add_argument("--max-usd-optimizer", type=float, default=OPTIMIZER_MAX_USD_PER_RUN)
+    ap.add_argument("--max-usd-scoring", type=float, default=5.0, help="customer's per-run spending limit")
+    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--resume")
+    args = ap.parse_args()
+
+    store = JsonlStore("runs")
+    if args.resume:
+        run_dir = Path("runs") / args.resume
+        state = json.loads((run_dir / "state.json").read_text())
+        state["stopped"] = None
+        if args.rounds:
+            state["rounds"] = args.rounds
+        print(f"resuming {args.resume} after round {state['round_done']}")
+    else:
+        if not args.task:
+            ap.error("--task is required for a new run")
+        metric, direction = args.objective.split(":")
+        obj = Objective(metric, direction, args.constraint)
+        adapter = get_task(args.task)
+        split, _ = load_or_create_split(args.task, adapter)
+        args.rounds = args.rounds or 8
+        run_id = f"{args.task}-{datetime.now():%Y%m%d-%H%M%S}"
+        run_dir = Path("runs") / run_id
+        run_dir.mkdir(parents=True, exist_ok=True)
+        state = {"run_id": run_id, "task": args.task, "rounds": args.rounds, "seed": args.seed,
+                 "objective": {"metric": obj.metric, "direction": obj.direction,
+                               "constraints": [asdict(c) for c in obj.constraints]},
+                 "budgets": {"optimizer_usd": args.max_usd_optimizer, "scoring_usd": args.max_usd_scoring},
+                 "heldout_hash": split.heldout_hash, "round_done": -1, "lessons": [],
+                 "usage": {"optimizer": asdict(Usage()), "scoring": asdict(Usage())},
+                 "models": {"optimizer": optimizer_endpoint().model, "scoring": scoring_endpoint().model},
+                 "started_at": datetime.now(timezone.utc).isoformat()}
+        store.insert("runs", {k: v for k, v in state.items() if k != "usage"})
+        print(f"run {run_id}: {obj.describe()} | {args.rounds} rounds | budgets: ours ${args.max_usd_optimizer}, "
+              f"theirs ${args.max_usd_scoring}")
+    Runner(state, store, run_dir).go()
+
+
+if __name__ == "__main__":
+    main()
