@@ -1,20 +1,23 @@
-# Whetstone: 90-second demo video script
+# Whetstone: 90-second demo video (voiceover script)
 
-Record at 1080p, browser at ~110% zoom, dark theme. Voice-over in plain language. Total 90 s.
+Build the video: `python scripts/record_demo.py` (automated segments), add your two clips to `video/user/`
+(`checkout.mp4`, `run.mp4`), then `python scripts/stitch_demo.py`, which gives `video/whetstone_demo.mp4` (~88 s).
+On-screen captions carry every number, so the voiceover can be read at a relaxed pace (~2.6 words/s).
+Anything that doesn't fit here is in [docs/JUDGES.md](JUDGES.md).
 
-| Time | Shot (what's on screen) | Voice-over |
-|---|---|---|
-| 0:00-0:10 | Title card: **Whetstone: self-improving prompt optimizer**. Then a plain prompt in a text box. | "Every company running AI has prompts that are 'good enough'. Nobody has time to tune them, and nobody can prove a tweak actually helped." |
-| 0:10-0:22 | Dashboard → **Results** tab, `banking77` run. Pan across the score-per-round chart. | "Whetstone fixes that. Give it a prompt, examples, and a scoring rule. A team of AI agents on Luminal proposes better versions in parallel: mutate, crossover, and fresh rewrites." |
-| 0:22-0:35 | Hover the dots (each proposal), then the orange line climbing 70% → 85% on validation. Scroll to **Agent feed** (kept vs discarded). | "Each round, every candidate is scored. An analyst agent turns the failures into lessons that guide the next round. Only candidates that beat the champion on validation survive." |
-| 0:35-0:48 | **Lessons** panel, then **How the prompt evolved** diff (green "Key distinctions" block). | "Here's what it learned: the confusable labels and the cues that separate them, written into the prompt automatically." |
-| 0:48-0:60 | **Held-out card**: 72.0% → 81.5%, "Statistically significant". | "The proof: 400 official test examples the optimizer never saw. Accuracy went from 72 to 81.5 percent. That's a third fewer errors, with a 95% confidence interval that excludes zero." |
-| 0:60-0:70 | Slide: "Pilot: a government contractor's internal AI coding pipeline" + the pilot's numbers (tokens per run −X%, same fix rate). | "It's general. We pointed it at a government contractor's internal code-fixing pipeline and cut tokens per run by X percent on held-out work, with the same fix rate." |
-| 0:70-0:82 | **Pricing** tab, then **Account & runs**: cost estimate → confirm checkbox. Quick cut of the AWS console (Lambda, DynamoDB, KMS, Cognito, App Monetization plans). | "It's a product: customers sign in with Cognito, bring their own AI key, encrypted with KMS, and see the cost on their own key before every run. Billing runs on AWS App Monetization: $49 founding, $199 standard." |
-| 0:82-0:90 | Sales slide: "First customer conversation: [result of the outreach]". Disclose: "The first prospect is my employer." End card with the repo URL. | "And we're selling it. Our first prospect, disclosed: my employer, [status of the yes]. Whetstone: prompts that prove they got better." |
+| Time | On screen | Voiceover | Prize it serves |
+|---|---|---|---|
+| 0:00-0:03 | Intro card | "Whetstone: a self-improving prompt optimizer." | All |
+| 0:03-0:14 | **Sign-up portal** (Cognito), 6-digit code screen | "Every company running AI has prompts that are only 'good enough'. A customer signs up, secured by Amazon Cognito with email verification…" | AWS |
+| 0:14-0:29 | **AWS hosted pricing → checkout** ($49.00 invoice) | "…and picks a plan on AWS App Monetization's hosted pricing page. Founding is forty-nine dollars a month for four optimization runs, and extra runs are metered at five dollars each." | AWS, Sales |
+| 0:29-0:37 | *Your clip:* test card, back on Founding | "Checkout runs in the sandbox. Their subscription now gates every run." | AWS |
+| 0:37-0:47 | *Your clip:* estimate → confirm → start | "They bring their own AI key, encrypted with KMS, see the exact cost estimate on that key, and start a run." | AWS, Sales |
+| 0:47-1:15 | **Results tour**: held-out card → chart → agent feed → lessons → diff | "Each round, four agents on Luminal propose new prompts in parallel: mutating, combining, and rewriting from scratch. An analyst agent turns failures into lessons for the next round. Only prompts that beat the champion survive. The proof is on 400 test examples it never saw: 72 to 81.5 percent, a third fewer errors, statistically significant, for under a dollar." | Luminal (improvement, loop design, parallelism) |
+| 1:15-1:19 | **Built on AWS** card | "It's all on AWS: Cognito, KMS, DynamoDB, Lambda, and App Monetization for subscriptions plus metered usage." | AWS |
+| 1:19-1:25 | **Selling it today** card | "And we're selling it. My employer's CEO, disclosed, said it 'sounds exciting' after our pilot cut their AI pipeline's tokens 23 percent, and handed us to their technical lead. A second company is reviewing the offer." | Sales |
+| 1:25-1:28 | Outro | "Whetstone: prompts that prove they got better." | All |
 
-## Shot checklist (Chayce)
-- Dashboard (local `python -m whetstone.web` or the public Lambda URL) on the banking77 run.
-- Account tab signed in (Wyatt's Cognito login), estimate shown, do not click Start.
-- AWS console tabs ready: Lambda function `whetstone-web`, DynamoDB tables, KMS key, Cognito pool, App Monetization app.
-- Never show: `.env`, any terminal with keys, the pilot's tool name, code, or logs. Pilot appears only as the slide wording above.
+## Recording tips
+- Record the voiceover separately (phone or laptop mic) and drop it under the video in Clipchamp, CapCut, or any editor. Captions already cover every number if you skip narration.
+- If a prospect replies, edit `SALES` in `scripts/record_demo.py`, run `python scripts/record_demo.py 06c_sales`, then re-run the stitcher.
+- Never show `.env`, a pasted API key, a terminal, or any name of the pilot's tool or company.

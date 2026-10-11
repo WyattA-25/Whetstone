@@ -1,5 +1,7 @@
 # Whetstone
 
+> **Judges:** start with [docs/JUDGES.md](docs/JUDGES.md): the tracks we're entering, evidence for each criterion, the AWS architecture, and our sales log.
+
 **A self-improving prompt optimizer.** Give Whetstone a prompt you already use, example inputs, and a way to score the output. A team of AI agents evolves better versions of that prompt over repeated rounds, then proves the improvement on held-out examples the optimizer never saw.
 
 Any business that prompts AI has prompts that could do better: support replies, classification, data extraction, coding agents, internal tools. Whetstone is general-purpose. The task-specific parts live behind a small adapter interface, and the optimizer core knows nothing about any particular task.

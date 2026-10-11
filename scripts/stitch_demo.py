@@ -18,8 +18,9 @@ FONT = "C\\:/Windows/Fonts/segoeuib.ttf"
 # (user clip name, slot seconds, caption)
 SLOTS = {"checkout": (8.0, "Enter payment details in the sandbox checkout (test card), back on the Founding plan"),
          "run": (8.0, "Estimate the cost on your own key, confirm, start the run")}
-ORDER = ["00_intro", "01_card_account", "01b_signup", "02_card_plan", "03_pricing", "03b_aws_pricing",
-         "03c_aws_checkout", "checkout", "04_card_run", "run", "05_card_results", "06_results", "07_outro"]
+ORDER = ["00_intro", "01_card_account", "01b_signup", "02_card_plan", "03b_aws_pricing",
+         "03c_aws_checkout", "checkout", "04_card_run", "run", "05_card_results", "06_results", "06b_aws",
+         "06c_sales", "07_outro"]
 # Seconds of page-load at the start of hosted-page clips (blank while AWS pages load)
 SKIP = {"03b_aws_pricing": 5.6, "03c_aws_checkout": 2.3}
 NORM = "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=0x12110f,fps=30,format=yuv420p"
