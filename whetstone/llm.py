@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 
 import openai
 from openai import OpenAI
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
+from tenacity import Retrying, retry_if_exception_type, stop_after_attempt, wait_random_exponential
 
 from .config import MAX_CONCURRENCY, EndpointConfig
 
@@ -46,11 +46,13 @@ class LLMClient:
     endpoint: EndpointConfig
     max_usd: float | None = None          # hard budget for this account in this run
     temperature: float = 0.7
+    timeout: float = 45.0                 # per attempt; long hangs are cut off and retried
+    attempts: int = 5
     usage: Usage = field(default_factory=Usage)
 
     def __post_init__(self) -> None:
         self._client = OpenAI(api_key=self.endpoint.api_key, base_url=self.endpoint.base_url,
-                              timeout=120, max_retries=0)
+                              timeout=self.timeout, max_retries=0)
         self._sem = threading.Semaphore(MAX_CONCURRENCY)
         self._lock = threading.Lock()
 
@@ -76,9 +78,10 @@ class LLMClient:
             self.usage.seconds += dt
         return ChatResult(resp.choices[0].message.content or "", pt, ct, usd, dt)
 
-    @retry(retry=retry_if_exception_type(RETRYABLE), wait=wait_random_exponential(min=1, max=30),
-           stop=stop_after_attempt(8), reraise=True)
     def _create(self, messages, temperature, max_tokens):
-        return self._client.chat.completions.create(
-            model=self.endpoint.model, messages=messages,
-            temperature=temperature, max_tokens=max_tokens)
+        for attempt in Retrying(retry=retry_if_exception_type(RETRYABLE), wait=wait_random_exponential(min=1, max=20),
+                                stop=stop_after_attempt(self.attempts), reraise=True):
+            with attempt:
+                return self._client.chat.completions.create(
+                    model=self.endpoint.model, messages=messages,
+                    temperature=temperature, max_tokens=max_tokens)

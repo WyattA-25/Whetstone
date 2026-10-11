@@ -56,7 +56,7 @@ class Runner:
         self.train = self.split.train(self.examples)
         self.val = self.split.val(self.examples)
         self.objective = Objective.from_dict(state["objective"])
-        self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"])
+        self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"], timeout=90, attempts=3)
         self.score_llm = LLMClient(scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0)
         self.opt.usage = Usage(**{k: v for k, v in state["usage"]["optimizer"].items()})
         self.score_llm.usage = Usage(**{k: v for k, v in state["usage"]["scoring"].items()})
@@ -133,11 +133,10 @@ class Runner:
         m = self.objective.metric
         pop = sorted(self.s["population"], key=lambda c: c["fitness"], reverse=True)
         as_parent = lambda c: {"id": c["id"], "prompt": c["prompt"], "score": short(c["train"], m)}
-        jobs = [("mutate", [as_parent(champ)]), ("mutate", [as_parent(champ)]), ("fresh", [])]
-        if len(pop) >= 2:
-            jobs.append(("crossover", [as_parent(pop[0]), as_parent(pop[1])]))
-        else:
-            jobs.append(("mutate", [as_parent(champ)]))
+        # 6 parallel agents: over-generate so a provider hiccup still leaves several candidates
+        jobs = [("mutate", [as_parent(champ)])] * 3 + [("fresh", [])] * 2
+        jobs.append(("crossover", [as_parent(pop[0]), as_parent(pop[1])]) if len(pop) >= 2
+                    else ("mutate", [as_parent(champ)]))
         common = dict(description=self.adapter.description, objective=self.objective.describe(),
                       lessons=self.s["lessons"], reference_prompt=self.s["baseline"]["prompt"])
 
@@ -149,7 +148,7 @@ class Runner:
             except BudgetExceeded:
                 raise
             except Exception as e:  # one failed agent shouldn't sink the round
-                self.log(f"{jobs[i][0]} proposer failed ({type(e).__name__})")
+                self.log(f"{jobs[i][0]} proposer failed ({type(e).__name__}: {str(e)[:200]})")
                 return None
 
         with ThreadPoolExecutor(len(jobs)) as ex:

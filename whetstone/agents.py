@@ -44,8 +44,8 @@ class Proposal:
 
 
 def propose(llm: LLMClient, strategy: str, *, description: str, objective: str, parents: list[dict],
-            lessons: list[str], failures: list[str], reference_prompt: str) -> Proposal | None:
-    """parents: [{"id","prompt","score"}]; returns None if the model didn't return a usable prompt."""
+            lessons: list[str], failures: list[str], reference_prompt: str) -> Proposal:
+    """parents: [{"id","prompt","score"}]; raises ValueError if the model didn't return a usable prompt."""
     sys = SYSTEM.format(description=description, objective=objective)
     if strategy == "mutate":
         p = parents[0]
@@ -72,7 +72,8 @@ def propose(llm: LLMClient, strategy: str, *, description: str, objective: str, 
                  temperature=temp, max_tokens=4096)
     prompt = extract_tag(r.text, "prompt")
     if not prompt or len(prompt) < 20:
-        return None
+        raise ValueError(f"no usable <prompt> block ({r.completion_tokens} tokens); "
+                         f"reply ends: {r.text.strip()[-150:]!r}")
     return Proposal(strategy, prompt, [p["id"] for p in parents])
 
 
