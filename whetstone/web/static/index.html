@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whetstone</title>
+<meta name="description" content="Self-improving prompt optimizer: agent teams evolve your prompts and prove it on held-out tests.">
+<style>
+:root {
+  --bg: #f6f5f2; --panel: #ffffff; --ink: #1c1b19; --muted: #6b6760; --line: #e4e1db;
+  --accent: #b45309; --accent-soft: #fdf3e7; --good: #15803d; --good-soft: #e9f7ee; --warn: #a16207;
+  --mutate: #2563eb; --crossover: #7c3aed; --fresh: #059669; --baseline: #78716c;
+  --ins: #dcfce7; --ins-ink: #14532d; --del: #fee2e2; --del-ink: #7f1d1d;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12110f; --panel: #1b1a17; --ink: #f2efe9; --muted: #a29d94; --line: #2f2d29;
+    --accent: #f59e0b; --accent-soft: #2a2114; --good: #4ade80; --good-soft: #13261a; --warn: #fbbf24;
+    --mutate: #60a5fa; --crossover: #a78bfa; --fresh: #34d399; --baseline: #a8a29e;
+    --ins: #14301f; --ins-ink: #bbf7d0; --del: #3a1717; --del-ink: #fecaca; --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12110f; --panel: #1b1a17; --ink: #f2efe9; --muted: #a29d94; --line: #2f2d29;
+  --accent: #f59e0b; --accent-soft: #2a2114; --good: #4ade80; --good-soft: #13261a; --warn: #fbbf24;
+  --mutate: #60a5fa; --crossover: #a78bfa; --fresh: #34d399; --baseline: #a8a29e;
+  --ins: #14301f; --ins-ink: #bbf7d0; --del: #3a1717; --del-ink: #fecaca; --shadow: none;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px 48px; }
+header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 20px 0 8px; }
+.brand { display: flex; align-items: baseline; gap: 10px; margin-right: auto; }
+.brand h1 { margin: 0; font-size: 24px; letter-spacing: -.02em; }
+.brand h1 span { color: var(--accent); }
+.brand p { margin: 0; color: var(--muted); font-size: 14px; }
+select, button { font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 10px; }
+button { cursor: pointer; }
+.live { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.dot.on { background: var(--good); box-shadow: 0 0 0 0 var(--good); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 60%, transparent); }
+  70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.sub { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+.grid { display: grid; gap: 16px; }
+.cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.two { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+@media (max-width: 900px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .two { grid-template-columns: 1fr; } }
+#run { max-width: 100%; min-width: 0; text-overflow: ellipsis; }
+@media (max-width: 520px) { .cards { grid-template-columns: 1fr; } #run { flex: 1 1 100%; } .big { font-size: 24px; } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); min-width: 0; }
+.card h2 { margin: 0 0 10px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.big { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+.big .arrow { color: var(--muted); font-weight: 400; margin: 0 4px; }
+.hero { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); background: linear-gradient(180deg, var(--accent-soft), var(--panel) 70%); }
+.note { color: var(--muted); font-size: 13px; margin-top: 6px; }
+.badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; margin-top: 8px; }
+.badge.good { background: var(--good-soft); color: var(--good); }
+.badge.warn { background: var(--accent-soft); color: var(--warn); }
+.delta { color: var(--good); font-weight: 600; }
+.delta.neg { color: var(--del-ink); }
+.section { margin-top: 16px; }
+svg text { fill: var(--muted); font-size: 12px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.feed { max-height: 560px; overflow: auto; padding-right: 4px; }
+.round { border-top: 1px solid var(--line); padding: 10px 0; }
+.round:first-child { border-top: 0; padding-top: 0; }
+.round-h { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.cand { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; padding: 6px 8px;
+  border-radius: 8px; cursor: pointer; }
+.cand:hover { background: var(--bg); }
+.chip { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 2px 7px; border-radius: 6px; color: #fff; }
+.chip.mutate { background: var(--mutate); } .chip.crossover { background: var(--crossover); }
+.chip.fresh { background: var(--fresh); } .chip.baseline { background: var(--baseline); }
+.scores { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--muted); white-space: nowrap; }
+.status { font-size: 12px; font-weight: 600; white-space: nowrap; }
+.status.champion { color: var(--accent); } .status.kept { color: var(--ink); } .status.discarded { color: var(--muted); }
+pre { white-space: pre-wrap; word-break: break-word; margin: 6px 0 4px; padding: 10px; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--line); font: 12.5px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.diff ins { background: var(--ins); color: var(--ins-ink); text-decoration: none; border-radius: 3px; }
+.diff del { background: var(--del); color: var(--del-ink); border-radius: 3px; }
+.diff-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+ol.lessons { margin: 0; padding-left: 20px; } ol.lessons li { margin-bottom: 6px; }
+.empty { color: var(--muted); font-size: 14px; padding: 24px 0; text-align: center; }
+footer { margin-top: 24px; color: var(--muted); font-size: 12px; }
+footer code { font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><h1>Whet<span>stone</span></h1><p>Self-improving prompt optimizer</p></div>
+    <select id="run" aria-label="Run"></select>
+    <span class="live"><span class="dot" id="livedot"></span><span id="livetxt">-</span></span>
+    <button id="theme" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </header>
+  <p class="sub" id="objective"></p>
+
+  <div id="app"><div class="empty">Loading runs...</div></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let METRIC = "success", current = null, timer = null, openCands = new Set(), diffSel = null;
+
+function fmt(v, m = METRIC) {
+  if (v === null || v === undefined || Number.isNaN(v)) return "-";
+  if (m === "success") return (v * 100).toFixed(1) + "%";
+  if (m === "tokens") return Math.round(v).toLocaleString();
+  if (m === "seconds") return v.toFixed(2) + "s";
+  if (m === "usd") return "$" + v.toFixed(v < 0.01 ? 5 : 3);
+  return (+v).toPrecision(3);
+}
+const val = (agg, m = METRIC) => agg ? agg[m] : null;
+
+// ---- theme -------------------------------------------------------------------------------------
+(function () {
+  let t = null; try { t = localStorage.getItem("ws-theme"); } catch (e) {}
+  if (t) document.documentElement.dataset.theme = t;
+  $("#theme").onclick = () => {
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    const cur = document.documentElement.dataset.theme || (dark ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("ws-theme", next); } catch (e) {}
+  };
+})();
+
+// ---- data --------------------------------------------------------------------------------------
+async function getJSON(u) { const r = await fetch(u); if (!r.ok) throw new Error(r.status); return r.json(); }
+
+async function loadRuns() {
+  const runs = await getJSON("/api/runs");
+  const sel = $("#run");
+  if (!runs.length) { $("#app").innerHTML = '<div class="empty">No runs yet. Start one with <code>python -m whetstone.run --task banking77</code>.</div>'; return; }
+  const want = decodeURIComponent(location.hash.slice(1)) || runs[0].run_id;
+  sel.innerHTML = runs.map(r => `<option value="${esc(r.run_id)}" ${r.run_id === want ? "selected" : ""}>${esc(r.run_id)} · ${esc(r.task)} · round ${r.round_done}/${r.rounds}</option>`).join("");
+  sel.onchange = () => { location.hash = sel.value; openCands.clear(); diffSel = null; loadRun(sel.value); };
+  loadRun(sel.value);
+}
+
+async function loadRun(id) {
+  clearTimeout(timer);
+  try { current = await getJSON("/api/runs/" + encodeURIComponent(id)); render(); }
+  catch (e) { $("#app").innerHTML = `<div class="empty">Could not load run (${esc(e.message)}).</div>`; }
+  const live = current && !current.summary.stopped;
+  $("#livedot").className = "dot" + (live ? " on" : "");
+  $("#livetxt").textContent = live ? "live · refreshing" : (current ? "finished" : "-");
+  if (live) timer = setTimeout(() => loadRun(id), 15000);
+}
+
+// ---- render ------------------------------------------------------------------------------------
+function render() {
+  const { summary: s, rounds, candidates, heldout } = current;
+  METRIC = s.objective.metric;
+  const obj = s.objective;
+  $("#objective").textContent = `Objective: ${obj.direction}imize ${obj.metric}` +
+    (obj.constraints || []).map(c => `, subject to ${c.metric} ${c.op} ${c.value}${c.relative_to_baseline ? " vs baseline" : ""}`).join("") +
+    ` · task ${s.task} · optimizer + scoring model ${s.models ? s.models.optimizer : "-"}`;
+
+  const base = s.baseline, ch = s.champion, u = s.usage || {};
+  const dVal = (ch.val ?? 0) - (base.val ?? 0);
+  let held;
+  if (heldout) {
+    const b = heldout.baseline[METRIC], c = heldout.best[METRIC], d = heldout.paired_diff;
+    const pts = METRIC === "success" ? `${d.mean >= 0 ? "+" : ""}${(d.mean * 100).toFixed(1)} pts` : fmt(d.mean);
+    const ci = METRIC === "success" ? `95% CI ${(d.ci95[0]*100).toFixed(1)} to ${(d.ci95[1]*100).toFixed(1)} pts` : "";
+    held = `<div class="card hero"><h2>Held-out test · ${heldout.n_heldout} unseen examples</h2>
+      <div class="big">${fmt(b.mean)}<span class="arrow">→</span>${fmt(c.mean)}</div>
+      <div class="note"><span class="delta ${d.mean < 0 ? "neg" : ""}">${pts}</span> · ${(heldout.relative_improvement*100).toFixed(1)}% relative · ${ci}</div>
+      <span class="badge ${heldout.significant ? "good" : "warn"}">${heldout.significant ? "Statistically significant" : "Directional only"}</span></div>`;
+  } else {
+    held = `<div class="card hero"><h2>Held-out test</h2><div class="big">Pending</div>
+      <div class="note">Run after optimization on examples the agents never saw. Hash <code>${esc((s.heldout_hash || "").slice(0, 12))}</code> is verified first.</div></div>`;
+  }
+  const status = s.stopped ? (s.stopped === "completed" ? "Completed" : s.stopped) : "Running";
+  const cards = `<div class="grid cards">
+    ${held}
+    <div class="card"><h2>Validation · used for selection</h2>
+      <div class="big">${fmt(base.val)}<span class="arrow">→</span>${fmt(ch.val)}</div>
+      <div class="note"><span class="delta ${dVal < 0 ? "neg" : ""}">${METRIC === "success" ? (dVal >= 0 ? "+" : "") + (dVal*100).toFixed(1) + " pts" : fmt(dVal)}</span> · best is <code>${esc(ch.id)}</code>, checked ${ch.val_runs}×</div></div>
+    <div class="card"><h2>Rounds</h2><div class="big">${Math.max(0, s.round_done)} / ${s.rounds}</div>
+      <div class="note">${esc(status)} · ${candidates.filter(c => c.strategy !== "baseline").length} prompts proposed</div></div>
+    <div class="card"><h2>Spend</h2>
+      <div class="big">$${((u.optimizer?.usd || 0) + (u.scoring?.usd || 0)).toFixed(3)}</div>
+      <div class="note">Agents (ours) $${(u.optimizer?.usd || 0).toFixed(4)} · scoring (customer key) $${(u.scoring?.usd || 0).toFixed(4)}</div></div>
+  </div>`;
+
+  const chart = `<div class="card section"><h2>Score per round</h2>${chartSVG(rounds, base.val)}
+    <div class="legend"><span><i style="background:var(--accent)"></i>Best prompt (validation, running mean)</span>
+    <span><i style="background:var(--mutate)"></i>Mutate</span><span><i style="background:var(--crossover)"></i>Crossover</span>
+    <span><i style="background:var(--fresh)"></i>Fresh</span><span><i style="border:2px dashed var(--baseline);background:none"></i>Baseline</span>
+    <span>Dots = each proposal's training-batch score</span></div></div>`;
+
+  const two = `<div class="grid two section">
+    <div class="card"><h2>Agent feed</h2><div class="feed">${feedHTML(rounds, candidates)}</div></div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h2>Lessons from the analyst agent</h2>${(s.lessons || []).length ? `<ol class="lessons">${s.lessons.map(l => `<li>${esc(l)}</li>`).join("")}</ol>` : '<div class="note">None yet.</div>'}</div>
+      <div class="card"><h2>How the prompt evolved</h2>${diffHTML(candidates, base)}</div>
+    </div></div>`;
+
+  const scroll = $(".feed") ? $(".feed").scrollTop : 0;
+  $("#app").innerHTML = cards + chart + two;
+  $(".feed").scrollTop = scroll;
+  $("#foot").innerHTML = `Held-out set is never used for selection or lessons (enforced in code) · held-out hash <code>${esc(s.heldout_hash || "-")}</code> · run <code>${esc(s.run_id)}</code>`;
+  bindFeed(); bindDiff(candidates, base);
+}
+
+function chartSVG(rounds, baseVal) {
+  if (!rounds.length) return '<div class="empty">Waiting for the baseline...</div>';
+  const W = 800, H = 280, L = 48, R = 16, T = 12, B = 32;
+  const total = Math.max(current.summary.rounds, rounds[rounds.length - 1].round, 1);
+  const pts = [];
+  rounds.forEach(r => (r.candidates || []).forEach(c => { const v = val(c.train); if (v != null) pts.push(v); }));
+  const line = rounds.map(r => ({ x: r.round, y: val(r.champion_val), promoted: r.promoted && r.round > 0 }));
+  const all = pts.concat(line.map(p => p.y)).concat([baseVal]).filter(v => v != null);
+  let lo = Math.min(...all), hi = Math.max(...all);
+  const pad = (hi - lo) * 0.12 || 0.05; lo -= pad; hi += pad;
+  if (METRIC === "success") { lo = Math.max(0, lo); hi = Math.min(1, hi); }
+  const X = i => L + (W - L - R) * i / total, Y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+  let g = "";
+  for (let k = 0; k <= 4; k++) {
+    const v = lo + (hi - lo) * k / 4;
+    g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
+  }
+  for (let i = 0; i <= total; i++) g += `<text x="${X(i)}" y="${H - 10}" text-anchor="middle">${i === 0 ? "base" : i}</text>`;
+  if (baseVal != null) g += `<line x1="${L}" x2="${W - R}" y1="${Y(baseVal)}" y2="${Y(baseVal)}" stroke="var(--baseline)" stroke-dasharray="5 5" stroke-width="1.5"/>`;
+  rounds.forEach(r => (r.candidates || []).forEach((c, j) => {
+    const v = val(c.train); if (v == null || r.round === 0) return;
+    const jit = ((j % 5) - 2) * 6;
+    g += `<circle cx="${X(r.round) + jit}" cy="${Y(v)}" r="4.5" fill="var(--${c.strategy})" opacity=".75"><title>${esc(c.id)}: batch ${fmt(v)}${c.val ? ", val " + fmt(val(c.val)) : ""}</title></circle>`;
+  }));
+  const path = line.filter(p => p.y != null).map((p, i) => `${i ? "L" : "M"}${X(p.x)},${Y(p.y)}`).join(" ");
+  g += `<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/>`;
+  line.forEach(p => { if (p.y != null) g += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="${p.promoted ? 6.5 : 4}" fill="${p.promoted ? "var(--accent)" : "var(--panel)"}" stroke="var(--accent)" stroke-width="2.5"><title>round ${p.x}: best ${fmt(p.y)}${p.promoted ? " (new best)" : ""}</title></circle>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Score per round">${g}</svg>`;
+}
+
+function feedHTML(rounds, cands) {
+  const byRound = {};
+  cands.forEach(c => (byRound[c.round] = byRound[c.round] || []).push(c));
+  const order = Object.keys(byRound).map(Number).sort((a, b) => b - a);
+  if (!order.length) return '<div class="note">No proposals yet.</div>';
+  return order.map(r => {
+    const rd = rounds.find(x => x.round === r);
+    const list = byRound[r].map(c => {
+      const st = c.status || "discarded";
+      const label = c.strategy === "baseline" ? "starting prompt" : st === "champion" ? "★ new best" : st === "kept" ? "validated" : "discarded";
+      const open = openCands.has(c.id);
+      return `<div class="cand" data-id="${esc(c.id)}">
+        <span class="chip ${esc(c.strategy)}">${esc(c.strategy)}</span>
+        <span class="scores">batch ${fmt(val(c.train))}${c.val ? ` · val ${fmt(val(c.val))}` : ""} · ${fmt(val(c.train, "tokens"), "tokens")} tok/ex</span>
+        <span class="status ${esc(st)}">${label}</span></div>
+        ${open ? `<pre>${esc(c.prompt)}</pre>` : ""}`;
+    }).join("");
+    return `<div class="round"><div class="round-h"><b>${r === 0 ? "Baseline" : "Round " + r}</b><span>${rd && rd.promoted && r > 0 ? "new best prompt" : ""}</span></div>${list}</div>`;
+  }).join("");
+}
+
+function bindFeed() {
+  document.querySelectorAll(".cand").forEach(el => el.onclick = () => {
+    const id = el.dataset.id; openCands.has(id) ? openCands.delete(id) : openCands.add(id); render();
+  });
+}
+
+// ---- prompt diff (word-level LCS) --------------------------------------------------------------
+function wordDiff(a, b) {
+  const A = a.split(/(\s+)/), B = b.split(/(\s+)/), n = A.length, m = B.length;
+  if (n * m > 4e6) return `<pre>${esc(b)}</pre>`;
+  const dp = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+    dp[i][j] = A[i] === B[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  let i = 0, j = 0, out = "";
+  while (i < n && j < m) {
+    if (A[i] === B[j]) { out += esc(A[i]); i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) { out += `<del>${esc(A[i])}</del>`; i++; }
+    else { out += `<ins>${esc(B[j])}</ins>`; j++; }
+  }
+  while (i < n) out += `<del>${esc(A[i++])}</del>`;
+  while (j < m) out += `<ins>${esc(B[j++])}</ins>`;
+  return `<pre class="diff">${out}</pre>`;
+}
+
+function lineage(cands, base) {
+  const champs = cands.filter(c => c.status === "champion" && c.strategy !== "baseline").sort((a, b) => a.round - b.round);
+  return [{ id: "baseline", prompt: base.prompt }].concat(champs);
+}
+
+function diffHTML(cands, base) {
+  const L = lineage(cands, base);
+  if (L.length < 2) return '<div class="note">The baseline is still the best prompt.</div>';
+  diffSel = diffSel || { from: 0, to: L.length - 1 };
+  const opts = sel => L.map((c, i) => `<option value="${i}" ${i === sel ? "selected" : ""}>${esc(c.id)}</option>`).join("");
+  return `<div class="diff-controls">from <select id="dfrom">${opts(diffSel.from)}</select> to <select id="dto">${opts(diffSel.to)}</select>
+    <span><ins style="background:var(--ins);color:var(--ins-ink);text-decoration:none;padding:0 4px;border-radius:3px">added</ins>
+    <del style="background:var(--del);color:var(--del-ink);padding:0 4px;border-radius:3px">removed</del></span></div>
+    ${wordDiff(L[diffSel.from].prompt || "", L[diffSel.to].prompt || "")}`;
+}
+
+function bindDiff() {
+  const f = $("#dfrom"), t = $("#dto");
+  if (!f) return;
+  f.onchange = t.onchange = () => { diffSel = { from: +f.value, to: +t.value }; render(); };
+}
+
+loadRuns().catch(e => $("#app").innerHTML = `<div class="empty">Could not reach the API (${esc(e.message)}).</div>`);
+</script>
+</body>
+</html>

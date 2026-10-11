@@ -17,7 +17,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
 | 8 | Unattended code-fix run + held-out evaluation | 🟡 eval tool done (`python -m whetstone.final_eval <run_id>`); classify redesign pending decision |
 | 9 | Employer pilot (only if approved; private config, never committed) | |
-| 10 | Results UI (FastAPI + HTML) | |
+| 10 | Results UI (FastAPI + HTML) | ✅ done: `python -m whetstone.web` → http://127.0.0.1:8000 |
 | ✂ | Cut line 5:00 PM | |
 | 11 | Customer features (BYO key, cost estimate, spend limit, run counter, usage log) | |
 | 12a | Payments (AWS beta tool; Stripe test-mode fallback) | |
@@ -92,6 +92,15 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Run: `python -m whetstone.run --task banking77 --rounds 8`; final: `python -m whetstone.final_eval <run_id>`
   (1 repeat by default for this task: 400 examples x 2 prompts = 800 calls).
 - Old task `classify` (v1) is kept for the record but retired.
+
+## Web UI
+
+- `python -m whetstone.web` (or the `whetstone-ui` preview config). Reads DynamoDB when WHETSTONE_STORE=dynamo,
+  else local `runs/`. Override with WHETSTONE_UI_SOURCE=local|dynamo.
+- Shows held-out result (or "pending"), validation baseline→best, rounds, spend split ours/customer,
+  score-per-round chart (best line + every proposal as a dot), agent feed (click to expand prompts),
+  analyst lessons, and a word-level prompt diff across the champion lineage. Auto-refreshes live runs.
+- Private runs (state.private or task "pilot*") are never served.
 
 ## Findings so far (be honest in README/video)
 

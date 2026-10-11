@@ -38,6 +38,11 @@ def test_propose_parses_reply_variants(reply, expected):
     assert _propose(reply).prompt == expected
 
 
+def test_propose_strips_nested_wrapper_tags():
+    reply = "<prompt>\n<prompt>\nClassify the message carefully.\n</prompt>\n</prompt>"
+    assert _propose(reply).prompt == "Classify the message carefully."
+
+
 def test_propose_rejects_empty_reply():
     with pytest.raises(ValueError):
         _propose("")

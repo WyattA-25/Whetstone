@@ -31,13 +31,18 @@ def _failures_block(failures: list[str]) -> str:
     return "\n\n".join(f"[{i + 1}]\n{f}" for i, f in enumerate(failures)) if failures else "(none)"
 
 
+def _strip_tags(body: str, tag: str) -> str:
+    """Remove stray copies of the wrapper tag (models sometimes nest them)."""
+    return re.sub(rf"</?{tag}>", "", body, flags=re.I).strip()
+
+
 def extract_tag(text: str, tag: str) -> str | None:
     m = re.findall(rf"<{tag}>(.*?)</{tag}>", text, flags=re.S | re.I)  # models vary tag case
     if m:
-        return m[-1].strip()
+        return _strip_tags(max(m, key=len), tag)
     # Reply cut off before (or inside) the closing tag: keep the body, drop the partial tag.
     m = re.search(rf"<{tag}>(.*)$", text, flags=re.S | re.I)
-    return re.sub(r"</?\w*>?\s*$", "", m.group(1)).strip() if m else None
+    return _strip_tags(re.sub(r"</?\w*>?\s*$", "", m.group(1)), tag) if m else None
 
 
 @dataclass
