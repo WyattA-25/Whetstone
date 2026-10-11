@@ -1,0 +1,6 @@
+# Whetstone public dashboard on AWS Lambda (Function URL). Read-only; no secrets in the image.
+FROM public.ecr.aws/lambda/python:3.11
+COPY requirements-web.txt .
+RUN pip install --no-cache-dir -r requirements-web.txt --target "${LAMBDA_TASK_ROOT}"
+COPY whetstone ${LAMBDA_TASK_ROOT}/whetstone
+CMD ["whetstone.web.lambda_handler.handler"]

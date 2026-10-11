@@ -1,0 +1,5 @@
+# Only the whetstone package and requirements-web.txt are needed; never ship secrets or data
+*
+!whetstone/
+!requirements-web.txt
+whetstone/**/__pycache__

@@ -21,7 +21,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | ✂ | Cut line 5:00 PM | |
 | 11 | Customer features (BYO key, cost estimate, spend limit, run counter, usage log) | ✅ done (KMS) |
 | 12a | Payments (AWS beta tool; Stripe test-mode fallback) | |
-| 12b | Deploy (ECR → App Runner, KMS) | |
+| 12b | Deploy | ✅ Lambda + Function URL: https://orluwkuvzjjph76umunjuj6qpe0yzalo.lambda-url.us-east-1.on.aws/ |
 | ✂ | Cut line 7:00 PM: features stop | |
 | 13 | Sale message draft | |
 | 14 | Demo video script | |
@@ -116,6 +116,14 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Verified: ciphertext only at rest; wrong encryption context rejected by KMS; fake key -> 401 shown;
   unconfirmed run -> HTTP 400; 5th Founding run flagged extra and billed $5 unless our bug failed it.
 
+## Deployment (12b)
+
+- Public read-only dashboard on **AWS Lambda (container image from ECR) + Function URL** (App Runner returned
+  SubscriptionRequiredException for this account). Role WhetstoneWebLambda: CloudWatch logs + read-only
+  DynamoDB whetstone-runs. No secrets in the image; account API off (403).
+- Redeploy: `bash scripts/deploy_aws.sh` (set AWS_CLI to the aws.exe path on Windows).
+- AWS services in use: DynamoDB, KMS, ECR, Lambda, IAM, CloudWatch Logs. Delete function/ECR/KMS after judging.
+
 ## Web UI
 
 - `python -m whetstone.web` (or the `whetstone-ui` preview config). Reads DynamoDB when WHETSTONE_STORE=dynamo,
@@ -146,7 +154,9 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 ## Open questions
 
 - Luminal real per-token price (for cost estimates).
-- AWS "best use" criteria; judging rubric.
+- Luminal judging (posted 4:04 PM): measurable improvement incl. fresh tests 40%, loop design 30%,
+  effective parallelism 20%, demo clarity 10%; relative improvement + difficulty.
+- AWS Track 2: must fill the AWS UserTesting survey after trying the monetize tool (eligibility + $50 card).
 - Employer: pilot permission, harness request/response format (ports 8080 / 5050), model used.
 
 ## Confidentiality

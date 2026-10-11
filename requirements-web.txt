@@ -1,0 +1,7 @@
+# Minimal dependencies for the deployed, read-only web dashboard (no LLM client, no secrets)
+fastapi==0.115.5
+uvicorn==0.32.1
+pydantic==2.10.2
+python-dotenv==1.0.1
+boto3==1.35.68
+mangum==0.19.0
