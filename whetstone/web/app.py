@@ -29,7 +29,8 @@ ACCOUNT_API = os.getenv("WHETSTONE_ACCOUNT_API", "off") == "on"
 # while hosted checkout is unavailable (the decision is still checked, logged, and shown).
 BILLING_ENFORCE = os.getenv("WHETSTONE_BILLING_ENFORCE", "on") != "off"
 # Where AWS's hosted checkout/portal send the buyer back. Must be a public https URL: the billing endpoint's
-# firewall rejects localhost/127.0.0.1 URLs in the request body (SSRF protection) with a bare 403.
+# firewall rejects the literal IP 127.0.0.1 in the request body (SSRF protection) with a bare 403;
+# "http://localhost:8000/" is accepted, so local dev returns buyers to the local app.
 PUBLIC_URL = os.getenv("WHETSTONE_PUBLIC_URL", "https://orluwkuvzjjph76umunjuj6qpe0yzalo.lambda-url.us-east-1.on.aws/")
 TASKS = {"banking77": "Support-ticket intent classification (Banking77)",
          "codefix": "Fix static-analysis findings in real repos"}
