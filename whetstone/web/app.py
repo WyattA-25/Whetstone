@@ -1,7 +1,8 @@
 """Whetstone web UI. Run locally: python -m whetstone.web  (then open http://127.0.0.1:8000).
 
 Account endpoints (API keys, starting runs) are OFF unless WHETSTONE_ACCOUNT_API=on, so the public deployment
-is a read-only dashboard + pricing page. For the hackathon demo there is a single customer, "demo".
+is a read-only dashboard + pricing page. Customers sign in with Amazon Cognito; their Cognito `sub` is the
+customer_id that every key, run counter, and usage record is keyed on.
 """
 from __future__ import annotations
 
@@ -12,13 +13,13 @@ from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 load_dotenv()
 
-from ..accounts import DEMO_CUSTOMER, EXTRA_RUN_USD, PLANS  # noqa: E402
+from ..accounts import EXTRA_RUN_USD, PLANS  # noqa: E402
 from .data import RunReader  # noqa: E402  (reads env set by load_dotenv)
 
 STATIC = Path(__file__).parent / "static"
@@ -70,7 +71,34 @@ def run(run_id: str) -> dict:
     return data
 
 
-# ---- account (local demo only) ----------------------------------------------------------------
+# ---- sign-in (Cognito) -------------------------------------------------------------------------
+class LoginIn(BaseModel):
+    email: str = Field(max_length=200)
+    password: str = Field(max_length=200)
+
+
+def current_customer(authorization: str = Header(default="")) -> str:
+    """Every account endpoint depends on this: a verified Cognito ID token -> customer_id (the `sub`)."""
+    accounts()  # 403 when the account API is disabled
+    from ..auth import AuthError, verify
+    try:
+        return verify(authorization.removeprefix("Bearer ").strip())["sub"]
+    except AuthError as e:
+        raise HTTPException(401, str(e)) from None
+
+
+@app.post("/api/auth/login")
+def login(body: LoginIn) -> dict:
+    accounts()
+    from ..auth import AuthError
+    from ..auth import login as cognito_login
+    try:
+        return cognito_login(body.email.strip(), body.password)
+    except AuthError as e:
+        raise HTTPException(401, str(e)) from None
+
+
+# ---- account -----------------------------------------------------------------------------------
 class PlanIn(BaseModel):
     plan: str
 
@@ -94,25 +122,25 @@ class RunIn(BaseModel):
 
 
 @app.get("/api/account")
-def account() -> dict:
+def account(cid: str = Depends(current_customer)) -> dict:
     a = accounts()
-    prof = a.profile(DEMO_CUSTOMER)
-    return {"profile": prof, "plan": PLANS[prof["plan"]], "quote": a.quote_next_run(DEMO_CUSTOMER),
-            "keys": a.list_keys(DEMO_CUSTOMER), "usage": a.usage_log(DEMO_CUSTOMER)}
+    prof = a.profile(cid)
+    return {"profile": prof, "plan": PLANS[prof["plan"]], "quote": a.quote_next_run(cid),
+            "keys": a.list_keys(cid), "usage": a.usage_log(cid)}
 
 
 @app.post("/api/account/plan")
-def set_plan(body: PlanIn) -> dict:
+def set_plan(body: PlanIn, cid: str = Depends(current_customer)) -> dict:
     try:
-        return accounts().set_plan(DEMO_CUSTOMER, body.plan)
+        return accounts().set_plan(cid, body.plan)
     except ValueError as e:
         raise HTTPException(400, str(e)) from None
 
 
 @app.post("/api/account/keys")
-def add_key(body: KeyIn) -> dict:
+def add_key(body: KeyIn, cid: str = Depends(current_customer)) -> dict:
     try:  # the key is validated, encrypted with KMS, and never echoed back
-        return accounts().add_key(DEMO_CUSTOMER, provider=body.provider, base_url=body.base_url, model=body.model,
+        return accounts().add_key(cid, provider=body.provider, base_url=body.base_url, model=body.model,
                                   api_key=body.api_key, price_in_per_m=body.price_in_per_m,
                                   price_out_per_m=body.price_out_per_m)
     except ValueError as e:
@@ -120,43 +148,43 @@ def add_key(body: KeyIn) -> dict:
 
 
 @app.delete("/api/account/keys/{key_id}")
-def revoke_key(key_id: str) -> dict:
-    accounts().revoke_key(DEMO_CUSTOMER, key_id)
+def revoke_key(key_id: str, cid: str = Depends(current_customer)) -> dict:
+    accounts().revoke_key(cid, key_id)
     return {"revoked": key_id}
 
 
-def _estimate(body: RunIn) -> dict:
+def _estimate(body: RunIn, cid: str) -> dict:
     from ..accounts import estimate_run
     from ..tasks import get_task
     if body.task not in TASKS:
         raise HTTPException(400, "unknown task")
     a = accounts()
-    key = next((k for k in a.list_keys(DEMO_CUSTOMER) if k["key_id"] == body.key_id), None)
+    key = next((k for k in a.list_keys(cid) if k["key_id"] == body.key_id), None)
     if not key:
         raise HTTPException(400, "choose one of your API keys")
     est = estimate_run(get_task(body.task), body.rounds, key["price_in_per_m"], key["price_out_per_m"])
-    quote = a.quote_next_run(DEMO_CUSTOMER)
+    quote = a.quote_next_run(cid)
     return {"estimate": est, "quote": quote, "key": key, "spending_limit_usd": body.max_usd,
             "limit_may_stop_early": est["scoring_usd"] > body.max_usd}
 
 
 @app.post("/api/account/estimate")
-def estimate(body: RunIn) -> dict:
-    return _estimate(body)
+def estimate(body: RunIn, cid: str = Depends(current_customer)) -> dict:
+    return _estimate(body, cid)
 
 
 @app.post("/api/account/runs")
-def start_run(body: RunIn) -> dict:
-    info = _estimate(body)
+def start_run(body: RunIn, cid: str = Depends(current_customer)) -> dict:
+    info = _estimate(body, cid)
     if not body.confirm_cost:
         raise HTTPException(400, "confirm the cost estimate first")
     if info["quote"]["next_is_extra"] and not body.confirm_extra:
         raise HTTPException(402, f"all included runs used: confirm the ${EXTRA_RUN_USD:.0f} extra-run charge")
-    if any(u.get("status") == "running" for u in accounts().usage_log(DEMO_CUSTOMER)):
+    if any(u.get("status") == "running" for u in accounts().usage_log(cid)):
         raise HTTPException(409, "a run is already in progress")
     run_id = f"{body.task}-{datetime.now():%Y%m%d-%H%M%S}"
     cmd = [sys.executable, "-m", "whetstone.run", "--task", body.task, "--rounds", str(body.rounds),
-           "--max-usd-scoring", str(body.max_usd), "--customer", DEMO_CUSTOMER, "--key-id", body.key_id,
+           "--max-usd-scoring", str(body.max_usd), "--customer", cid, "--key-id", body.key_id,
            "--run-id", run_id] + (["--confirm-extra"] if body.confirm_extra else [])
     log = (ROOT / "runs" / f"{run_id}.worker.log")
     log.parent.mkdir(exist_ok=True)

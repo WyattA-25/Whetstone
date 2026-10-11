@@ -103,6 +103,17 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
   (1 repeat by default for this task: 400 examples x 2 prompts = 800 calls).
 - Old task `classify` (v1) is kept for the record but retired.
 
+## Customer identity (Cognito) — required by the AWS monetize skill
+
+- Cognito user pool `whetstone-customers` (us-east-1_pKCpGo6FW), app client `whetstone-web` (no secret,
+  USER_PASSWORD_AUTH). Admin-created accounts only (B2B onboarding). customer_id = Cognito `sub`.
+- `whetstone/auth.py`: login + strict ID-token verification (RS256/JWKS, iss, aud, token_use=id, exp).
+  Tests: forged/wrong-aud/wrong-iss/access-token/expired/unsigned tokens rejected.
+- All account endpoints require `Authorization: Bearer <id token>` (401 otherwise). UI: sign-in form,
+  token in sessionStorage only, sign-out.
+- Onboard a customer: `python -m whetstone.customers add <email> --copy-demo-keys` (password via hidden prompt).
+- AWS monetize skill: in progress (HTTP-direct path, .monetize/integration=http). Next: recommendation.
+
 ## Customer features (step 11)
 
 - `whetstone/accounts.py`: plans (Founding $49/4 runs, Standard $199/10 runs, extra $5), run counter per UTC

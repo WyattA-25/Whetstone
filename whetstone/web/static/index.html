@@ -349,11 +349,40 @@ function bindDiff() {
 
 // ---- views / tabs ------------------------------------------------------------------------------
 let CONFIG = null;
+// Session: the Cognito ID token lives only in this tab's sessionStorage and is sent as a Bearer header.
+const session = {
+  get() { try { return JSON.parse(sessionStorage.getItem("ws-session") || "null"); } catch (e) { return null; } },
+  set(v) { try { v ? sessionStorage.setItem("ws-session", JSON.stringify(v)) : sessionStorage.removeItem("ws-session"); } catch (e) {} },
+};
+function authHeaders() { const s = session.get(); return s ? { Authorization: "Bearer " + s.id_token } : {}; }
 async function post(u, body, method = "POST") {
-  const r = await fetch(u, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  const r = await fetch(u, { method, headers: { "Content-Type": "application/json", ...authHeaders() }, body: body ? JSON.stringify(body) : undefined });
   const j = await r.json().catch(() => ({}));
+  if (r.status === 401 && !u.endsWith("/login")) { session.set(null); renderAccount(); }
   if (!r.ok) throw new Error(j.detail || r.status);
   return j;
+}
+async function getAuthed(u) {
+  const r = await fetch(u, { headers: authHeaders() });
+  if (r.status === 401) { session.set(null); throw new Error("signed out"); }
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+function loginView() {
+  $("#view-account").innerHTML = `<div class="card section" style="max-width:420px;margin:24px auto">
+    <h2>Customer sign-in</h2><p class="note">Sign in to manage your API keys, start optimization runs, and see your usage.
+    Accounts are created during onboarding (Amazon Cognito).</p>
+    <form class="form" id="loginform" autocomplete="on">
+      <label>Email<input id="l-email" type="email" autocomplete="username" required></label>
+      <label>Password<input id="l-pass" type="password" autocomplete="current-password" required></label>
+      <div><button class="btn" type="submit">Sign in</button></div><div id="l-msg"></div></form></div>`;
+  $("#loginform").onsubmit = async e => {
+    e.preventDefault(); const m = $("#l-msg"); m.className = "msg"; m.textContent = "Signing in...";
+    try {
+      const r = await post("/api/auth/login", { email: $("#l-email").value, password: $("#l-pass").value });
+      session.set({ id_token: r.id_token, email: r.email }); renderAccount();
+    } catch (err) { $("#l-pass").value = ""; m.className = "msg err"; m.textContent = err.message; }
+  };
 }
 function show(view) {
   ["results", "account", "pricing"].forEach(v => { $("#view-" + v).hidden = v !== view; });
@@ -393,8 +422,11 @@ let lastEstimate = null;
 
 async function renderAccount() {
   const V = $("#view-account");
+  if (!session.get()) { loginView(); return; }
   let A;
-  try { A = await getJSON("/api/account"); } catch (e) { V.innerHTML = `<div class="empty">Account API unavailable (${esc(e.message)}).</div>`; return; }
+  try { A = await getAuthed("/api/account"); } catch (e) {
+    if (!session.get()) { loginView(); return; }
+    V.innerHTML = `<div class="empty">Account API unavailable (${esc(e.message)}).</div>`; return; }
   const q = A.quote, pct = Math.min(100, 100 * q.used / q.included);
   const keyRows = A.keys.length ? A.keys.map(k => `<tr><td>${esc(k.provider)}</td><td><code>${esc(k.model)}</code></td>
       <td>${esc(k.added_at.replace("T", " ").replace("+00:00", " UTC"))}</td><td>validated ✓</td>
@@ -405,7 +437,8 @@ async function renderAccount() {
       <td>~$${(+u.scoring_usd_est || 0).toFixed(4)}</td><td>$${(+u.overage_usd || 0).toFixed(2)} ${u.payment_status && u.payment_status !== "n/a" ? "· " + esc(u.payment_status) : ""}</td></tr>`).join("")
     : `<tr><td colspan="6" class="note">No runs yet this month.</td></tr>`;
   V.innerHTML = `<div class="grid two section">
-    <div class="card"><h2>Plan</h2><div class="big">${esc(A.plan.name)} · $${A.plan.usd_per_month}/mo</div>
+    <div class="card"><h2>Plan · ${esc(session.get().email || "")} <button class="btn ghost" id="logout" style="float:right;padding:2px 10px;font-size:12px">Sign out</button></h2>
+      <div class="big">${esc(A.plan.name)} · $${A.plan.usd_per_month}/mo</div>
       <div class="note">${q.used} of ${q.included} included runs used this month${q.next_is_extra ? ` · <b>next run costs $${q.extra_run_usd}</b>` : ""}</div>
       <div class="meter"><i style="width:${pct}%"></i></div>
       <div class="form" style="margin-top:12px"><label>Switch plan (demo)<select id="plan">
@@ -432,6 +465,7 @@ async function renderAccount() {
   <div class="card section"><h2>Usage log · this account</h2><div class="tablewrap"><table>
     <tr><th>Run</th><th>Status</th><th>Counted</th><th>Our agents</th><th>Your key (est.)</th><th>Overage</th></tr>${usageRows}</table></div></div>`;
 
+  $("#logout").onclick = () => { session.set(null); loginView(); };
   $("#plan").onchange = async e => { await post("/api/account/plan", { plan: e.target.value }); renderAccount(); };
   $("#k-prov").onchange = e => { $("#k-url").value = PROVIDERS[e.target.value]; };
   document.querySelectorAll("[data-revoke]").forEach(b => b.onclick = async () => {
