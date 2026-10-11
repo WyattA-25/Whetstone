@@ -61,8 +61,16 @@ def login(email: str, password: str) -> dict:
     try:
         r = idp.initiate_auth(ClientId=CLIENT_ID, AuthFlow="USER_PASSWORD_AUTH",
                               AuthParameters={"USERNAME": email, "PASSWORD": password})
+    except idp.exceptions.UserNotConfirmedException:
+        try:
+            idp.resend_confirmation_code(ClientId=CLIENT_ID, Username=email)
+        except Exception:  # noqa: BLE001
+            pass
+        raise AuthError("UNVERIFIED: verify your email first. We just sent you a new code.") from None
     except idp.exceptions.NotAuthorizedException:
         raise AuthError("wrong email or password") from None
+    except idp.exceptions.UserNotConfirmedException:
+        raise AuthError("UNVERIFIED: verify your email first. We just sent you a new code.") from None
     except idp.exceptions.PasswordResetRequiredException:
         raise AuthError("password reset required") from None
     except Exception as e:  # never echo request contents (they include the password)
@@ -88,7 +96,11 @@ def sign_up(email: str, password: str) -> dict:
         r = idp.sign_up(ClientId=CLIENT_ID, Username=email, Password=password,
                         UserAttributes=[{"Name": "email", "Value": email}])
     except idp.exceptions.UsernameExistsException:
-        raise AuthError("an account with this email already exists; sign in instead") from None
+        try:  # unverified leftover from an interrupted sign-up: resend the code instead of a dead end
+            idp.resend_confirmation_code(ClientId=CLIENT_ID, Username=email)
+            return {"confirmed": False, "sent_to": None, "resent": True}
+        except Exception:  # noqa: BLE001 - already verified: resend is refused
+            raise AuthError("an account with this email already exists; sign in instead") from None
     except idp.exceptions.InvalidPasswordException:
         raise AuthError("password must be at least 10 characters with lowercase letters and a number") from None
     except Exception as e:  # never echo the request (it holds the password)

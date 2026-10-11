@@ -379,14 +379,18 @@ function loginView(mode = "signin", email = "") {
       `<form class="form" id="f" autocomplete="on"><label>Email<input id="l-email" type="email" autocomplete="username" required value="${esc(email)}"></label>
        <label>Password<input id="l-pass" type="password" autocomplete="current-password" required></label>
        <div><button class="btn" type="submit">Sign in</button></div></form>`,
-      `New to Whetstone? <a href="#" id="go-signup">Create an account</a>`);
+      `New to Whetstone? <a href="#" id="go-signup">Create an account</a> · Have a code? <a href="#" id="go-verify">Verify email</a>`);
     $("#go-signup").onclick = e => { e.preventDefault(); loginView("signup", $("#l-email").value); };
     $("#f").onsubmit = async e => {
       e.preventDefault(); msg("", "Signing in...");
       try { const r = await post("/api/auth/login", { email: $("#l-email").value, password: $("#l-pass").value });
         session.set({ id_token: r.id_token, email: r.email }); renderAccount(); }
-      catch (err) { $("#l-pass").value = ""; msg("err", err.message); }
+      catch (err) {
+        if (String(err.message).startsWith("UNVERIFIED")) { pendingPw = $("#l-pass").value; loginView("confirm", $("#l-email").value);
+          msg("ok", "Your email isn't verified yet. We just sent a new code."); return; }
+        $("#l-pass").value = ""; msg("err", err.message); }
     };
+    $("#go-verify").onclick = e => { e.preventDefault(); loginView("confirm", $("#l-email").value); };
   } else if (mode === "signup") {
     V.innerHTML = card("Create your account", "Accounts are secured by Amazon Cognito. We'll email you a 6-digit code to verify your address.",
       `<form class="form" id="f" autocomplete="on"><label>Email<input id="s-email" type="email" autocomplete="username" required value="${esc(email)}"></label>
@@ -401,19 +405,23 @@ function loginView(mode = "signin", email = "") {
       msg("", "Creating your account...");
       const em = $("#s-email").value, pw = $("#s-pass").value;
       try { const r = await post("/api/auth/signup", { email: em, password: pw }); pendingPw = pw;
-        loginView("confirm", em); msg("ok", "Check " + (r.sent_to || "your email") + " for a 6-digit code."); }
+        loginView("confirm", em); msg("ok", (r.resent ? "This email was already started but not verified. We sent a new code to it. " : "") +
+          "Check " + (r.sent_to || "your email") + " for a 6-digit code (look in spam too)."); }
       catch (err) { msg("err", err.message); }
     };
   } else {
-    V.innerHTML = card("Verify your email", "Enter the 6-digit code we emailed to " + esc(email) + ".",
-      `<form class="form" id="f"><label>Verification code<input id="c-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required></label>
+    V.innerHTML = card("Verify your email", "Enter the 6-digit code we emailed" + (email ? " to " + esc(email) : "") + ". Codes can take a minute and may land in spam.",
+      `<form class="form" id="f">${email ? "" : '<label>Email<input id="c-email" type="email" required></label>'}<label>Verification code<input id="c-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required></label>
        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit">Verify and sign in</button>
        <button class="btn ghost" type="button" id="c-resend">Resend code</button></div></form>`,
       `<a href="#" id="go-signin">Back to sign-in</a>`);
     $("#go-signin").onclick = e => { e.preventDefault(); pendingPw = null; loginView("signin", email); };
-    $("#c-resend").onclick = async () => { try { await post("/api/auth/resend", { email }); msg("ok", "New code sent."); } catch (err) { msg("err", err.message); } };
+    $("#c-resend").onclick = async () => { const em = email || ($("#c-email") && $("#c-email").value);
+      if (!em) { msg("err", "Enter your email first."); return; }
+      try { await post("/api/auth/resend", { email: em }); msg("ok", "New code sent (check spam too)."); } catch (err) { msg("err", err.message); } };
     $("#f").onsubmit = async e => {
       e.preventDefault(); msg("", "Verifying...");
+      if (!email) email = $("#c-email").value;
       try { await post("/api/auth/confirm", { email, code: $("#c-code").value });
         if (pendingPw) { const r = await post("/api/auth/login", { email, password: pendingPw }); pendingPw = null;
           session.set({ id_token: r.id_token, email: r.email }); renderAccount(); }
