@@ -1,0 +1,78 @@
+# Code-fix benchmark repos (step 5). Consumed by scripts/collect_findings.py and whetstone/tasks/codefix.py.
+# Every repo below was vetted on Windows + Python 3.11 with the collector: fresh clone, fresh venv,
+# tests pass, findings scanned from source_dir only (ruff + bandit, curated rule set).
+# test_seconds = wall time of the `test` command as measured by the collector (final collection run).
+repos:
+  - name: itsdangerous
+    url: https://github.com/pallets/itsdangerous
+    commit: 672971d66a2ef9f85151e53283113f33d642dabd
+    license: BSD-3-Clause
+    python: "3.11"
+    install: pip install -e . pytest freezegun
+    test: pytest -x -q
+    test_seconds: 4.1
+    source_dir: src/itsdangerous
+    notes: "Reference repo (pre-validated). Small, very fast tests; ~10 findings (RUF012, PLW2901, PERF203, S324, UP038, SIM108...)."
+
+  - name: boltons
+    url: https://github.com/mahmoud/boltons
+    commit: 4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d
+    license: BSD-3-Clause
+    python: "3.11"
+    install: pip install -e . pytest
+    # Mirrors upstream tox (doctests + tests). One test is deselected because it fails on Windows only
+    # (compares os.linesep-joined output against an LF-only data file); it passes on Linux/macOS.
+    test: pytest -x -q --doctest-modules boltons tests --deselect tests/test_jsonutils.py::test_reverse_iter_lines
+    test_seconds: 6.8
+    source_dir: boltons
+    notes: "~17k lines of independent single-file utility modules (slightly above the 15k guideline, but every fix is local to one module). Richest finding pool: ~400 candidates across 51 rules (B904, B006, B008, PLR1711, PLR5501, SIM105/117/118, E721, E731, RUF001/005/010/012...). Doctests exercise much of the source."
+
+  - name: prettytable
+    url: https://github.com/prettytable/prettytable
+    commit: 5fec60c0fd85530e5299d8c6e39dc030bfd7ce9f
+    license: BSD-3-Clause
+    python: "3.11"
+    install: pip install -e .[tests]
+    test: pytest -x -q
+    test_seconds: 2.0
+    source_dir: src/prettytable
+    exclude_rules: [S311, B311]   # tests seed `random`; switching to `secrets` breaks them
+    notes: "Formerly jazzband/prettytable (same repo, moved org). ~3.6k lines; almost all findings in prettytable.py (3.3k lines, adapter windows it). Good B904 + S101 (try/assert/except AssertionError validators -> if/raise ValueError), PLW2901, SIM108. Caveat: the 4 S311 findings are in _set_random_style and tests seed `random`, so switching to `secrets` would break tests -> likely unfixable."
+
+  - name: python-tabulate
+    url: https://github.com/astanin/python-tabulate
+    commit: 268615a5c27dc40e5c22454c07b44d5c50410da0
+    license: MIT
+    python: "3.11"
+    install: pip install -e .[widechars] pytest
+    # pyproject addopts already add --doctest-modules and README doctests.
+    test: pytest -x -q
+    test_seconds: 8.9
+    source_dir: tabulate
+    notes: "~3.1k lines (tabulate/__init__.py ~2.9k + cli.py). Clean, behaviour-preserving findings: B905 (zip strict=), UP038, SIM108, PLW3301, RUF005, PLR5501, SIM105/118/212, S101. numpy/pandas tests are skipped (not installed)."
+
+  - name: click
+    url: https://github.com/pallets/click
+    commit: 2247b35ea1c47c727d7a06e51fa280e12a863ff6
+    license: BSD-3-Clause
+    python: "3.11"
+    install: pip install -e . pytest
+    # pyproject addopts already deselect the slow `stress` marker.
+    test: pytest -x -q
+    test_seconds: 18.2
+    source_dir: src/click
+    exclude_rules: [S311, B311]   # random temp-file suffix, not a security use
+    exclude_paths: [_winconsole.py]   # Windows-only module; tests on other OSes would not exercise fixes
+    notes: "~13k lines, well-tested. Good spread (SIM105/108/115, PLW2901, PLW0603, PLR1704, RUF005/012, UP038, PERF203, S110, S101/B101). Caveat: ~7 of 30 picked are bandit/ruff subprocess warnings (B404 'import subprocess' x3, B603/S603 x3) that are essentially unfixable without a suppression, plus S311 on a temp-file name suffix."
+
+rejected:
+  - url: https://github.com/andialbrecht/sqlparse
+    reason: "Repo's ruff config selects RUF059, unknown to our pinned ruff 0.7.4, so ruff aborts on this tree: only 1 (bandit) finding survives, and fix verification would hit the same error."
+  - url: https://github.com/python-humanize/humanize
+    reason: "Same problem: repo ruff config uses RUF046 (unknown to ruff 0.7.4) -> ruff aborts; only 2 bandit findings."
+  - url: https://github.com/hukkin/tomli
+    reason: "Too clean/small: ~940 source lines, only 4 findings after filtering (needs ~10)."
+  - url: https://github.com/un33k/python-slugify
+    reason: "Too small (~575 source lines); findings dominated by UP025 u-prefixes and F401/F403 re-exports in __init__.py (fixing those changes the public API)."
+  - url: https://github.com/more-itertools/more-itertools
+    reason: "Works (tests pass, 78 candidates / 30 picked, MIT) but tests take 35-40s, 2-5x slower than the accepted repos. Usable fallback: commit b21ec4ee8e139ebe297e2221980a694bebb69523, install 'pip install -e . pytest', test 'pytest -x -q tests', source_dir more_itertools. Note its S311 findings are in seeded random recipes (likely unfixable)."

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "itsdangerous",
+    "url": "https://github.com/pallets/itsdangerous",
+    "commit": "672971d66a2ef9f85151e53283113f33d642dabd",
+    "test_seconds": 2.2,
+    "tests_pass": true
+  },
+  {
+    "name": "boltons",
+    "url": "https://github.com/mahmoud/boltons",
+    "commit": "4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d",
+    "test_seconds": 7.7,
+    "tests_pass": true
+  },
+  {
+    "name": "prettytable",
+    "url": "https://github.com/prettytable/prettytable",
+    "commit": "5fec60c0fd85530e5299d8c6e39dc030bfd7ce9f",
+    "test_seconds": 2.0,
+    "tests_pass": true
+  },
+  {
+    "name": "python-tabulate",
+    "url": "https://github.com/astanin/python-tabulate",
+    "commit": "268615a5c27dc40e5c22454c07b44d5c50410da0",
+    "test_seconds": 8.9,
+    "tests_pass": true
+  },
+  {
+    "name": "click",
+    "url": "https://github.com/pallets/click",
+    "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+    "test_seconds": 12.0,
+    "tests_pass": true
+  }
+]

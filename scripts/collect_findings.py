@@ -32,6 +32,9 @@ OUT = ROOT / "data/codefix/findings.jsonl"
 LOCK = ROOT / "data/codefix/repos.lock.json"
 
 SKIP_PARTS = ("test", "tests", "testing", "docs", "doc", "examples", "example", "vendor", "_vendor", "benchmarks")
+# Unfixable without a suppression comment or a behaviour change: warnings about importing/using subprocess
+# at all (the library's job is to run subprocesses). Per-repo extras go in repos.yaml (exclude_rules/paths).
+EXCLUDE_RULES = {"B404", "S404", "B603", "S603"}
 MAX_PER_RULE = 4        # per repo: keeps the dataset diverse
 MAX_PER_REPO = 30
 SEED = 42
@@ -73,7 +76,12 @@ def prepare(repo: dict, run_tests: bool) -> dict:
     return lock
 
 
-def good(f, source_dir: str) -> bool:
+def good(f, source_dir: str, repo: dict | None = None) -> bool:
+    repo = repo or {}
+    if f.rule in EXCLUDE_RULES or f.rule in repo.get("exclude_rules", []):
+        return False
+    if any(x in f.path for x in repo.get("exclude_paths", [])):
+        return False
     parts = Path(f.path).parts
     if not f.path.startswith(source_dir.rstrip("/")):
         return False
@@ -87,7 +95,7 @@ def collect(repo: dict) -> list[dict]:
     found = []
     for tool in repo.get("scanners", ["ruff", "bandit"]):
         found += scan(tool, src, repo["source_dir"])
-    found = [f for f in found if good(f, repo["source_dir"])]
+    found = [f for f in found if good(f, repo["source_dir"], repo)]
     # de-duplicate the same rule on the same line (ruff's S rules mirror bandit's)
     uniq = {}
     for f in found:

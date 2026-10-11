@@ -11,7 +11,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 2 | Core library (Luminal client, TaskAdapter interface, objective, frozen split + hash, storage) | ✅ done |
 | 3 | Adapter A: text classification (exact match) | ✅ done |
 | 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | ✅ built; first full run in progress |
-| 5 | Code-fix data (teammate): repos → SARIF findings → frozen split | 🟡 collector done (`scripts/collect_findings.py`); waiting on Chayce's `data/codefix/repos.yaml` |
+| 5 | Code-fix data: repos → findings → frozen split | ✅ 110 findings, 5 repos (itsdangerous, boltons, prettytable, tabulate, click), 39 rules; split freezes on first codefix baseline |
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | ✅ done (verifier self-test passes; dev baseline 6/8 on itsdangerous) |
 | ✂ | Cut line 3:00 PM | |
 | 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
