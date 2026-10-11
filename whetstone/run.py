@@ -23,8 +23,8 @@ from .config import (AGENT_EXTRA_BODY, OPTIMIZER_MAX_USD_PER_RUN, EndpointConfig
 from .evaluate import evaluate_prompt
 from .llm import BudgetExceeded, LLMClient, Usage
 from .objective import Constraint, Objective
-from .store import Store, get_store
-from .tasks import get_task, load_or_create_split
+from .store import JsonlStore, Store, get_store
+from .tasks import get_task, is_private, load_or_create_split
 
 POPULATION = 4
 N_FAILURES = 8
@@ -95,7 +95,8 @@ class Runner:
         tmp = self.run_dir / "state.json.tmp"
         tmp.write_text(json.dumps(self.s, indent=2))
         tmp.replace(self.run_dir / "state.json")
-        self.store.put_state(self.s["run_id"], self.s)
+        if not self.s.get("private"):
+            self.store.put_state(self.s["run_id"], self.s)
 
     def fit(self, agg: dict, split: str) -> float:
         return self.objective.fitness(agg, self.s["baseline"][split])
@@ -314,10 +315,10 @@ def main() -> None:
     ap.add_argument("--confirm-extra", action="store_true", help="customer confirmed the $5 extra-run charge")
     args = ap.parse_args()
 
-    store = get_store("runs")
     if args.resume:
         run_dir = Path("runs") / args.resume
         state = json.loads((run_dir / "state.json").read_text())
+        store = JsonlStore("runs") if state.get("private") else get_store("runs")
         state["stopped"] = None
         if args.rounds:
             state["rounds"] = args.rounds
@@ -325,6 +326,8 @@ def main() -> None:
     else:
         if not args.task:
             ap.error("--task is required for a new run")
+        # Confidential pilots stay on this machine: local files only, never DynamoDB/dashboard/results/.
+        store = JsonlStore("runs") if is_private(args.task) else get_store("runs")
         metric, direction = args.objective.split(":")
         obj = Objective(metric, direction, args.constraint)
         adapter = get_task(args.task)
@@ -338,6 +341,7 @@ def main() -> None:
                                "constraints": [asdict(c) for c in obj.constraints]},
                  "budgets": {"optimizer_usd": args.max_usd_optimizer, "scoring_usd": args.max_usd_scoring},
                  "heldout_hash": split.heldout_hash, "round_done": -1, "lessons": [],
+                 "private": is_private(args.task),
                  "usage": {"optimizer": asdict(Usage()), "scoring": asdict(Usage())},
                  "models": {"optimizer": optimizer_endpoint().model, "scoring": scoring_endpoint().model},
                  "started_at": datetime.now(timezone.utc).isoformat()}

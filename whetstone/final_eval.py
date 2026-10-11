@@ -22,7 +22,7 @@ from .config import scoring_endpoint
 from .evaluate import evaluate_prompt
 from .llm import LLMClient
 from .objective import Objective
-from .store import get_store
+from .store import JsonlStore, get_store
 from .tasks import get_task, load_or_create_split
 
 METRICS = ("success", "tokens", "seconds", "usd", "error")
@@ -139,10 +139,12 @@ def main() -> None:
               "models": st.get("models"), "scoring_usage": llm.usage.as_dict(),
               "best_prompt": best["prompt"], "baseline_prompt": base_prompt,
               "per_example": {i: {"baseline": base[i], "best": champ[i]} for i in ids}}
-    Path("results").mkdir(exist_ok=True)
-    out = Path("results") / f"{args.run_id}-heldout.json"
+    private = bool(st.get("private"))
+    out_dir = Path("pilot/results") if private else Path("results")   # pilot results never enter the repo
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out_dir / f"{args.run_id}-heldout.json"
     out.write_text(json.dumps(result, indent=2))
-    get_store().insert("heldout", result)
+    (JsonlStore("runs") if private else get_store()).insert("heldout", result)
     print(f"\nsaved {out}  | held-out scoring cost ${llm.usage.usd:.4f} ({llm.usage.calls} calls)")
 
 

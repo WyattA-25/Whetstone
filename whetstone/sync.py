@@ -38,6 +38,10 @@ def main() -> None:
     runs = [p for p in Path("runs").glob("*") if p.is_dir()] if "--all" in args else [Path("runs") / a for a in args]
     ddb = DynamoStore()
     for r in runs:
+        st = r / "state.json"
+        if st.exists() and json.loads(st.read_text()).get("private"):
+            print(f"{r.name}: private run, skipped (never uploaded)")
+            continue
         print(f"{r.name}: {sync_run(ddb, r)} items uploaded")
 
 
