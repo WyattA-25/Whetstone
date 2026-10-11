@@ -25,6 +25,9 @@ from .data import RunReader  # noqa: E402  (reads env set by load_dotenv)
 STATIC = Path(__file__).parent / "static"
 ROOT = Path(__file__).resolve().parents[2]
 ACCOUNT_API = os.getenv("WHETSTONE_ACCOUNT_API", "off") == "on"
+# Entitlement enforcement for starting runs (AWS App Monetization). Fail-closed by default; set to "off" only
+# while hosted checkout is unavailable (the decision is still checked, logged, and shown).
+BILLING_ENFORCE = os.getenv("WHETSTONE_BILLING_ENFORCE", "on") != "off"
 TASKS = {"banking77": "Support-ticket intent classification (Banking77)",
          "codefix": "Fix static-analysis findings in real repos"}
 
@@ -182,6 +185,10 @@ def start_run(body: RunIn, cid: str = Depends(current_customer)) -> dict:
         raise HTTPException(402, f"all included runs used: confirm the ${EXTRA_RUN_USD:.0f} extra-run charge")
     if any(u.get("status") == "running" for u in accounts().usage_log(cid)):
         raise HTTPException(409, "a run is already in progress")
+    from ..billing import check_entitlement
+    ent = check_entitlement(cid)
+    if not ent["allowed"] and BILLING_ENFORCE:
+        raise HTTPException(402, f"no active plan for this account ({ent['reason']}): choose a plan first")
     run_id = f"{body.task}-{datetime.now():%Y%m%d-%H%M%S}"
     cmd = [sys.executable, "-m", "whetstone.run", "--task", body.task, "--rounds", str(body.rounds),
            "--max-usd-scoring", str(body.max_usd), "--customer", cid, "--key-id", body.key_id,
@@ -189,4 +196,24 @@ def start_run(body: RunIn, cid: str = Depends(current_customer)) -> dict:
     log = (ROOT / "runs" / f"{run_id}.worker.log")
     log.parent.mkdir(exist_ok=True)
     subprocess.Popen(cmd, cwd=ROOT, stdout=log.open("w"), stderr=subprocess.STDOUT)  # the key is fetched by the worker
-    return {"run_id": run_id, "extra_run": info["quote"]["next_is_extra"]}
+    return {"run_id": run_id, "extra_run": info["quote"]["next_is_extra"], "entitlement": ent,
+            "enforced": BILLING_ENFORCE}
+
+
+@app.post("/api/billing/pricing")
+def pricing_session(cid: str = Depends(current_customer)) -> dict:
+    """Hosted AWS App Monetization pricing page (checkout session with no planId)."""
+    from ..billing import BillingError, checkout_session
+    try:
+        return checkout_session(cid, return_url="http://127.0.0.1:8000/")
+    except BillingError as e:
+        raise HTTPException(502, f"hosted checkout unavailable: {e}") from None
+
+
+@app.post("/api/billing/portal")
+def portal_session(cid: str = Depends(current_customer)) -> dict:
+    from ..billing import BillingError, billing_portal
+    try:
+        return {"redirect": billing_portal(cid, return_url="http://127.0.0.1:8000/")}
+    except BillingError as e:
+        raise HTTPException(502, f"billing portal unavailable: {e}") from None

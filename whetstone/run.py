@@ -86,6 +86,10 @@ class Runner:
                                         ours=asdict(self.opt.usage), theirs=asdict(self.score_llm.usage))
             self.log(f"usage recorded: counted={rec['counted']} overage=${rec['overage_usd']} "
                      f"ours ${rec['optimizer_usd']} theirs ~${rec['scoring_usd_est']}")
+            if rec["counted"]:
+                from .billing import put_event   # AWS App Monetization metering (idempotent on run_id)
+                put_event(cust["customer_id"], self.s["run_id"])
+                self.log("metered 1 optimization_run to AWS App Monetization")
         except Exception as e:  # billing bookkeeping must never lose the run's results
             self.log(f"WARNING: could not record usage ({type(e).__name__}); run results are saved")
 

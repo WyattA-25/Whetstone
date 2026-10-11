@@ -441,6 +441,8 @@ async function renderAccount() {
       <div class="big">${esc(A.plan.name)} · $${A.plan.usd_per_month}/mo</div>
       <div class="note">${q.used} of ${q.included} included runs used this month${q.next_is_extra ? ` · <b>next run costs $${q.extra_run_usd}</b>` : ""}</div>
       <div class="meter"><i style="width:${pct}%"></i></div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="b-plan" type="button">Choose a plan</button>
+        <button class="btn ghost" id="b-portal" type="button">Manage billing</button></div><div id="b-msg"></div>
       <div class="form" style="margin-top:12px"><label>Switch plan (demo)<select id="plan">
         ${Object.entries(CONFIG.plans).map(([k, p]) => `<option value="${k}" ${p.name === A.plan.name ? "selected" : ""}>${esc(p.name)} ($${p.usd_per_month}/mo, ${p.included_runs} runs)</option>`).join("")}
       </select></label></div></div>
@@ -466,6 +468,11 @@ async function renderAccount() {
     <tr><th>Run</th><th>Status</th><th>Counted</th><th>Our agents</th><th>Your key (est.)</th><th>Overage</th></tr>${usageRows}</table></div></div>`;
 
   $("#logout").onclick = () => { session.set(null); loginView(); };
+  const go = async (u) => { const m = $("#b-msg"); m.className = "msg"; m.textContent = "Opening AWS billing...";
+    try { const r = await post(u, {}); if (r.redirect) location.href = r.redirect; else { m.className = "msg ok"; m.textContent = "Plan change applied" + (r.effectiveAt ? " (effective " + r.effectiveAt + ")" : "") + "."; } }
+    catch (err) { m.className = "msg err"; m.textContent = err.message; } };
+  $("#b-plan").onclick = () => go("/api/billing/pricing");
+  $("#b-portal").onclick = () => go("/api/billing/portal");
   $("#plan").onchange = async e => { await post("/api/account/plan", { plan: e.target.value }); renderAccount(); };
   $("#k-prov").onchange = e => { $("#k-url").value = PROVIDERS[e.target.value]; };
   document.querySelectorAll("[data-revoke]").forEach(b => b.onclick = async () => {
