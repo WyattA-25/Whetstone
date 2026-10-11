@@ -5,7 +5,7 @@
 Both are on-demand ("PAY_PER_REQUEST"): no capacity to manage, billed per request (cents at our scale).
 - KMS key alias/whetstone-customer-keys: encrypts customers' AI-provider API keys at rest (~$1/month).
 - Cognito user pool whetstone-customers + app client whetstone-web: customer sign-in. A customer's Cognito
-  `sub` is their billing identity. Accounts are admin-created (B2B onboarding); no self sign-up.
+  `sub` is their billing identity. Self sign-up with an emailed verification code (or admin-created).
 """
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ def ensure_user_pool(idp) -> tuple[str, str]:
     else:
         pool_id = idp.create_user_pool(
             PoolName="whetstone-customers", UsernameAttributes=["email"], AutoVerifiedAttributes=["email"],
-            AdminCreateUserConfig={"AllowAdminCreateUserOnly": True},
+            AdminCreateUserConfig={"AllowAdminCreateUserOnly": False},   # self sign-up with email verification
             Policies={"PasswordPolicy": {"MinimumLength": 10, "RequireUppercase": False, "RequireLowercase": True,
                                          "RequireNumbers": True, "RequireSymbols": False}},
             UserPoolTags={"project": "whetstone"})["UserPool"]["Id"]

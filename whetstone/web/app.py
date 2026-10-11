@@ -105,6 +105,48 @@ def login(body: LoginIn) -> dict:
         raise HTTPException(401, str(e)) from None
 
 
+class SignUpIn(BaseModel):
+    email: str = Field(max_length=200)
+    password: str = Field(max_length=200)
+
+
+class ConfirmIn(BaseModel):
+    email: str = Field(max_length=200)
+    code: str = Field(default="", max_length=20)
+
+
+@app.post("/api/auth/signup")
+def signup(body: SignUpIn) -> dict:
+    accounts()
+    from ..auth import AuthError, sign_up
+    try:
+        return sign_up(body.email.strip(), body.password)
+    except AuthError as e:
+        raise HTTPException(400, str(e)) from None
+
+
+@app.post("/api/auth/confirm")
+def confirm(body: ConfirmIn) -> dict:
+    accounts()
+    from ..auth import AuthError, confirm_sign_up
+    try:
+        confirm_sign_up(body.email.strip(), body.code)
+        return {"confirmed": True}
+    except AuthError as e:
+        raise HTTPException(400, str(e)) from None
+
+
+@app.post("/api/auth/resend")
+def resend(body: ConfirmIn) -> dict:
+    accounts()
+    from ..auth import AuthError, resend_code
+    try:
+        resend_code(body.email.strip())
+        return {"sent": True}
+    except AuthError as e:
+        raise HTTPException(400, str(e)) from None
+
+
 # ---- account -----------------------------------------------------------------------------------
 class PlanIn(BaseModel):
     plan: str

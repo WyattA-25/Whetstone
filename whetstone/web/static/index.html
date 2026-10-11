@@ -358,7 +358,7 @@ function authHeaders() { const s = session.get(); return s ? { Authorization: "B
 async function post(u, body, method = "POST") {
   const r = await fetch(u, { method, headers: { "Content-Type": "application/json", ...authHeaders() }, body: body ? JSON.stringify(body) : undefined });
   const j = await r.json().catch(() => ({}));
-  if (r.status === 401 && !u.endsWith("/login")) { session.set(null); renderAccount(); }
+  if (r.status === 401 && !u.includes("/api/auth/")) { session.set(null); renderAccount(); }
   if (!r.ok) throw new Error(j.detail || r.status);
   return j;
 }
@@ -368,21 +368,59 @@ async function getAuthed(u) {
   if (!r.ok) throw new Error(r.status);
   return r.json();
 }
-function loginView() {
-  $("#view-account").innerHTML = `<div class="card section" style="max-width:420px;margin:24px auto">
-    <h2>Customer sign-in</h2><p class="note">Sign in to manage your API keys, start optimization runs, and see your usage.
-    Accounts are created during onboarding (Amazon Cognito).</p>
-    <form class="form" id="loginform" autocomplete="on">
-      <label>Email<input id="l-email" type="email" autocomplete="username" required></label>
-      <label>Password<input id="l-pass" type="password" autocomplete="current-password" required></label>
-      <div><button class="btn" type="submit">Sign in</button></div><div id="l-msg"></div></form></div>`;
-  $("#loginform").onsubmit = async e => {
-    e.preventDefault(); const m = $("#l-msg"); m.className = "msg"; m.textContent = "Signing in...";
-    try {
-      const r = await post("/api/auth/login", { email: $("#l-email").value, password: $("#l-pass").value });
-      session.set({ id_token: r.id_token, email: r.email }); renderAccount();
-    } catch (err) { $("#l-pass").value = ""; m.className = "msg err"; m.textContent = err.message; }
-  };
+let pendingPw = null;   // held in memory only between sign-up and the code step; never stored
+function loginView(mode = "signin", email = "") {
+  const V = $("#view-account");
+  const card = (title, note, form, foot) => `<div class="card section" style="max-width:440px;margin:24px auto">
+    <h2>${title}</h2><p class="note">${note}</p>${form}<div id="l-msg"></div><p class="note" style="margin-top:12px">${foot}</p></div>`;
+  const msg = (cls, t) => { const m = $("#l-msg"); m.className = "msg " + cls; m.textContent = t; };
+  if (mode === "signin") {
+    V.innerHTML = card("Customer sign-in", "Sign in to manage your API keys, start optimization runs, and see your usage.",
+      `<form class="form" id="f" autocomplete="on"><label>Email<input id="l-email" type="email" autocomplete="username" required value="${esc(email)}"></label>
+       <label>Password<input id="l-pass" type="password" autocomplete="current-password" required></label>
+       <div><button class="btn" type="submit">Sign in</button></div></form>`,
+      `New to Whetstone? <a href="#" id="go-signup">Create an account</a>`);
+    $("#go-signup").onclick = e => { e.preventDefault(); loginView("signup", $("#l-email").value); };
+    $("#f").onsubmit = async e => {
+      e.preventDefault(); msg("", "Signing in...");
+      try { const r = await post("/api/auth/login", { email: $("#l-email").value, password: $("#l-pass").value });
+        session.set({ id_token: r.id_token, email: r.email }); renderAccount(); }
+      catch (err) { $("#l-pass").value = ""; msg("err", err.message); }
+    };
+  } else if (mode === "signup") {
+    V.innerHTML = card("Create your account", "Accounts are secured by Amazon Cognito. We'll email you a 6-digit code to verify your address.",
+      `<form class="form" id="f" autocomplete="on"><label>Email<input id="s-email" type="email" autocomplete="username" required value="${esc(email)}"></label>
+       <label>Password <span class="note">(10+ characters, lowercase letters and a number)</span><input id="s-pass" type="password" autocomplete="new-password" minlength="10" required></label>
+       <label>Confirm password<input id="s-pass2" type="password" autocomplete="new-password" minlength="10" required></label>
+       <div><button class="btn" type="submit">Create account</button></div></form>`,
+      `Already have an account? <a href="#" id="go-signin">Sign in</a>`);
+    $("#go-signin").onclick = e => { e.preventDefault(); loginView("signin", $("#s-email").value); };
+    $("#f").onsubmit = async e => {
+      e.preventDefault();
+      if ($("#s-pass").value !== $("#s-pass2").value) { msg("err", "Passwords don't match."); return; }
+      msg("", "Creating your account...");
+      const em = $("#s-email").value, pw = $("#s-pass").value;
+      try { const r = await post("/api/auth/signup", { email: em, password: pw }); pendingPw = pw;
+        loginView("confirm", em); msg("ok", "Check " + (r.sent_to || "your email") + " for a 6-digit code."); }
+      catch (err) { msg("err", err.message); }
+    };
+  } else {
+    V.innerHTML = card("Verify your email", "Enter the 6-digit code we emailed to " + esc(email) + ".",
+      `<form class="form" id="f"><label>Verification code<input id="c-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required></label>
+       <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit">Verify and sign in</button>
+       <button class="btn ghost" type="button" id="c-resend">Resend code</button></div></form>`,
+      `<a href="#" id="go-signin">Back to sign-in</a>`);
+    $("#go-signin").onclick = e => { e.preventDefault(); pendingPw = null; loginView("signin", email); };
+    $("#c-resend").onclick = async () => { try { await post("/api/auth/resend", { email }); msg("ok", "New code sent."); } catch (err) { msg("err", err.message); } };
+    $("#f").onsubmit = async e => {
+      e.preventDefault(); msg("", "Verifying...");
+      try { await post("/api/auth/confirm", { email, code: $("#c-code").value });
+        if (pendingPw) { const r = await post("/api/auth/login", { email, password: pendingPw }); pendingPw = null;
+          session.set({ id_token: r.id_token, email: r.email }); renderAccount(); }
+        else { loginView("signin", email); msg("ok", "Email verified. Sign in to continue."); } }
+      catch (err) { msg("err", err.message); }
+    };
+  }
 }
 function show(view) {
   ["results", "account", "pricing"].forEach(v => { $("#view-" + v).hidden = v !== view; });

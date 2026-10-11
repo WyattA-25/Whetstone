@@ -73,3 +73,42 @@ def login(email: str, password: str) -> dict:
     claims = verify(res["IdToken"])
     return {"id_token": res["IdToken"], "expires_in": res["ExpiresIn"], "email": claims.get("email"),
             "customer_id": claims["sub"]}
+
+
+def _idp():
+    if not (POOL_ID and CLIENT_ID):
+        raise AuthError("sign-up is not configured (run python -m whetstone.aws_setup)")
+    return boto3.client("cognito-idp", region_name=REGION)
+
+
+def sign_up(email: str, password: str) -> dict:
+    """Self sign-up. Cognito emails a 6-digit code; the account is usable after confirm_sign_up()."""
+    idp = _idp()
+    try:
+        r = idp.sign_up(ClientId=CLIENT_ID, Username=email, Password=password,
+                        UserAttributes=[{"Name": "email", "Value": email}])
+    except idp.exceptions.UsernameExistsException:
+        raise AuthError("an account with this email already exists; sign in instead") from None
+    except idp.exceptions.InvalidPasswordException:
+        raise AuthError("password must be at least 10 characters with lowercase letters and a number") from None
+    except Exception as e:  # never echo the request (it holds the password)
+        raise AuthError(f"sign-up failed ({type(e).__name__})") from None
+    return {"confirmed": r.get("UserConfirmed", False),
+            "sent_to": r.get("CodeDeliveryDetails", {}).get("Destination")}
+
+
+def confirm_sign_up(email: str, code: str) -> None:
+    idp = _idp()
+    try:
+        idp.confirm_sign_up(ClientId=CLIENT_ID, Username=email, ConfirmationCode=code.strip())
+    except (idp.exceptions.CodeMismatchException, idp.exceptions.ExpiredCodeException):
+        raise AuthError("that code is wrong or expired; request a new one") from None
+    except Exception as e:  # noqa: BLE001
+        raise AuthError(f"confirmation failed ({type(e).__name__})") from None
+
+
+def resend_code(email: str) -> None:
+    try:
+        _idp().resend_confirmation_code(ClientId=CLIENT_ID, Username=email)
+    except Exception as e:  # noqa: BLE001
+        raise AuthError(f"could not resend the code ({type(e).__name__})") from None
