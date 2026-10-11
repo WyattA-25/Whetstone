@@ -1,0 +1,48 @@
+repos:
+  - name: boltons
+    url: https://github.com/mahmoud/boltons
+    commit: 4e5faa3d7e4008d89e0d8bf1ea87b6d9a061a16d
+    license: BSD-3-Clause
+    python: "3.11"
+    install: pip install -e .
+    test: pytest -x -q
+    test_seconds: 7.5
+    source_dir: boltons
+    findings:
+      ruff: 556
+      bandit: 25
+      top_rules: [UP031, B904, SIM108, B007, S110]
+    notes: "Tested on Windows, Python 3.11.9. ruff 0.17.0 --isolated, bandit 1.9.4. pytest is not pulled in by the install; pip install pytest separately. About 150-190 usable findings; cap UP031 (118) when sampling; skip auto-fixable PLR1711/PLR5501 and complexity rules. S110/B110, S101/B101, S112/B112 are the same sites in both tools. Spot-checked B904, SIM108, B007: clean one-file fixes. First run 7.5s, warm runs about 3.1s, stable over 3 runs."
+  - name: bottle
+    url: https://github.com/bottlepy/bottle
+    commit: 8ec5fe29420d14998c0d86885083983eaea8b839
+    license: MIT
+    python: "3.11"
+    install: pip install -e .
+    test: pytest -x -q
+    test_seconds: 1.8
+    source_dir: bottle.py
+    findings:
+      ruff: 353
+      bandit: 16
+      top_rules: [B904, RUF012, PLW2901, SIM105, E731]
+    notes: "Single 3.7k-line file, so source_dir is a file, not a folder. ruff 0.17.0 --isolated, bandit 1.9.4. pytest installed separately. About 45-55 usable findings; cap UP031 (63). Skip E701/E402/PLC0415 and deliberate framework items (pickle, eval, exec, template autoescape). Exclude SIM115: the spot-checked site keeps a temp file open on purpose. On Windows, clone with core.autocrlf=false or test_stpl fails on CRLF. S110/S101/S324/S603 duplicate bandit B110/B101/B324/B603. First run 1.8s, warm runs about 0.9s, stable over 3 runs."
+  - name: mako
+    url: https://github.com/sqlalchemy/mako
+    commit: 14889bc0feacd12102ee61f0769677be2fddbc1b
+    license: MIT
+    python: "3.11"
+    install: pip install -e .
+    test: pytest -x -q
+    test_seconds: 6.1
+    source_dir: mako
+    findings:
+      ruff: 308
+      bandit: 27
+      top_rules: [RUF012, S101, PLW2901, E722, RUF059]
+    notes: "ruff 0.17.0 --isolated, bandit 1.9.4. pytest installed separately. About 37-50 usable findings. All 27 bandit findings duplicate ruff S rules (B101/S101, B702/S702, B307/S307, B102/S102), so they are not extra. Skip mako/ext (24; its tests are skipped without dogpile.cache/Beaker/babel/lingua) and mako/testing (29; test-support code). 98 findings sit in codegen.py, so cap per file. Cap UP031 (144). Skip template-engine design items (S702/S307/S102) and SIM115. 64 tests skipped (missing optional deps, one POSIX-only). RUF012 at parsetree.py is fixable only with a ClassVar annotation. Warm runs about 3.9s, stable over 3 runs."
+rejected:
+  - url: https://github.com/cookiecutter/cookiecutter
+    reason: "Only 31 ruff findings in source, mostly complexity rules (PLR09xx); about 5-8 usable. Tests also need pytest-cov because the repo pytest config passes --cov options."
+  - url: https://github.com/theskumar/python-dotenv
+    reason: "CLI test fails on Windows (FileNotFoundError, WinError 2); about 969 source lines; 69 of 87 ruff findings are auto-fixable UP typing rules; about 3-6 usable."
