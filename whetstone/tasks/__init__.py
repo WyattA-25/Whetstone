@@ -11,6 +11,9 @@ def get_task(name: str) -> TaskAdapter:
     if name == "classify":
         from .classify import ClassifyAdapter
         return ClassifyAdapter()
+    if name == "codefix":
+        from .codefix import CodeFixAdapter
+        return CodeFixAdapter()
     raise KeyError(f"unknown task {name!r}")
 
 

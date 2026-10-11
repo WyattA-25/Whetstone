@@ -29,3 +29,6 @@ Thumbs.db
 
 # Local planning doc (contains sales strategy)
 claude_code_kickoff_prompt.md
+
+# Dev/test data for the code-fix adapter
+data/codefix/dev/

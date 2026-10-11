@@ -45,6 +45,8 @@ class Score:
 class TaskAdapter(ABC):
     name: str = "task"
     description: str = ""        # plain-language task description given to proposer agents
+    scoring_timeout: float = 45.0    # seconds per scoring call attempt
+    proposals_per_round: int = 6     # parallel proposer agents per round (fewer for expensive tasks)
 
     @abstractmethod
     def starting_prompts(self) -> list[str]:

@@ -12,9 +12,9 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 3 | Adapter A: text classification (exact match) | ✅ done |
 | 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | ✅ built; first full run in progress |
 | 5 | Code-fix data (teammate): repos → SARIF findings → frozen split | 🟡 collector done (`scripts/collect_findings.py`); waiting on Chayce's `data/codefix/repos.yaml` |
-| 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | |
+| 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | ✅ done (verifier self-test passes; dev baseline 6/8 on itsdangerous) |
 | ✂ | Cut line 3:00 PM | |
-| 7 | MongoDB Atlas persistence | |
+| 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ⏭ next (needs AWS CLI configured) |
 | 8 | Unattended code-fix run + held-out evaluation | |
 | 9 | Employer pilot (only if approved; private config, never committed) | |
 | 10 | Results UI (FastAPI + HTML) | |
@@ -31,7 +31,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 
 - **T1 Transpose / Luminal** ($3k): core loop + held-out result. Highest priority.
 - **T2 Build AND Sell**: both the **Sales prize** (employer founding-customer sale) and the **AWS prize**.
-- MongoDB: not entered as a track (judging spreads across tracks). Persistence choice for step 7 pending.
+- MongoDB: not entered. Step 7 persistence = **AWS DynamoDB** (counts toward the AWS prize). Chayce: skip Atlas.
 - Priority if behind: T1 > Sales > AWS.
 
 ## Team
@@ -61,6 +61,17 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - **Noise:** same prompt at temperature 0 gave val 70% / 80% / 75% across runs. The model is
   nondeterministic, so selection must re-check winners and report confidence intervals.
 - Prices in `.env` are placeholder estimates ($0.10 in / $0.40 out per 1M); replace with Luminal's real price.
+
+## Code-fix adapter notes
+
+- Dev data: `python scripts/collect_findings.py --repos data/codefix/repos.example.yaml --out data/codefix/dev/findings.jsonl`
+- Verifier self-test: `python -m whetstone.tasks.codefix --selftest --findings data/codefix/dev/findings.jsonl --repos data/codefix/repos.example.yaml`
+  (no-op fails, noqa rejected, breaking change fails tests, tests import the sandbox copy, original untouched)
+- Dev baseline (itsdangerous, 8 scored): 6/8 fixed, ~3.3k tok/ex, ~6s LLM + ~2.4s verify per attempt.
+  Both failures were security findings (S324, S110) "fixed" with a suppression comment -> rejected.
+- Memory cap applies on Linux/macOS only (no setrlimit on Windows); timeouts apply everywhere.
+- Real data: Chayce's `data/codefix/repos.yaml` -> `python scripts/collect_findings.py` -> `data/codefix/findings.jsonl`;
+  the split freezes on the first `python -m whetstone.baseline --task codefix`.
 
 ## Known issues
 

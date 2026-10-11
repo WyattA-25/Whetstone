@@ -57,7 +57,8 @@ class Runner:
         self.val = self.split.val(self.examples)
         self.objective = Objective.from_dict(state["objective"])
         self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"], timeout=90, attempts=3)
-        self.score_llm = LLMClient(scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0)
+        self.score_llm = LLMClient(scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0,
+                                   timeout=self.adapter.scoring_timeout)
         self.opt.usage = Usage(**{k: v for k, v in state["usage"]["optimizer"].items()})
         self.score_llm.usage = Usage(**{k: v for k, v in state["usage"]["scoring"].items()})
 
@@ -134,7 +135,9 @@ class Runner:
         pop = sorted(self.s["population"], key=lambda c: c["fitness"], reverse=True)
         as_parent = lambda c: {"id": c["id"], "prompt": c["prompt"], "score": short(c["train"], m)}
         # 6 parallel agents: over-generate so a provider hiccup still leaves several candidates
-        jobs = [("mutate", [as_parent(champ)])] * 3 + [("fresh", [])] * 2
+        n = self.adapter.proposals_per_round
+        n_fresh = 2 if n >= 6 else 1
+        jobs = [("mutate", [as_parent(champ)])] * (n - n_fresh - 1) + [("fresh", [])] * n_fresh
         jobs.append(("crossover", [as_parent(pop[0]), as_parent(pop[1])]) if len(pop) >= 2
                     else ("mutate", [as_parent(champ)]))
         common = dict(description=self.adapter.description, objective=self.objective.describe(),

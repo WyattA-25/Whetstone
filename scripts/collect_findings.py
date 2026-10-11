@@ -14,10 +14,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import random
-import shlex
-import subprocess
 import sys
 import time
 from collections import defaultdict
@@ -27,9 +24,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from whetstone.tasks.sandbox import CACHE, sh, venv_env  # noqa: E402
 from whetstone.tasks.scanners import scan  # noqa: E402
 
-CACHE = ROOT / ".cache"
 REPOS_YAML = ROOT / "data/codefix/repos.yaml"
 OUT = ROOT / "data/codefix/findings.jsonl"
 LOCK = ROOT / "data/codefix/repos.lock.json"
@@ -38,29 +35,6 @@ SKIP_PARTS = ("test", "tests", "testing", "docs", "doc", "examples", "example", 
 MAX_PER_RULE = 4        # per repo: keeps the dataset diverse
 MAX_PER_REPO = 30
 SEED = 42
-
-
-def sh(cmd: str | list[str], cwd: Path, timeout: int = 600, env: dict | None = None) -> subprocess.CompletedProcess:
-    if isinstance(cmd, str):
-        cmd = shlex.split(cmd)
-    if env and "VIRTUAL_ENV" in env:  # Windows ignores env PATH when locating the program itself
-        exe = venv_bin(Path(env["VIRTUAL_ENV"])) / (cmd[0] + (".exe" if os.name == "nt" else ""))
-        if exe.exists():
-            cmd = [str(exe), *cmd[1:]]
-    return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                          timeout=timeout, env=env)
-
-
-def venv_bin(venv: Path) -> Path:
-    return venv / ("Scripts" if os.name == "nt" else "bin")
-
-
-def venv_env(venv: Path) -> dict:
-    env = dict(os.environ)
-    env["PATH"] = str(venv_bin(venv)) + os.pathsep + env["PATH"]
-    env["VIRTUAL_ENV"] = str(venv)
-    env.pop("PYTHONHOME", None)
-    return env
 
 
 def prepare(repo: dict, run_tests: bool) -> dict:
@@ -144,6 +118,7 @@ def main() -> None:
     ap.add_argument("--only")
     ap.add_argument("--skip-tests", action="store_true")
     ap.add_argument("--repos", default=str(REPOS_YAML))
+    ap.add_argument("--out", default=str(OUT))
     args = ap.parse_args()
 
     cfg = yaml.safe_load(Path(args.repos).read_text(encoding="utf-8"))
@@ -156,10 +131,12 @@ def main() -> None:
             rows += collect(repo)
         except Exception as e:
             print(f"  SKIPPED: {e}")
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
-    LOCK.write_text(json.dumps(locks, indent=2), encoding="utf-8")
-    print(f"\nwrote {len(rows)} findings from {len(locks)} repos -> {OUT.relative_to(ROOT)}")
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    lock = LOCK if out == OUT else out.with_name("repos.lock.json")
+    lock.write_text(json.dumps(locks, indent=2), encoding="utf-8")
+    print(f"\nwrote {len(rows)} findings from {len(locks)} repos -> {out}  (commits + test times: {lock})")
     print("Next: the code-fix adapter freezes the train/val/held-out split on first use.")
 
 
