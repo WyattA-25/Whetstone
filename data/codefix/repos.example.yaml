@@ -1,0 +1,9 @@
+# Example format; Chayce's real list goes in data/codefix/repos.yaml
+repos:
+  - name: itsdangerous
+    url: https://github.com/pallets/itsdangerous
+    commit: HEAD
+    license: BSD-3-Clause
+    install: pip install -e . pytest freezegun
+    test: pytest -x -q
+    source_dir: src/itsdangerous

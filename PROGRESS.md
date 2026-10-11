@@ -10,8 +10,8 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 1 | Repo & environment | ✅ done |
 | 2 | Core library (Luminal client, TaskAdapter interface, objective, frozen split + hash, storage) | ✅ done |
 | 3 | Adapter A: text classification (exact match) | ✅ done |
-| 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | ⏭ next |
-| 5 | Code-fix data (teammate): repos → SARIF findings → frozen split | |
+| 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | ✅ built; first full run in progress |
+| 5 | Code-fix data (teammate): repos → SARIF findings → frozen split | 🟡 collector done (`scripts/collect_findings.py`); waiting on Chayce's `data/codefix/repos.yaml` |
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | |
 | ✂ | Cut line 3:00 PM | |
 | 7 | MongoDB Atlas persistence | |
@@ -26,6 +26,13 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 13 | Sale message draft | |
 | 14 | Demo video script | |
 | 15 | README + submission | |
+
+## Prize targets (decided)
+
+- **T1 Transpose / Luminal** ($3k): core loop + held-out result. Highest priority.
+- **T2 Build AND Sell**: both the **Sales prize** (employer founding-customer sale) and the **AWS prize**.
+- MongoDB: not entered as a track (judging spreads across tracks). Persistence choice for step 7 pending.
+- Priority if behind: T1 > Sales > AWS.
 
 ## Team
 
@@ -54,6 +61,12 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - **Noise:** same prompt at temperature 0 gave val 70% / 80% / 75% across runs. The model is
   nondeterministic, so selection must re-check winners and report confidence intervals.
 - Prices in `.env` are placeholder estimates ($0.10 in / $0.40 out per 1M); replace with Luminal's real price.
+
+## Known issues
+
+- Luminal intermittently returns 503 "model temporarily unavailable" / connection errors (seen 12:49-13:06).
+  Loop tolerates it: failed agents skipped, failed rounds retried with backoff, everything resumable.
+- Don't run baseline/manual scripts while a run is going: they share the ~10-concurrent rate limit.
 
 ## Open questions
 
