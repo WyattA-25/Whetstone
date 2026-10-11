@@ -168,18 +168,27 @@ class Runner:
         for c, (agg, f) in zip(cands, results):
             c["train"], c["fitness"], c["_fails"] = agg, self.fit(agg, "train"), f
 
-        # 4) selection: top-2 that beat the champion on train get a validation check;
-        #    promote only if it also holds on validation (guards against lucky noise).
+        # 4) selection: top-2 that beat the champion on train get a validation check, and the champion
+        #    is re-checked on validation in the same round. The champion's val score is a running mean
+        #    over all its checks, so one lucky measurement can't block every challenger (winner's curse).
+        #    Promotion requires beating the champion on train + val combined (140 examples).
         challengers = sorted([c for c in cands if c["fitness"] > champ["fitness"]],
                              key=lambda c: c["fitness"], reverse=True)[:2]
         promoted = None
-        for c in challengers:
-            c["val"], _ = self.eval(c["prompt"], self.val)
-            c["combined"] = combine(c["train"], c["val"])
-            best = promoted or champ
-            if (self.fit(c["val"], "val") >= self.fit(best["val"], "val")
-                    and self.fit(c["combined"], "combined") > self.fit(best["combined"], "combined")):
-                promoted = c
+        if challengers:
+            with ThreadPoolExecutor(len(challengers) + 1) as ex:
+                vals = list(ex.map(lambda p: self.eval(p, self.val)[0],
+                                   [champ["prompt"]] + [c["prompt"] for c in challengers]))
+            k = champ.get("val_runs", 1)
+            champ["val"] = {m_: (champ["val"].get(m_, 0) * k + vals[0].get(m_, 0)) / (k + 1)
+                            for m_ in vals[0] if m_ != "n"} | {"n": vals[0]["n"]}
+            champ["val_runs"] = k + 1
+            champ["combined"] = combine(champ["train"], champ["val"])
+            for c, v in zip(challengers, vals[1:]):
+                c["val"], c["combined"] = v, combine(c["train"], v)
+                best = promoted or champ
+                if self.fit(c["combined"], "combined") > self.fit(best["combined"], "combined"):
+                    promoted = c
         if promoted:
             self.s["champion"] = {k: v for k, v in promoted.items() if k != "_fails"}
             self.s["champion_failures"] = promoted["_fails"]
