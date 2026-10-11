@@ -16,7 +16,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | ✂ | Cut line 3:00 PM | |
 | 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
 | 8 | Held-out evaluation | ✅ banking77 headline (below). Code-fix run `codefix-20261011-160235` in progress (baseline already 82% train / 95% val, little headroom) |
-| 9 | Employer pilot (approved; private, never committed) | 🟡 in progress: dry-run integration of the employer's fix pipeline; objective = tokens + time per run with success held. Code/data/results only under git-ignored `pilot/`. Public wording only: "a government contractor's internal tool" |
+| 9 | Employer pilot (private) | ✅ 3 rounds, 8 candidates; held-out (4 runs each): tokens/run −23.3% (non-overlapping ranges), cost −22%, fix time −15% (directional), same fix rate. Public wording only: "a government contractor's internal AI code-fixing tool" |
 | 10 | Results UI (FastAPI + HTML) | ✅ done: `python -m whetstone.web` → http://127.0.0.1:8000 |
 | ✂ | Cut line 5:00 PM | |
 | 11 | Customer features (BYO key, cost estimate, spend limit, run counter, usage log) | ✅ done (KMS) |
