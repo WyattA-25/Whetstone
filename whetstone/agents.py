@@ -33,7 +33,11 @@ def _failures_block(failures: list[str]) -> str:
 
 def extract_tag(text: str, tag: str) -> str | None:
     m = re.findall(rf"<{tag}>(.*?)</{tag}>", text, flags=re.S | re.I)  # models vary tag case
-    return m[-1].strip() if m else None
+    if m:
+        return m[-1].strip()
+    # Reply cut off before (or inside) the closing tag: keep the body, drop the partial tag.
+    m = re.search(rf"<{tag}>(.*)$", text, flags=re.S | re.I)
+    return re.sub(r"</?\w*>?\s*$", "", m.group(1)).strip() if m else None
 
 
 @dataclass
