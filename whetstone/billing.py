@@ -56,7 +56,7 @@ def _region(endpoint: str) -> str:
     return _conf().get("MONETIZATION_REGION") or endpoint.split("//", 1)[1].split(".")[0]
 
 
-def _signed(method: str, path: str, query: dict, body: dict | None = None, timeout: float = 10.0) -> httpx.Response:
+def _signed(method: str, path: str, query: dict, body: dict | None = None, timeout: float = 30.0) -> httpx.Response:
     endpoint, _, _ = _identity()
     url = f"{endpoint}{path}?{urlencode(query)}"
     data = json.dumps(body) if body is not None else None

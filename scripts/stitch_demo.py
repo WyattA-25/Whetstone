@@ -16,11 +16,12 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 CLIPS, USER, OUT = Path("video/clips"), Path("video/user"), Path("video/whetstone_demo.mp4")
 FONT = "C\\:/Windows/Fonts/segoeuib.ttf"
 # (user clip name, slot seconds, caption)
-SLOTS = {"signup": (12.0, "Sign up with email + password, then the 6-digit code"),
-         "checkout": (12.0, "Pick Founding, pay in the sandbox checkout (test card)"),
-         "run": (9.0, "Estimate the cost on your own key, confirm, start the run")}
-ORDER = ["00_intro", "01_card_account", "signup", "02_card_plan", "03_pricing", "checkout",
-         "04_card_run", "run", "05_card_results", "06_results", "07_outro"]
+SLOTS = {"checkout": (8.0, "Enter payment details in the sandbox checkout (test card), back on the Founding plan"),
+         "run": (8.0, "Estimate the cost on your own key, confirm, start the run")}
+ORDER = ["00_intro", "01_card_account", "01b_signup", "02_card_plan", "03_pricing", "03b_aws_pricing",
+         "03c_aws_checkout", "checkout", "04_card_run", "run", "05_card_results", "06_results", "07_outro"]
+# Seconds of page-load at the start of hosted-page clips (blank while AWS pages load)
+SKIP = {"03b_aws_pricing": 5.6, "03c_aws_checkout": 2.3}
 NORM = "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=0x12110f,fps=30,format=yuv420p"
 
 
@@ -54,7 +55,7 @@ def main() -> None:
                   f"fontsize=24:box=1:boxcolor=0x12110fE6:boxborderw=14:x=(w-text_w)/2:y=h-72")
             args = ["-i", str(src), "-t", f"{slot}", "-vf", vf]
         else:
-            args = ["-ss", "0.25", "-i", str(CLIPS / f"{key}.webm"), "-vf", NORM]
+            args = ["-ss", f"{SKIP.get(key, 0.25)}", "-i", str(CLIPS / f"{key}.webm"), "-vf", NORM]
         out = tmp / f"{len(parts):02d}_{key}.mp4"
         subprocess.run([FF, "-loglevel", "error", "-y", *args, "-an", "-c:v", "libx264", "-preset", "fast",
                         "-crf", "20", str(out)], check=True)
