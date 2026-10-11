@@ -33,9 +33,10 @@ li{padding:11px 0;border-top:1px solid #2f2d29}li b{color:#f59e0b;font-weight:70
 SALES = [
     "<b>Prospect 1</b>: CEO of my employer (disclosed), a government contractor building AI developer tools. "
     "Pilot on their AI code-fixing pipeline: <b>-23% tokens/run</b>, same fix rate",
-    "<b>Reply</b>: \"That sounds exciting\". Referred us to their technical lead to evaluate. Offer sent",
+    "<b>We reached out</b> to the CEO: he showed interest (\"that sounds exciting\") and referred us to their technical lead, "
+    "who now has the offer",
     "<b>Prospect 2</b>: an executive at a second company with AI prompts in production. Offer sent, awaiting reply",
-    "<b>Offer</b>: Founding plan $49/mo locked 12 months, 4 runs, $5 per extra run, scoring on their own AI key",
+    "<b>Honest status</b>: real interest, <b>no sale closed today</b>. Offer: $49/mo founding plan, 4 runs, $5 per extra run",
 ]
 AWS = [
     "<b>App Monetization</b> (private beta): 2 subscription plans + <b>$5 metered extra runs</b>, fail-closed entitlement before every run",
@@ -175,7 +176,7 @@ def main() -> None:
         clip(b, "05_card_results", card("Step 4", "See the results", "Every round, every agent, every prompt", 2.0))
         clip(b, "06_results", results)
         clip(b, "06b_aws", list_card("Under the hood", "Built on AWS", AWS, 5.0))
-        clip(b, "06c_sales", list_card("Build and sell", "Selling it today", SALES, 6.5))
+        clip(b, "06c_sales", list_card("Build and sell", "Selling it today", SALES, 8.0))
         clip(b, "07_outro", card("Results", "72% → 81.5% <span>·</span> −23% tokens",
                                  "Held-out accuracy (Banking77, 400 unseen) · −23% tokens on a government contractor's AI code-fixing tool, same fix rate", 4.0))
         b.close()

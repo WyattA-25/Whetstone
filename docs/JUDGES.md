@@ -67,10 +67,10 @@ We're transparent that **our first prospect is my employer**, a government contr
 
 | # | Prospect | What we offered | Status |
 |---|---|---|---|
-| 1 | **CEO of my employer** (government contractor, AI developer tools). Disclosed: I work there | Ran a dry-run pilot on their internal AI code-fixing pipeline (−23% tokens per run, same fix rate). Offered the Founding plan: $49/mo locked 12 months, 4 runs, $5 per extra run, scoring on their own OpenAI account (about $1-2 per run) | **Positive.** "That sounds exciting." He referred us to their technical lead to evaluate. Message sent to the technical lead; *awaiting reply* |
+| 1 | **CEO of my employer** (government contractor, AI developer tools). Disclosed: I work there | Ran a dry-run pilot on their internal AI code-fixing pipeline (−23% tokens per run, same fix rate). Offered the Founding plan: $49/mo locked 12 months, 4 runs, $5 per extra run, scoring on their own OpenAI account (about $1-2 per run) | **Interest shown, no sale yet.** We reached out to the CEO with the pilot results and offer; he replied that it "sounds exciting" and referred us to their technical lead, who would need to evaluate it. We messaged the technical lead with the same results and offer; *awaiting reply* |
 | 2 | **Executive at a second company** building AI products | Confirmed they use AI prompts in one product today with more planned; sent results and the Founding offer | *Awaiting reply* |
 
-*This table is updated as replies come in.* Payments run in the App Monetization **sandbox** (the beta processes test payments only), so a written yes or a letter of intent is the strongest commitment possible today. The seller payout registration is created.
+**Bottom line today: genuine interest from a decision-maker and a warm referral to the technical evaluator, but no sale was closed during the event.** *This table is updated as replies come in.* Payments run in the App Monetization **sandbox** (the beta processes test payments only), so a written yes or a letter of intent is the strongest commitment possible today. The seller payout registration is created.
 
 ## 7. Honest limitations
 

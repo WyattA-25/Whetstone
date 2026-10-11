@@ -16,8 +16,8 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 CLIPS, USER, OUT = Path("video/clips"), Path("video/user"), Path("video/whetstone_demo.mp4")
 FONT = "C\\:/Windows/Fonts/segoeuib.ttf"
 # (user clip name, slot seconds, caption)
-SLOTS = {"checkout": (8.0, "Enter payment details in the sandbox checkout (test card), back on the Founding plan"),
-         "run": (8.0, "Estimate the cost on your own key, confirm, start the run")}
+SLOTS = {"checkout": (7.5, "Enter payment details in the sandbox checkout (test card), back on the Founding plan"),
+         "run": (7.5, "Estimate the cost on your own key, confirm, start the run")}
 ORDER = ["00_intro", "01_card_account", "01b_signup", "02_card_plan", "03b_aws_pricing",
          "03c_aws_checkout", "checkout", "04_card_run", "run", "05_card_results", "06_results", "06b_aws",
          "06c_sales", "07_outro"]
