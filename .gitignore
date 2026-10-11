@@ -32,3 +32,7 @@ claude_code_kickoff_prompt.md
 
 # Dev/test data for the code-fix adapter
 data/codefix/dev/
+
+# AWS App Monetization beta: private registry token + installed packages (never commit)
+.npmrc
+node_modules/

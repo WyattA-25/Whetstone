@@ -13,6 +13,7 @@ BLOCKED_PATHS = [
     re.compile(r"(^|/)pilot/"),
     re.compile(r"(^|/)configs/private/"),
     re.compile(r"\.private\."),
+    re.compile(r"(^|/)\.npmrc$"),
 ]
 
 SECRET_PATTERNS = [
@@ -22,6 +23,7 @@ SECRET_PATTERNS = [
     re.compile(r"mongodb(\+srv)?://[^\s:/]+:[^\s@/]+@"),   # Mongo URI with password
     re.compile(r"(sk|rk)_live_[A-Za-z0-9]{10,}"),          # Stripe live keys
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
+    re.compile(r"_authToken\s*=\s*\S{8,}"),                # npm registry tokens (.npmrc)
 ]
 
 DENYLIST = Path("configs/private/denylist.txt")
