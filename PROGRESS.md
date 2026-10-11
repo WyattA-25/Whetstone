@@ -8,8 +8,8 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | # | Step | Status |
 |---|---|---|
 | 1 | Repo & environment | ✅ done |
-| 2 | Core library (Luminal client, TaskAdapter interface, objective, frozen split + hash, storage) | ⏭ next |
-| 3 | Adapter A: text classification (exact match) | |
+| 2 | Core library (Luminal client, TaskAdapter interface, objective, frozen split + hash, storage) | ✅ done |
+| 3 | Adapter A: text classification (exact match) | ⏭ next |
 | 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | |
 | 5 | Code-fix data (teammate): repos → SARIF findings → frozen split | |
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | |
@@ -32,6 +32,10 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 - Wyatt (WyattA-25): lead, reviews and runs everything.
 - Chayce (Chayce-Allison): GitHub repo setup, Atlas/AWS accounts, findings data + split, testing, video recording.
 
+## Repo
+
+https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the GitHub noreply email.
+
 ## Key decisions
 
 - Optimization objective is configurable (success rate, tokens, time, cost, with constraints).
@@ -41,14 +45,16 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 
 ## Current numbers
 
-None yet.
+- Luminal: `https://flash.luminal.cloud/v1`, only model `deepseek-ai/DeepSeek-V4.1-Flash`.
+  Reasoning model (hidden reasoning tokens count as completion tokens). ~0.7-1.5s per short call.
+- Rate limit: ~10 concurrent requests OK, more get HTTP 429. Default concurrency 8 + exponential backoff.
+- Prices in `.env` are placeholder estimates ($0.10 in / $0.40 out per 1M); replace with Luminal's real price.
 
 ## Open questions
 
-- Luminal: exact model names, base URL, rate limits (needed for step 2).
+- Luminal real per-token price (for cost estimates).
 - AWS "best use" criteria; judging rubric.
 - Employer: pilot permission, harness request/response format (ports 8080 / 5050), model used.
-- Git commit email is currently a personal Gmail; confirm before the repo goes public.
 
 ## Confidentiality
 
