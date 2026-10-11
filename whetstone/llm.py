@@ -48,6 +48,7 @@ class LLMClient:
     temperature: float = 0.7
     timeout: float = 45.0                 # per attempt; long hangs are cut off and retried
     attempts: int = 5
+    extra_body: dict | None = None        # provider-specific options, e.g. turning model "thinking" off
     usage: Usage = field(default_factory=Usage)
 
     def __post_init__(self) -> None:
@@ -84,4 +85,4 @@ class LLMClient:
             with attempt:
                 return self._client.chat.completions.create(
                     model=self.endpoint.model, messages=messages,
-                    temperature=temperature, max_tokens=max_tokens)
+                    temperature=temperature, max_tokens=max_tokens, extra_body=self.extra_body)

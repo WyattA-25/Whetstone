@@ -50,5 +50,9 @@ def scoring_endpoint() -> EndpointConfig:
     )
 
 
+# Our agents run with the model's hidden "thinking" off: replies come back faster, and the model can't
+# burn its whole token budget reasoning and return an empty answer. Scoring calls keep the provider default.
+AGENT_EXTRA_BODY = None if os.getenv("LUMINAL_AGENT_THINKING", "off") == "on" else {"thinking": {"type": "disabled"}}
+
 MAX_CONCURRENCY = int(os.getenv("LLM_MAX_CONCURRENCY") or 8)
 OPTIMIZER_MAX_USD_PER_RUN = _f("OPTIMIZER_MAX_USD_PER_RUN", 2.00)

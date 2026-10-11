@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .agents import analyze, propose
-from .config import OPTIMIZER_MAX_USD_PER_RUN, optimizer_endpoint, scoring_endpoint
+from .config import AGENT_EXTRA_BODY, OPTIMIZER_MAX_USD_PER_RUN, optimizer_endpoint, scoring_endpoint
 from .evaluate import evaluate_prompt
 from .llm import BudgetExceeded, LLMClient, Usage
 from .objective import Constraint, Objective
@@ -56,7 +56,8 @@ class Runner:
         self.train = self.split.train(self.examples)
         self.val = self.split.val(self.examples)
         self.objective = Objective.from_dict(state["objective"])
-        self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"], timeout=90, attempts=3)
+        self.opt = LLMClient(optimizer_endpoint(), max_usd=state["budgets"]["optimizer_usd"], timeout=90, attempts=3,
+                             extra_body=AGENT_EXTRA_BODY)
         self.score_llm = LLMClient(scoring_endpoint(), max_usd=state["budgets"]["scoring_usd"], temperature=0,
                                    timeout=self.adapter.scoring_timeout)
         self.opt.usage = Usage(**{k: v for k, v in state["usage"]["optimizer"].items()})

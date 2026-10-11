@@ -77,6 +77,10 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 
 - Luminal intermittently returns 503 "model temporarily unavailable" / connection errors (seen 12:49-13:06).
   Loop tolerates it: failed agents skipped, failed rounds retried with backoff, everything resumable.
+- Agent replies with thinking ON sometimes spent all 4096 tokens reasoning and returned nothing.
+  Fix: agents run with `extra_body={"thinking": {"type": "disabled"}}` (set `LUMINAL_AGENT_THINKING=on` to revert).
+  Scoring calls keep the provider default (reasoning on) so baselines stay comparable.
+- Check a run from any shell: `python -m whetstone.status` (add `--all` for the full log).
 - Don't run baseline/manual scripts while a run is going: they share the ~10-concurrent rate limit.
 
 ## Open questions
