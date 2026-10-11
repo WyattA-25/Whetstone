@@ -1,6 +1,6 @@
 """Read-side access to run data for the web UI: local files or DynamoDB (same shapes either way).
 
-Private runs (employer pilot: state "private": true, or a task starting with "pilot") are never returned.
+Private runs (private pilot: state "private": true, or a task starting with "pilot") are never returned.
 """
 from __future__ import annotations
 

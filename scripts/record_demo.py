@@ -31,10 +31,10 @@ li{padding:11px 0;border-top:1px solid #2f2d29}li b{color:#f59e0b;font-weight:70
 
 # Update when replies come in (shown in the video's "Selling it" segment).
 SALES = [
-    "<b>Prospect 1</b>: CEO of my employer (disclosed), a government contractor building AI developer tools. "
-    "Pilot on their AI code-fixing pipeline: <b>-23% tokens/run</b>, same fix rate",
-    "<b>We reached out</b> to the CEO: he showed interest (\"that sounds exciting\") and referred us to their technical lead, "
-    "who now has the offer",
+    "<b>Prospect 1</b>: a government contractor building AI systems. We tested Whetstone on one of their internal "
+    "tools: <b>-23% tokens/run</b>, same fix rate",
+    "<b>We pitched the CEO</b>: he showed interest (\"that sounds exciting\") but wanted the CTO's take first. "
+    "The CTO wasn't available today",
     "<b>Prospect 2</b>: an executive at a second company with AI prompts in production. Offer sent, awaiting reply",
     "<b>Honest status</b>: real interest, <b>no sale closed today</b>. Offer: $49/mo founding plan, 4 runs, $5 per extra run",
 ]

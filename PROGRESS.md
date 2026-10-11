@@ -16,7 +16,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | ✂ | Cut line 3:00 PM | |
 | 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
 | 8 | Held-out evaluation | ✅ banking77 headline (below). Code-fix run `codefix-20261011-160235` in progress (baseline already 82% train / 95% val, little headroom) |
-| 9 | Employer pilot (private) | ✅ 3 rounds, 8 candidates; held-out (4 runs each): tokens/run −23.3% (non-overlapping ranges), cost −22%, fix time −15% (directional), same fix rate. Public wording only: "a government contractor's internal AI code-fixing tool" |
+| 9 | Private pilot | ✅ 3 rounds, 8 candidates; held-out (4 runs each): tokens/run −23.3% (non-overlapping ranges), cost −22%, fix time −15% (directional), same fix rate. Public wording only: "a government contractor's internal AI code-fixing tool" |
 | 10 | Results UI (FastAPI + HTML) | ✅ done: `python -m whetstone.web` → http://127.0.0.1:8000 |
 | ✂ | Cut line 5:00 PM | |
 | 11 | Customer features (BYO key, cost estimate, spend limit, run counter, usage log) | ✅ done (KMS) |
@@ -38,7 +38,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 ## Prize targets (decided)
 
 - **T1 Transpose / Luminal** ($3k): core loop + held-out result. Highest priority.
-- **T2 Build AND Sell**: both the **Sales prize** (employer founding-customer sale) and the **AWS prize**.
+- **T2 Build AND Sell**: both the **Sales prize** (first-customer sale) and the **AWS prize**.
 - MongoDB: not entered. Step 7 persistence = **AWS DynamoDB** (counts toward the AWS prize). Chayce: skip Atlas.
 - Priority if behind: T1 > Sales > AWS.
 
@@ -186,9 +186,9 @@ https://github.com/WyattA-25/Whetstone (private until step 15). Commits use the 
 - Luminal judging (posted 4:04 PM): measurable improvement incl. fresh tests 40%, loop design 30%,
   effective parallelism 20%, demo clarity 10%; relative improvement + difficulty.
 - AWS Track 2: must fill the AWS UserTesting survey after trying the monetize tool (eligibility + $50 card).
-- Employer: pilot permission, harness request/response format (ports 8080 / 5050), model used.
+- Pilot partner: permission, harness format, model used (resolved).
 
 ## Confidentiality
 
-- Employer identifiers go in `configs/private/denylist.txt` (git-ignored, one term per line).
+- Partner identifiers go in `configs/private/denylist.txt` (git-ignored, one term per line).
 - The pre-commit hook (`.githooks/pre-commit`) blocks pilot paths, `.env`, denylisted terms, and obvious secrets.

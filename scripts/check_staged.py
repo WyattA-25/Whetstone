@@ -1,6 +1,6 @@
-"""Pre-commit guard: block secrets, pilot data, and employer identifiers.
+"""Pre-commit guard: block secrets, pilot data, and partner identifiers.
 
-Employer terms live in configs/private/denylist.txt (git-ignored), so the
+Partner terms live in configs/private/denylist.txt (git-ignored), so the
 denylist itself never leaks into the repo.
 """
 import re
@@ -60,7 +60,7 @@ def main() -> int:
         lowered = content.lower() + "\n" + path.lower()
         for term in terms:
             if term in lowered:
-                problems.append(f"{path}: contains a denylisted employer term")
+                problems.append(f"{path}: contains a denylisted partner term")
 
     if problems:
         print("Commit blocked by scripts/check_staged.py:")

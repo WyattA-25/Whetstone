@@ -3,7 +3,7 @@
 .env.*
 !.env.example
 
-# Private employer pilot: never commit
+# Private pilot: never commit
 pilot/
 configs/private/
 *.private.*

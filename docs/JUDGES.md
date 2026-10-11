@@ -63,15 +63,15 @@ What we learned, visible in the commit history: v1 overfit (train +11 pts, held-
 
 ## 6. Sales: who we contacted and what happened
 
-We're transparent that **our first prospect is my employer**, a government contractor that builds AI developer tools.
+Our first prospect is **a government contractor that builds AI systems**. We tested Whetstone on one of their internal tools before pitching.
 
 | # | Prospect | What we offered | Status |
 |---|---|---|---|
-| 1 | **CEO of my employer** (government contractor, AI developer tools). Disclosed: I work there | Ran a dry-run pilot on their internal AI code-fixing pipeline (−23% tokens per run, same fix rate). Offered the Founding plan: $49/mo locked 12 months, 4 runs, $5 per extra run, scoring on their own OpenAI account (about $1-2 per run) | **Interest shown, no sale yet.** We reached out to the CEO with the pilot results and offer; he replied that it "sounds exciting" and referred us to their technical lead, who would need to evaluate it. We messaged the technical lead with the same results and offer; *awaiting reply* |
+| 1 | **CEO of a government contractor building AI systems** | Dry-run pilot on one of their internal AI code-fixing tools (−23% tokens per run, same fix rate). Offered the Founding plan: $49/mo locked 12 months, 4 runs, $5 per extra run, scoring on their own OpenAI account (about $1-2 per run) | **Interest shown, no sale yet.** We pitched the CEO with the pilot results and offer. He replied that it "sounds exciting" but wanted the CTO's thoughts first, and the CTO wasn't available during the event. We sent the same results and offer for the CTO to review; *awaiting reply* |
 | 2 | **Executive at a second company** building AI products | Confirmed they use AI prompts in one product today with more planned; sent results and the Founding offer | *Awaiting reply* |
 
-**Bottom line today: genuine interest from a decision-maker and a warm referral to the technical evaluator, but no sale was closed during the event.** *This table is updated as replies come in.* Payments run in the App Monetization **sandbox** (the beta processes test payments only), so a written yes or a letter of intent is the strongest commitment possible today. The seller payout registration is created.
+**Bottom line today: genuine interest from a CEO, pending the CTO's review, but no sale was closed during the event.** *This table is updated as replies come in.* Payments run in the App Monetization **sandbox** (the beta processes test payments only), so a written yes or a letter of intent is the strongest commitment possible today. The seller payout registration is created.
 
 ## 7. Honest limitations
 
-See the README's "Honest limitations": small pilot samples, longer prompts, process-level sandboxing, the beta billing sandbox, and Luminal rate limits and 503s during the event. Nothing from the employer pilot (code, prompts, data, names) is in this repository. It ran from a private, git-ignored folder, with a pre-commit guard that blocks employer terms.
+See the README's "Honest limitations": small pilot samples, longer prompts, process-level sandboxing, the beta billing sandbox, and Luminal rate limits and 503s during the event. Nothing from the private pilot (code, prompts, data, names) is in this repository. It ran from a private, git-ignored folder, with a pre-commit guard that blocks the partner's identifying terms.

@@ -3,7 +3,7 @@
 Examples:
   Objective("success", "max")                                   # public demo: fix rate
   Objective("tokens", "min", [Constraint("success", ">=", -0.02, relative_to_baseline=True)])
-      # employer pilot: fewer tokens, success may drop at most 2 points vs baseline
+      # private pilot: fewer tokens, success may drop at most 2 points vs baseline
 """
 from __future__ import annotations
 

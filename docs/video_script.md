@@ -14,7 +14,7 @@ Anything that doesn't fit here is in [docs/JUDGES.md](JUDGES.md).
 | 0:37-0:47 | *Your clip:* estimate → confirm → start | "They bring their own AI key, encrypted with KMS, see the exact cost estimate on that key, and start a run." | AWS, Sales |
 | 0:47-1:15 | **Results tour**: held-out card → chart → agent feed → lessons → diff | "Each round, four agents on Luminal propose new prompts in parallel: mutating, combining, and rewriting from scratch. An analyst agent turns failures into lessons for the next round. Only prompts that beat the champion survive. The proof is on 400 test examples it never saw: 72 to 81.5 percent, a third fewer errors, statistically significant, for under a dollar." | Luminal (improvement, loop design, parallelism) |
 | 1:15-1:19 | **Built on AWS** card | "It's all on AWS: Cognito, KMS, DynamoDB, Lambda, and App Monetization for subscriptions plus metered usage." | AWS |
-| 1:18-1:26 | **Selling it today** card | "We pitched my employer's CEO, disclosed, with a pilot that cut their tokens 23 percent. He showed interest and sent us to their technical lead. No sale closed today, but real interest." | Sales |
+| 1:18-1:26 | **Selling it today** card | "We pitched a government contractor that builds AI systems, after cutting tokens 23 percent on one of their internal tools. Their CEO is interested but wants the CTO's take first. No sale closed today." | Sales |
 | 1:26-1:29 | Outro | "Whetstone: prompts that prove they got better." | All |
 
 ## Recording tips
