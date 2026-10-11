@@ -49,3 +49,10 @@ def test_jsonl_store(tmp_path):
     assert JsonlStore(tmp_path).insert("rounds", {"run_id": "r1", "round": 2, "best": 0.8}) == 2  # survives restart
     assert [d["best"] for d in st.find("rounds", run_id="r1")] == [0.5, 0.7, 0.8]
     assert st.find("rounds", run_id="r1", round=1)[0]["best"] == 0.7
+
+
+def test_bootstrap_ci():
+    from whetstone.final_eval import bootstrap_ci
+    assert bootstrap_ci([1.0] * 30) == (1.0, 1.0)
+    lo, hi = bootstrap_ci([0.0] * 50 + [1.0] * 50, n=2000)
+    assert 0.38 < lo < 0.5 < hi < 0.62
