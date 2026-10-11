@@ -1,6 +1,6 @@
-# Linguist
+# Whetstone
 
-**A self-improving prompt optimizer.** Give Linguist a prompt you already use, a set of example inputs, and a way to score outputs. A team of AI agents evolves better versions of that prompt over repeated rounds and proves the improvement on held-out examples the optimizer never saw.
+**A self-improving prompt optimizer.** Give Whetstone a prompt you already use, a set of example inputs, and a way to score outputs. A team of AI agents evolves better versions of that prompt over repeated rounds and proves the improvement on held-out examples the optimizer never saw.
 
 Works for any prompt-driven task: support replies, classification, data extraction, summarization, sales emails, coding agents. Our first showcase is a code-fix pipeline, where an AI agent fixes scanner findings and success is checked objectively by re-scanning and running the tests.
 

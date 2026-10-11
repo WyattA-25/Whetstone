@@ -1,4 +1,4 @@
-# Linguist: Progress
+# Whetstone: Progress
 
 Handoff file. If Claude usage runs out, Codex or a human picks up from here.
 The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarized below.
