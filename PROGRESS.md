@@ -10,22 +10,30 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 1 | Repo & environment | ✅ done |
 | 2 | Core library (Luminal client, TaskAdapter interface, objective, frozen split + hash, storage) | ✅ done |
 | 3 | Adapter A: text classification (exact match) | ✅ done |
-| 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | ✅ built; first full run in progress |
-| 5 | Code-fix data: repos → findings → frozen split | ✅ 110 findings, 5 repos (itsdangerous, boltons, prettytable, tabulate, click), 39 rules; split freezes on first codefix baseline |
+| 4 | Optimizer loop (mutate / crossover / fresh / analyst, selection, budgets, resumable) | ✅ done (banking77: 8 rounds, val 70% → 85%) |
+| 5 | Code-fix data: repos → findings → frozen split | ✅ 110 findings, 5 repos, 39 rules; split frozen (`data/codefix/split.json`). Chayce's PR #1 merged as `repos.v2-candidates.yaml` (adds bottle, mako for v2) |
 | 6 | Adapter B: code-fix (sandbox, Luminal fixer, re-scan + tests, cache) | ✅ done (verifier self-test passes; dev baseline 6/8 on itsdangerous) |
 | ✂ | Cut line 3:00 PM | |
 | 7 | Persistence → **DynamoDB** (option A; replaces Atlas) | ✅ done |
-| 8 | Held-out evaluation | ✅ banking77 headline done (below); code-fix run still to do |
-| 9 | Employer pilot (only if approved; private config, never committed) | |
+| 8 | Held-out evaluation | ✅ banking77 headline (below). Code-fix run `codefix-20261011-160235` in progress (baseline already 82% train / 95% val, little headroom) |
+| 9 | Employer pilot (approved; private, never committed) | 🟡 in progress: dry-run integration of the employer's fix pipeline; objective = tokens + time per run with success held. Code/data/results only under git-ignored `pilot/`. Public wording only: "a government contractor's internal tool" |
 | 10 | Results UI (FastAPI + HTML) | ✅ done: `python -m whetstone.web` → http://127.0.0.1:8000 |
 | ✂ | Cut line 5:00 PM | |
 | 11 | Customer features (BYO key, cost estimate, spend limit, run counter, usage log) | ✅ done (KMS) |
-| 12a | Payments (AWS beta tool; Stripe test-mode fallback) | |
+| 12a | Payments (AWS App Monetization beta) | 🟡 app + metric `optimization_run` + plans Founding $49 (4 runs) / Standard $199 (10 runs), $5 overage (cap 20) created as **drafts** (sandbox). Seller registration pending (ListApps transport error; asked Wyatt). Code wiring (metering/checkout) next |
 | 12b | Deploy | ✅ Lambda + Function URL: https://orluwkuvzjjph76umunjuj6qpe0yzalo.lambda-url.us-east-1.on.aws/ |
 | ✂ | Cut line 7:00 PM: features stop | |
-| 13 | Sale message draft | |
+| 13 | Sale message draft | 🟡 private draft in `pilot/outreach/` (needs pilot numbers) |
 | 14 | Demo video script | |
 | 15 | README + submission | |
+
+## Status at ~18:05 (latest)
+
+- Headline (T1): banking77 held-out 72.0% → 81.5% (+9.5 pts, CI +5.5..+13.5, significant).
+- Deployed: Lambda dashboard (read-only) + DynamoDB + KMS + Cognito (customer sign-in) + ECR.
+- AWS monetize skill: HTTP-direct path; app id 01a12c9f8ab07ce0b73c7f317885a5c0 (us-west-2 beta endpoint).
+  Connection files `.env.monetization` / `.monetize/` are git-ignored.
+- Tonight's plan: pilot numbers ~19:00 → outreach messages ~19:30 → video + README + submission by 20:00.
 
 ## Prize targets (decided)
 
@@ -37,7 +45,7 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 ## Team
 
 - Wyatt (WyattA-25): lead, reviews and runs everything.
-- Chayce (Chayce-Allison): GitHub repo setup, Atlas/AWS accounts, findings data + split, testing, video recording.
+- Chayce (Chayce-Allison): code-fix repo scouting (PR #1), testing, video recording.
 
 ## Repo
 
