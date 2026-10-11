@@ -1,0 +1,1003 @@
+{
+  "run_id": "codefix-20261011-160235",
+  "task": "codefix",
+  "at": "2026-10-11T21:45:53.595435+00:00",
+  "objective": {
+    "metric": "success",
+    "direction": "max",
+    "constraints": []
+  },
+  "n_heldout": 33,
+  "excluded_for_errors": [],
+  "repeats": 1,
+  "heldout_hash": "6ed551abe3267dadfc5ff92616c8f8224355e569f37a5434e89f0b1cea2a4735",
+  "best_id": "r1-mutate-1",
+  "baseline": {
+    "success": {
+      "mean": 0.9393939393939394,
+      "ci95": [
+        0.8484848484848485,
+        1.0
+      ],
+      "per_repeat": [
+        0.9393939393939394
+      ]
+    },
+    "tokens": {
+      "mean": 3007.6363636363635,
+      "ci95": [
+        2707.3636363636365,
+        3337.6969696969695
+      ],
+      "per_repeat": [
+        3007.6363636363635
+      ]
+    },
+    "seconds": {
+      "mean": 4.711478377833511,
+      "ci95": [
+        2.6333176945195054,
+        7.460776914249767
+      ],
+      "per_repeat": [
+        4.711478377833511
+      ]
+    },
+    "usd": {
+      "mean": 0.0014936454545454545,
+      "ci95": [
+        0.0011587181818181818,
+        0.0018876727272727272
+      ],
+      "per_repeat": [
+        0.0014936454545454545
+      ]
+    },
+    "error": {
+      "mean": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "per_repeat": [
+        0.0
+      ]
+    }
+  },
+  "best": {
+    "success": {
+      "mean": 0.9090909090909091,
+      "ci95": [
+        0.8181818181818182,
+        1.0
+      ],
+      "per_repeat": [
+        0.9090909090909091
+      ]
+    },
+    "tokens": {
+      "mean": 3503.212121212121,
+      "ci95": [
+        3205.3333333333335,
+        3828.3030303030305
+      ],
+      "per_repeat": [
+        3503.212121212121
+      ]
+    },
+    "seconds": {
+      "mean": 7.218288284359557,
+      "ci95": [
+        3.0100871216167104,
+        12.619585586316658
+      ],
+      "per_repeat": [
+        7.218288284359557
+      ]
+    },
+    "usd": {
+      "mean": 0.0016347363636363636,
+      "ci95": [
+        0.0013275727272727275,
+        0.001988336363636364
+      ],
+      "per_repeat": [
+        0.0016347363636363636
+      ]
+    },
+    "error": {
+      "mean": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "per_repeat": [
+        0.0
+      ]
+    }
+  },
+  "paired_diff": {
+    "metric": "success",
+    "mean": -0.030303030303030304,
+    "ci95": [
+      -0.09090909090909091,
+      0.0
+    ]
+  },
+  "relative_improvement": -0.03225806451612903,
+  "significant": false,
+  "verdict": "no improvement on held-out data",
+  "models": {
+    "optimizer": "deepseek-ai/DeepSeek-V4.1-Flash",
+    "scoring": "deepseek-ai/DeepSeek-V4.1-Flash"
+  },
+  "scoring_usage": {
+    "calls": 66,
+    "prompt_tokens": 171770,
+    "completion_tokens": 43088,
+    "usd": 0.103237,
+    "seconds": 393.68
+  },
+  "best_prompt": "You are a coding assistant that fixes ONE static-analysis finding (ruff or bandit) in a Python file. A fixed harness gives you the finding, the numbered source file, and the required <edit> output format. Make minimal, targeted changes that preserve behaviour.\n\nHard rules:\n- NEVER add suppression comments (# noqa, # nosec) or otherwise silence the scanner. Fix the underlying code.\n- Do not delete or rename names the rest of the file relies on. Re-read the surrounding code and confirm every referenced name still exists after your edit.\n- Do not introduce new scanner findings (e.g. unused imports, imports not at top of file, undefined names).\n\nHow to fix by finding type:\n- Ambiguous/non-ASCII characters (RUF001/RUF002/RUF003): replace the offending character with its intended ASCII equivalent inside the literal/regex. Do not add noqa.\n- `global` used but no assignment (PLW0602): remove the `global` statement only if the function truly never assigns that name; otherwise keep it and address the real issue. Do not leave dangling references.\n- Import not at top of file (E402): move the import to the top of the module, or restructure so the import is no longer needed at that location. If you must import locally, ensure it does not create a new E402/E402-style finding.\n- File opened without a context manager (SIM115): restructure so the handle is managed by a `with` block; if the resource must outlive the scope (e.g. stored on `self`), keep it retained while satisfying the rule without suppression.\n- Insecure hash (S324): switch to a secure alternative only if the call site's semantics allow; otherwise restructure so the scanner no longer flags it. Never suppress.\n- `try`/`except`/`pass` (SIM105): use `contextlib.suppress(...)` instead, and place any resulting import at the top of the file to avoid E402.\n- `assert` findings: replace the assertion with an explicit check that raises an appropriate exception, preserving the same failure behaviour.\n- `try`/`except` inside a loop (PERF203): restructure so the try block is outside the loop, or narrow the try to the minimal expression, without changing behaviour. Do not suppress.\n\nGeneral approach: read the numbered source, identify the exact line and the names it touches, make the smallest edit that removes the finding while preserving behaviour and keeping all referenced names valid. Verify your edit mentally against the file before finalizing.",
+  "baseline_prompt": "You are a helpful coding assistant. Fix the issue reported by the static analysis tool in the given Python file. Make minimal changes.",
+  "per_example": {
+    "boltons-B009-1fb6ba59a2": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 12.8,
+        "tokens": 2574,
+        "seconds": 1.4825074672698975,
+        "usd": 0.0009297,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 12.8,
+        "tokens": 3167,
+        "seconds": 3.7424895763397217,
+        "usd": 0.0011877,
+        "error": 0.0
+      }
+    },
+    "boltons-B904-0850d9b3d1": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.81,
+        "tokens": 2397,
+        "seconds": 0.9874262809753418,
+        "usd": 0.0007848,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.81,
+        "tokens": 3086,
+        "seconds": 1.8774347305297852,
+        "usd": 0.001158,
+        "error": 0.0
+      }
+    },
+    "boltons-PLR1711-ca387d0ab6": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 14.82,
+        "tokens": 4282,
+        "seconds": 3.58313250541687,
+        "usd": 0.0017174999999999998,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 14.82,
+        "tokens": 4960,
+        "seconds": 3.8463099002838135,
+        "usd": 0.0020775,
+        "error": 0.0
+      }
+    },
+    "boltons-PLR5501-1d3937cd72": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.59,
+        "tokens": 2332,
+        "seconds": 1.4102444648742676,
+        "usd": 0.0008778,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.59,
+        "tokens": 3027,
+        "seconds": 1.6140713691711426,
+        "usd": 0.0012582000000000001,
+        "error": 0.0
+      }
+    },
+    "boltons-PLR5501-711d8a314b": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.6,
+        "tokens": 2515,
+        "seconds": 1.8538551330566406,
+        "usd": 0.0010137,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.6,
+        "tokens": 3674,
+        "seconds": 5.1423585414886475,
+        "usd": 0.0019508999999999998,
+        "error": 0.0
+      }
+    },
+    "boltons-PLW2901-dc179129b9": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 14.0,
+        "tokens": 4769,
+        "seconds": 13.972214698791504,
+        "usd": 0.0036636000000000004,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 8.78,
+        "tokens": 5546,
+        "seconds": 14.734377384185791,
+        "usd": 0.0041424,
+        "error": 0.0
+      }
+    },
+    "boltons-S110-a1a954088a": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.8,
+        "tokens": 3985,
+        "seconds": 9.979296445846558,
+        "usd": 0.0026742,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.8,
+        "tokens": 4824,
+        "seconds": 11.404189586639404,
+        "usd": 0.0032274,
+        "error": 0.0
+      }
+    },
+    "boltons-SIM117-5b931d7e68": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.71,
+        "tokens": 2535,
+        "seconds": 1.709911823272705,
+        "usd": 0.0009701999999999998,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.71,
+        "tokens": 2856,
+        "seconds": 0.8283596038818359,
+        "usd": 0.0009018,
+        "error": 0.0
+      }
+    },
+    "boltons-SIM118-ab323deca5": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.51,
+        "tokens": 2965,
+        "seconds": 4.290219306945801,
+        "usd": 0.0015383999999999999,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.51,
+        "tokens": 2981,
+        "seconds": 1.9801702499389648,
+        "usd": 0.001104,
+        "error": 0.0
+      }
+    },
+    "boltons-UP032-4490a677b9": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.02,
+        "tokens": 2378,
+        "seconds": 2.1424500942230225,
+        "usd": 0.0010041,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.02,
+        "tokens": 3004,
+        "seconds": 2.6988792419433594,
+        "usd": 0.0013016999999999998,
+        "error": 0.0
+      }
+    },
+    "click-B101-9c0d3f7417": {
+      "baseline": {
+        "success": 0.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 0.0,
+        "tests_pass": 0.0,
+        "verify_seconds": 10.37,
+        "tokens": 5138,
+        "seconds": 18.11983871459961,
+        "usd": 0.0042999,
+        "error": 0.0
+      },
+      "best": {
+        "success": 0.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 0.0,
+        "verify_seconds": 14.85,
+        "tokens": 3850,
+        "seconds": 55.00720143318176,
+        "usd": 0.0023007,
+        "error": 0.0
+      }
+    },
+    "click-PLW2901-5171f6ef25": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 19.47,
+        "tokens": 4279,
+        "seconds": 3.0805013179779053,
+        "usd": 0.0018128999999999997,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 19.47,
+        "tokens": 5713,
+        "seconds": 6.790802240371704,
+        "usd": 0.0030800999999999997,
+        "error": 0.0
+      }
+    },
+    "click-SIM108-97170adca8": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 21.31,
+        "tokens": 2471,
+        "seconds": 2.178318500518799,
+        "usd": 0.0009698999999999999,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 21.31,
+        "tokens": 2849,
+        "seconds": 1.300281286239624,
+        "usd": 0.0009698999999999999,
+        "error": 0.0
+      }
+    },
+    "click-SIM115-3399dfaad1": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 19.28,
+        "tokens": 5261,
+        "seconds": 17.925477981567383,
+        "usd": 0.0047526,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 19.28,
+        "tokens": 5828,
+        "seconds": 61.46272420883179,
+        "usd": 0.004979399999999999,
+        "error": 0.0
+      }
+    },
+    "click-UP038-300127c875": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 21.52,
+        "tokens": 2249,
+        "seconds": 2.447268009185791,
+        "usd": 0.0009402,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 21.52,
+        "tokens": 2786,
+        "seconds": 1.8687331676483154,
+        "usd": 0.001131,
+        "error": 0.0
+      }
+    },
+    "itsdangerous-RUF012-ace4e5fdbc": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 2.4,
+        "tokens": 2584,
+        "seconds": 1.7457764148712158,
+        "usd": 0.0008706,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 2.4,
+        "tokens": 3204,
+        "seconds": 1.385223150253296,
+        "usd": 0.001161,
+        "error": 0.0
+      }
+    },
+    "itsdangerous-UP038-0879bd4d5b": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 2.47,
+        "tokens": 3483,
+        "seconds": 0.8055381774902344,
+        "usd": 0.0011061,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 2.47,
+        "tokens": 4099,
+        "seconds": 1.429657220840454,
+        "usd": 0.0013916999999999998,
+        "error": 0.0
+      }
+    },
+    "prettytable-B904-2bb1ec034c": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 4.34,
+        "tokens": 2249,
+        "seconds": 0.8075928688049316,
+        "usd": 0.0007773,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 4.34,
+        "tokens": 2770,
+        "seconds": 1.2567024230957031,
+        "usd": 0.0009488999999999999,
+        "error": 0.0
+      }
+    },
+    "prettytable-PLW2901-15e7641ef5": {
+      "baseline": {
+        "success": 0.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 0.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 3.96,
+        "tokens": 3299,
+        "seconds": 5.292482137680054,
+        "usd": 0.0019743,
+        "error": 0.0
+      },
+      "best": {
+        "success": 0.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 0.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 3.96,
+        "tokens": 2941,
+        "seconds": 1.319554328918457,
+        "usd": 0.0010911,
+        "error": 0.0
+      }
+    },
+    "prettytable-PLW2901-64cb1b28c3": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 6.45,
+        "tokens": 3180,
+        "seconds": 4.630377292633057,
+        "usd": 0.0017667,
+        "error": 0.0
+      },
+      "best": {
+        "success": 0.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 0.0,
+        "verify_seconds": 3.58,
+        "tokens": 3316,
+        "seconds": 2.6780169010162354,
+        "usd": 0.0014762999999999998,
+        "error": 0.0
+      }
+    },
+    "prettytable-S101-5c780c287d": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 3.73,
+        "tokens": 2444,
+        "seconds": 1.9780197143554688,
+        "usd": 0.0010113,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 3.73,
+        "tokens": 3368,
+        "seconds": 4.64153790473938,
+        "usd": 0.0016665,
+        "error": 0.0
+      }
+    },
+    "prettytable-S101-d58cbbe7f6": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 8.05,
+        "tokens": 2697,
+        "seconds": 3.684042453765869,
+        "usd": 0.0013203,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 3.39,
+        "tokens": 3063,
+        "seconds": 2.16402530670166,
+        "usd": 0.0013059,
+        "error": 0.0
+      }
+    },
+    "prettytable-SIM108-f419c35434": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 4.11,
+        "tokens": 2726,
+        "seconds": 1.5104012489318848,
+        "usd": 0.0010229999999999998,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 4.11,
+        "tokens": 3224,
+        "seconds": 1.5655133724212646,
+        "usd": 0.0011669999999999999,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-PLW2901-5b8ae01f07": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 10.97,
+        "tokens": 2941,
+        "seconds": 1.1981208324432373,
+        "usd": 0.0010182,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 9.82,
+        "tokens": 3512,
+        "seconds": 1.2039194107055664,
+        "usd": 0.0012498000000000001,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-PLW3301-91791a4e5e": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 9.8,
+        "tokens": 4693,
+        "seconds": 35.744793176651,
+        "usd": 0.0037047,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 9.8,
+        "tokens": 4456,
+        "seconds": 31.30577540397644,
+        "usd": 0.0029666999999999996,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-RUF005-559f5b8d05": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.35,
+        "tokens": 2017,
+        "seconds": 1.3944694995880127,
+        "usd": 0.0006609,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.35,
+        "tokens": 2526,
+        "seconds": 0.8928191661834717,
+        "usd": 0.0008180999999999999,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-RUF005-8b4c0b3335": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.32,
+        "tokens": 2289,
+        "seconds": 1.4164669513702393,
+        "usd": 0.0007821,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.32,
+        "tokens": 2770,
+        "seconds": 1.3138256072998047,
+        "usd": 0.0009057000000000001,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-S101-a155dc54a9": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.95,
+        "tokens": 2719,
+        "seconds": 3.8778231143951416,
+        "usd": 0.001317,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 10.18,
+        "tokens": 3703,
+        "seconds": 6.459545373916626,
+        "usd": 0.0020442,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-SIM108-309550ae4c": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.55,
+        "tokens": 2472,
+        "seconds": 0.9216494560241699,
+        "usd": 0.0008072999999999999,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.55,
+        "tokens": 2998,
+        "seconds": 1.0052831172943115,
+        "usd": 0.0009849000000000001,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-SIM108-8e9d7de00b": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.18,
+        "tokens": 2421,
+        "seconds": 0.8972406387329102,
+        "usd": 0.0007731,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.18,
+        "tokens": 3002,
+        "seconds": 1.393484354019165,
+        "usd": 0.0010167,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-SIM212-9b1d89c7bf": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.16,
+        "tokens": 2876,
+        "seconds": 1.387272834777832,
+        "usd": 0.000933,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 13.16,
+        "tokens": 3464,
+        "seconds": 1.72304368019104,
+        "usd": 0.0011849999999999999,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-UP038-61bcc99dba": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.22,
+        "tokens": 2088,
+        "seconds": 1.7640697956085205,
+        "usd": 0.0007983,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 11.22,
+        "tokens": 2540,
+        "seconds": 0.8663082122802734,
+        "usd": 0.0008871,
+        "error": 0.0
+      }
+    },
+    "python-tabulate-UP038-9495447883": {
+      "baseline": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 10.85,
+        "tokens": 1944,
+        "seconds": 1.2599871158599854,
+        "usd": 0.0006965999999999999,
+        "error": 0.0
+      },
+      "best": {
+        "success": 1.0,
+        "parse_ok": 1.0,
+        "rescan_clean": 1.0,
+        "no_new_findings": 1.0,
+        "tests_pass": 1.0,
+        "verify_seconds": 10.85,
+        "tokens": 2499,
+        "seconds": 1.3008959293365479,
+        "usd": 0.0009089999999999999,
+        "error": 0.0
+      }
+    }
+  }
+}

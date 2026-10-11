@@ -10,7 +10,7 @@ Any business that prompts AI has prompts that could do better: support replies, 
 |---|---|---|
 | **Support-ticket intent classification** (Banking77, 10 confusable intents) | **72.0% → 81.5% accuracy** on all 400 official test examples. **+9.5 pts, 95% CI [+5.5, +13.5]**, a 34% error-rate reduction | Statistically significant. 8 rounds, about $1 total. Train/val drawn from Banking77's train file. |
 | **A government contractor's internal AI code-fixing pipeline** (private pilot, dry-run) | **−23% tokens per run**, −22% cost per run, −15% fix time (directional), same fix rate | 3 rounds, 8 candidate prompts; held-out findings, 4 runs each. No pilot code or data is in this repo. |
-| Code-fix showcase (5 open-source repos, 110 ruff/bandit findings) | No gain: baseline already at 95.5% on validation | Honest ceiling result: a strong fixer model leaves no headroom. Shows the guardrails reject noise instead of inventing gains. |
+| Code-fix showcase (5 open-source repos, 110 ruff/bandit findings) | No gain: 93.9% → 90.9% on 33 held-out findings (−3.0 pts, CI [−9.1, 0]) | Honest ceiling result: the reasoning fixer already solves ~94%, leaving no headroom. Reported as-is; the guardrails don't invent gains. |
 
 
 ## How it works
