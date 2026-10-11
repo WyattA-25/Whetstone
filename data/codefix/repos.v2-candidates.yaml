@@ -1,3 +1,8 @@
+# Candidate repos for code-fix dataset v2, scouted by Chayce (PR #1).
+# Kept separate from repos.yaml on purpose: the v1 dataset (repos.yaml -> findings.jsonl) has a
+# frozen train/val/held-out split that a running experiment depends on. bottle and mako are new;
+# boltons overlaps v1 (same commit). Note: scouted with ruff 0.17.0 (--isolated); the collector pins
+# ruff 0.7.4 and reads each repo's own ruff config, so re-run collect_findings.py before using.
 repos:
   - name: boltons
     url: https://github.com/mahmoud/boltons
