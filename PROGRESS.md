@@ -27,13 +27,13 @@ The full spec is `claude_code_kickoff_prompt.md`; the approved plan is summarize
 | 14 | Demo video script | |
 | 15 | README + submission | |
 
-## Status at ~18:05 (latest)
+## Status at ~17:15 ET (latest)
 
 - Headline (T1): banking77 held-out 72.0% → 81.5% (+9.5 pts, CI +5.5..+13.5, significant).
 - Deployed: Lambda dashboard (read-only) + DynamoDB + KMS + Cognito (customer sign-in) + ECR.
 - AWS monetize skill: HTTP-direct path; app id 01a12c9f8ab07ce0b73c7f317885a5c0 (us-west-2 beta endpoint).
   Connection files `.env.monetization` / `.monetize/` are git-ignored.
-- Tonight's plan: pilot numbers ~19:00 → outreach messages ~19:30 → video + README + submission by 20:00.
+- Tonight (ET): pilot numbers ~18:20 → outreach ~18:30 → feature freeze 19:00 → video + README + submit by ~19:45 → judging 20:00.
 
 ## Prize targets (decided)
 
